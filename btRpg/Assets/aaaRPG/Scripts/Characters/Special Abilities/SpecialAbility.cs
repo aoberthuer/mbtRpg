@@ -28,12 +28,18 @@ namespace RPG.Characters
 
         [Header("Special Ability General")]
         [SerializeField] float energyCost = 10f;
+        [SerializeField] GameObject particlePrefab = null;
 
         protected ISpecialAbility behaviour;
 
         public float getEnergyCost()
         {
             return energyCost;
+        }
+
+        public GameObject getParticlePrefab()
+        {
+            return particlePrefab;
         }
 
         public abstract void AttachComponentTo(GameObject gameObjectToAttachTo);
