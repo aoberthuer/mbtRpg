@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 
 using RPG.Core;
+using System;
 
 namespace RPG.Characters
 {
@@ -18,6 +19,12 @@ namespace RPG.Characters
 
         public void Use(AbilityUseParameters abilityUseParameters)
         {
+            DealRadialDamage();
+            PlayParticleEffect();
+        }
+
+        private void DealRadialDamage()
+        {
             float extraDamage = config.GetExtraDamage();
             float damageRadius = config.getDamageRadius();
 
@@ -28,10 +35,10 @@ namespace RPG.Characters
                 damageRadius
             );
 
-            foreach(RaycastHit hit in raycastHits)
+            foreach (RaycastHit hit in raycastHits)
             {
                 IDamageable damageable = hit.collider.gameObject.GetComponent<IDamageable>();
-                if(damageable != null)
+                if (damageable != null)
                 {
 
                     Debug.Log("Game object's tag: " + gameObject.tag + ", IDamageable's tag: " + damageable.GetTag());
@@ -46,6 +53,16 @@ namespace RPG.Characters
 
                 }
             }
+        }
+
+        private void PlayParticleEffect()
+        {
+            // TODO: should we attach the newly instatiated particle system to the player. Right now it stays where it was instatiated.
+            GameObject particleSystemPrefab = Instantiate(config.getParticlePrefab(), transform.position, Quaternion.identity);
+            ParticleSystem particleSystem = particleSystemPrefab.GetComponent<ParticleSystem>();
+
+            particleSystem.Play();
+            Destroy(particleSystemPrefab, particleSystem.main.duration);
         }
 
         private void Start()
