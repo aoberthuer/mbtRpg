@@ -9,11 +9,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4f489dc591aeea241ad62c42048a1656, type: 3}
-  m_Name: Morning Star
+  m_Name: Broadsword
   m_EditorClassIdentifier: 
-  gripTransform: {fileID: 4710536553018130, guid: 0f320512eee3ac54d86b9db4ddca85ba,
+  gripTransform: {fileID: 4585368972908900, guid: 2b646f0d43084924793a93dd96a2126e,
     type: 2}
-  weaponPrefab: {fileID: 144458, guid: bcaaef6ff4b03be43871886bf6d918eb, type: 2}
-  attackAnimation: {fileID: 7400000, guid: 43b3bf1526e697f4f8b06e53457dfa2b, type: 3}
-  minTimeBetweenHits: 0.75
-  maxAttackRange: 1.5
+  weaponPrefab: {fileID: 1861973371041204, guid: 8d3df677b031cf54ebd79ba0a29048a2,
+    type: 2}
+  attackAnimation: {fileID: 7400000, guid: 018ce46eeecfeae4abb8016f2c6841ca, type: 3}
+  minTimeBetweenHits: 0.5
+  maxAttackRange: 2

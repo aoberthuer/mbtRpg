@@ -96,7 +96,8 @@ namespace RPG.Characters
             GameObject weaponPrefab = weaponInUse.GetWeaponPrefab();
 
             GameObject dominantHand = RequestDominantHand();
-            GameObject weapon = Instantiate(weaponPrefab, dominantHand.transform);
+            GameObject weapon = Instantiate(weaponPrefab);
+            weapon.transform.SetParent(dominantHand.transform);
 
             weapon.transform.localPosition = weaponInUse.gripTransform.localPosition;
             weapon.transform.localRotation = weaponInUse.gripTransform.localRotation;
