@@ -97,13 +97,13 @@
     <Compile Include="Assets\aaaRPG\Scripts\Characters\Player\Player.cs" />
     <Compile Include="Assets\aaaRPG\Scripts\Characters\Player\PlayerHealthBar.cs" />
     <Compile Include="Assets\aaaRPG\Scripts\Characters\Player\PlayerMovement.cs" />
+    <Compile Include="Assets\aaaRPG\Scripts\Characters\Special Abilities\AbilityConfig.cs" />
     <Compile Include="Assets\aaaRPG\Scripts\Characters\Special Abilities\Area of Effect\AreaOfEffectBehaviour.cs" />
     <Compile Include="Assets\aaaRPG\Scripts\Characters\Special Abilities\Area of Effect\AreaOfEffectConfig.cs" />
     <Compile Include="Assets\aaaRPG\Scripts\Characters\Special Abilities\Power Attack\PowerAttackBehaviour.cs" />
     <Compile Include="Assets\aaaRPG\Scripts\Characters\Special Abilities\Power Attack\PowerAttackConfig.cs" />
     <Compile Include="Assets\aaaRPG\Scripts\Characters\Special Abilities\Self Heal\SelfHealBehaviour.cs" />
     <Compile Include="Assets\aaaRPG\Scripts\Characters\Special Abilities\Self Heal\SelfHealConfig.cs" />
-    <Compile Include="Assets\aaaRPG\Scripts\Characters\Special Abilities\SpecialAbility.cs" />
     <Compile Include="Assets\aaaRPG\Scripts\Core\IDamageable.cs" />
     <Compile Include="Assets\aaaRPG\Scripts\Weapons\Projectile.cs" />
     <Compile Include="Assets\aaaRPG\Scripts\Weapons\Weapon.cs" />

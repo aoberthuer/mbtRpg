@@ -10,6 +10,17 @@ namespace RPG.Characters
         SelfHealConfig config;
         Player player;
 
+        AudioSource audioSource;
+
+        private void Start()
+        {
+            Debug.Log("Self Heal attached to: " + gameObject.name);
+
+            player = GetComponent<Player>();
+            audioSource = GetComponent<AudioSource>(); // on the player...
+        }
+
+
         public void SetConfig(SelfHealConfig config)
         {
             this.config = config;
@@ -19,11 +30,12 @@ namespace RPG.Characters
         {
             HealPlayer(abilityUseParameters);
             PlayParticleEffect();
+            PlayAudioClip();
         }
 
         private void HealPlayer(AbilityUseParameters abilityUseParameters)
         {
-            player.TakeDamage(-config.getExtraHealth()); // heal as negative damage ;-)
+            player.Heal(config.getExtraHealth());
         }
 
         private void PlayParticleEffect()
@@ -36,10 +48,13 @@ namespace RPG.Characters
             Destroy(particleSystemPrefab, particleSystem.main.duration);
         }
 
-        private void Start()
+        private void PlayAudioClip()
         {
-            Debug.Log("Self Heal attached to: " + gameObject.name);
-            player = GetComponent<Player>();
+            if (audioSource != null && config.getAudioClip() != null)
+            {
+                audioSource.clip = config.getAudioClip();
+                audioSource.Play();
+            }
         }
     }
 }

@@ -38,6 +38,12 @@ namespace RPG.Characters
             foreach (RaycastHit hit in raycastHits)
             {
                 IDamageable damageable = hit.collider.gameObject.GetComponent<IDamageable>();
+
+                // could solve it like this... (course's solution)
+                // bool hitPlayer = hit.collider.gameObject.GetComponent<Player>();
+                // if (damageable != null && !hitPlayer)
+
+                // or like this... here the origin (not specifically the player) will not be affected by the aoe.
                 if (damageable != null)
                 {
 

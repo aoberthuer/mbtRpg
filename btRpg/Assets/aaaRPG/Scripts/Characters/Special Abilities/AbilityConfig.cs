@@ -23,12 +23,14 @@ namespace RPG.Characters
         void Use(AbilityUseParameters abilityUseParameters);
     }
 
-    public abstract class SpecialAbility : ScriptableObject
+    public abstract class AbilityConfig : ScriptableObject
     {
 
         [Header("Special Ability General")]
         [SerializeField] float energyCost = 10f;
         [SerializeField] GameObject particlePrefab = null;
+
+        [SerializeField] AudioClip audioClip = null;
 
         protected ISpecialAbility behaviour;
 
@@ -40,6 +42,11 @@ namespace RPG.Characters
         public GameObject getParticlePrefab()
         {
             return particlePrefab;
+        }
+
+        public AudioClip getAudioClip()
+        {
+            return audioClip;
         }
 
         public abstract void AttachComponentTo(GameObject gameObjectToAttachTo);
