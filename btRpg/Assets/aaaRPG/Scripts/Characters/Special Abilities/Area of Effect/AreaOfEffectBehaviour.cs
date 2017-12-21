@@ -7,26 +7,26 @@ namespace RPG.Characters
 {
 
 
-    public class AreaOfEffectBehaviour : MonoBehaviour, ISpecialAbility
+    public class AreaOfEffectBehaviour : AbilityBehaviour
     {
-
-        AreaOfEffectConfig config;
 
         public void SetConfig(AreaOfEffectConfig config)
         {
             this.config = config;
         }
 
-        public void Use(AbilityUseParameters abilityUseParameters)
+        public override void Use(AbilityUseParameters abilityUseParameters)
         {
+            base.Use(abilityUseParameters);
             DealRadialDamage();
-            PlayParticleEffect();
         }
 
         private void DealRadialDamage()
         {
-            float extraDamage = config.GetExtraDamage();
-            float damageRadius = config.getDamageRadius();
+            AreaOfEffectConfig aoeConfig = (AreaOfEffectConfig) config;
+
+            float extraDamage = aoeConfig.GetExtraDamage();
+            float damageRadius = aoeConfig.getDamageRadius();
 
             RaycastHit[] raycastHits = Physics.SphereCastAll(
                 transform.position,
@@ -61,20 +61,6 @@ namespace RPG.Characters
             }
         }
 
-        private void PlayParticleEffect()
-        {
-            // TODO: should we attach the newly instatiated particle system to the player. Right now it stays where it was instatiated.
-            GameObject particleSystemPrefab = Instantiate(config.getParticlePrefab(), transform.position, Quaternion.identity);
-            ParticleSystem particleSystem = particleSystemPrefab.GetComponent<ParticleSystem>();
-
-            particleSystem.Play();
-            Destroy(particleSystemPrefab, particleSystem.main.duration);
-        }
-
-        private void Start()
-        {
-            Debug.Log("Area of Effect attached to: " + gameObject.name);
-        }
     }
 
 }

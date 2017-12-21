@@ -28,7 +28,9 @@ namespace RPG.Characters
 
         [Header("Special Ability General")]
         [SerializeField] float energyCost = 10f;
+
         [SerializeField] GameObject particlePrefab = null;
+        [SerializeField] bool particleInLocalSpace = false;
 
         [SerializeField] AudioClip audioClip = null;
 
@@ -42,6 +44,11 @@ namespace RPG.Characters
         public GameObject getParticlePrefab()
         {
             return particlePrefab;
+        }
+
+        public bool getParticleInLocalSpace()
+        {
+            return particleInLocalSpace;
         }
 
         public AudioClip getAudioClip()

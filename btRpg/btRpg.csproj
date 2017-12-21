@@ -97,6 +97,7 @@
     <Compile Include="Assets\aaaRPG\Scripts\Characters\Player\Player.cs" />
     <Compile Include="Assets\aaaRPG\Scripts\Characters\Player\PlayerHealthBar.cs" />
     <Compile Include="Assets\aaaRPG\Scripts\Characters\Player\PlayerMovement.cs" />
+    <Compile Include="Assets\aaaRPG\Scripts\Characters\Special Abilities\AbilityBehaviour.cs" />
     <Compile Include="Assets\aaaRPG\Scripts\Characters\Special Abilities\AbilityConfig.cs" />
     <Compile Include="Assets\aaaRPG\Scripts\Characters\Special Abilities\Area of Effect\AreaOfEffectBehaviour.cs" />
     <Compile Include="Assets\aaaRPG\Scripts\Characters\Special Abilities\Area of Effect\AreaOfEffectConfig.cs" />
