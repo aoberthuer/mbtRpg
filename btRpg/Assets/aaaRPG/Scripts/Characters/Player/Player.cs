@@ -21,21 +21,27 @@ namespace RPG.Characters
         [SerializeField] float baseDamage = 10f;
 
         [SerializeField] Weapon weaponInUse = null;
-        float lastHitTime = 0f;
+        private float lastHitTime = 0f;
+        private float currentHealthPoints;
 
-        float currentHealthPoints;
+        private Enemy enemy = null; // 'caching' the current enemy
 
         [SerializeField] AnimatorOverrideController animatorOverrideController = null;
         Animator animator = null;
 
+        [Header("Special Abilities")]
         [SerializeField] AbilityConfig[] specialAbilities;
 
+        [Header("Sounds")]
         [SerializeField] AudioClip[] deathSounds;
         [SerializeField] AudioClip[] damageSounds;
 
-        AudioSource audioSource;
+        private AudioSource audioSource = null;
 
-        Enemy enemy = null;
+        [Header("Critical Hit")]
+        [Range(0.0f, 1.0f)] [SerializeField] float criticalHitChance = 0.1f;
+        [SerializeField] float criticalHitMultiplier = 1.25f;
+        [SerializeField] ParticleSystem criticalHitParticle = null;
 
 
         private void Start()
@@ -159,8 +165,26 @@ namespace RPG.Characters
             if (Time.time - lastHitTime > weaponInUse.GetMinTimeBetweenHits())
             {
                 animator.SetTrigger(ANIM_TRIGGER_ATTACK);
-                enemy.TakeDamage(baseDamage);
+                enemy.TakeDamage(CalculateDamage());
                 lastHitTime = Time.time;
+            }
+        }
+
+        private float CalculateDamage()
+        {
+            bool isCriticalHit = UnityEngine.Random.Range(0f, 1f) <= criticalHitChance;
+            float damageBeforeCritical = baseDamage + weaponInUse.GetAdditionalDamage();
+            if (isCriticalHit)
+            {
+                if (criticalHitParticle != null)
+                {
+                    criticalHitParticle.Play();
+                }
+                return damageBeforeCritical * criticalHitMultiplier;
+            }
+            else
+            {
+                return damageBeforeCritical;
             }
         }
 

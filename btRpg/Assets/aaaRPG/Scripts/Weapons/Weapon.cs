@@ -14,6 +14,8 @@ namespace RPG.Weapons
         [SerializeField] float minTimeBetweenHits = .5f;
         [SerializeField] float maxAttackRange = 2f;
 
+        [SerializeField] float additionalDamage = 10f;
+
         public float GetMinTimeBetweenHits()
         {
             return minTimeBetweenHits;
@@ -34,6 +36,11 @@ namespace RPG.Weapons
         {
             RemoveAnimationEvents();
             return attackAnimation;
+        }
+
+        public float GetAdditionalDamage()
+        {
+            return additionalDamage;
         }
 
         // Method removes all animation events so they cannot break existing code.
