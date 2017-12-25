@@ -29,16 +29,19 @@ namespace RPG.Characters
         public void PlayParticleEffect()
         {
             // TODO: should we attach the newly instatiated particle system to the player. Right now it stays where it was instatiated.
-            GameObject particleSystemPrefab = Instantiate(config.getParticlePrefab(), transform.position, Quaternion.identity);
+            GameObject particleSystemPrefab = Instantiate(config.getParticlePrefab(), transform.position, config.getParticlePrefab().transform.rotation);
 
             if(config.getParticleInLocalSpace())
             {
                 particleSystemPrefab.transform.parent = transform;
             }
 
-            ParticleSystem particleSystem = particleSystemPrefab.GetComponent<ParticleSystem>();
-            particleSystem.Play();
-            Destroy(particleSystemPrefab, particleSystem.main.duration);
+            ParticleSystem[] particleSystems = particleSystemPrefab.GetComponentsInChildren<ParticleSystem>();
+            foreach (ParticleSystem particleSystem in particleSystems)
+            {
+                particleSystem.Play();
+                Destroy(particleSystemPrefab, particleSystem.main.duration);
+            }   
         }
 
         private void PlayAudioClip()
