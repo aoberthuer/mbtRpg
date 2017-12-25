@@ -36,12 +36,14 @@ namespace RPG.Characters
                 particleSystemPrefab.transform.parent = transform;
             }
 
-            ParticleSystem[] particleSystems = particleSystemPrefab.GetComponentsInChildren<ParticleSystem>();
-            foreach (ParticleSystem particleSystem in particleSystems)
+
+            // Play particle system on top level component (if present)
+            ParticleSystem particleSystem = particleSystemPrefab.GetComponent<ParticleSystem>();
+            if (particleSystem != null)
             {
-                particleSystem.Play();
+                particleSystem.Play(true); // plays child particle systems as well (if present)
                 Destroy(particleSystemPrefab, particleSystem.main.duration);
-            }   
+            }
         }
 
         private void PlayAudioClip()
