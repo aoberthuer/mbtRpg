@@ -339,6 +339,7 @@
     <None Include="Assets\Standard Assets\Environment\Water\Water4\Shaders\FXWater4Advanced.shader" />
     <None Include="Assets\Standard Assets\Environment\Water\Water4\Shaders\FXWater4Simple.shader" />
     <None Include="Assets\Standard Assets\Environment\Water\Water4\Shaders\WaterInclude.cginc" />
+    <None Include="Assets\Synty Polygon\SimpleFX\Materials\UnlitVertexColour_Alpha.shader" />
     <None Include="Assets\aaaRPG\Prefabs\Characters\ThirdPersonCharacter\ThirdPersonCharacterGuidelines.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
