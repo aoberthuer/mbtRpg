@@ -18,11 +18,6 @@ namespace RPG.Characters
         }
     }
 
-    public interface ISpecialAbility
-    {
-        void Use(AbilityUseParameters abilityUseParameters);
-    }
-
     public abstract class AbilityConfig : ScriptableObject
     {
 
@@ -30,11 +25,10 @@ namespace RPG.Characters
         [SerializeField] float energyCost = 10f;
 
         [SerializeField] GameObject particlePrefab = null;
-        [SerializeField] bool particleInLocalSpace = false;
 
         [SerializeField] AudioClip audioClip = null;
 
-        protected ISpecialAbility behaviour;
+        protected AbilityBehaviour behaviour;
 
         public float getEnergyCost()
         {
@@ -44,11 +38,6 @@ namespace RPG.Characters
         public GameObject getParticlePrefab()
         {
             return particlePrefab;
-        }
-
-        public bool getParticleInLocalSpace()
-        {
-            return particleInLocalSpace;
         }
 
         public AudioClip getAudioClip()
