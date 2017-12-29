@@ -26,7 +26,7 @@ namespace RPG.Characters
 
         [SerializeField] GameObject particlePrefab = null;
 
-        [SerializeField] AudioClip audioClip = null;
+        [SerializeField] AudioClip[] audioClips = null;
 
         protected AbilityBehaviour behaviour;
 
@@ -40,9 +40,9 @@ namespace RPG.Characters
             return particlePrefab;
         }
 
-        public AudioClip getAudioClip()
+        public AudioClip getRandomAudioClip()
         {
-            return audioClip;
+            return audioClips[Random.Range(0, audioClips.Length)];
         }
 
         public abstract void AttachComponentTo(GameObject gameObjectToAttachTo);

@@ -11,21 +11,18 @@ namespace RPG.Characters
 
         protected Player player;
 
-        protected AudioSource audioSource;
-
         protected AbilityConfig config;
 
 
         private void Start()
         {
             player = GetComponent<Player>();
-            audioSource = GetComponent<AudioSource>(); // on the player...
         }
 
         public virtual void Use(AbilityUseParameters abilityUseParameters)
         {
             PlayParticleEffect();
-            PlayAudioClip();
+            PlayAbilityAudioClip();
         }
 
         public void PlayParticleEffect()
@@ -58,11 +55,13 @@ namespace RPG.Characters
             yield return new WaitForEndOfFrame();
         }
 
-        private void PlayAudioClip()
+        private void PlayAbilityAudioClip()
         {
-            if (audioSource != null && config.getAudioClip() != null)
+            AudioSource audioSource = GetComponent<AudioSource>(); // on the player...
+
+            if (audioSource != null && config.getRandomAudioClip() != null)
             {
-                audioSource.clip = config.getAudioClip();
+                audioSource.clip = config.getRandomAudioClip();
                 audioSource.Play();
             }
         }
