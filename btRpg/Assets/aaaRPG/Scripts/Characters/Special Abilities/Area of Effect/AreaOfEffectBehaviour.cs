@@ -5,15 +5,8 @@ using System;
 
 namespace RPG.Characters
 {
-
-
     public class AreaOfEffectBehaviour : AbilityBehaviour
     {
-
-        public void SetConfig(AreaOfEffectConfig config)
-        {
-            this.config = config;
-        }
 
         public override void Use(AbilityUseParameters abilityUseParameters)
         {

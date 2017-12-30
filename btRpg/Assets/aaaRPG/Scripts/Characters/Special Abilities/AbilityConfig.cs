@@ -45,7 +45,14 @@ namespace RPG.Characters
             return audioClips[Random.Range(0, audioClips.Length)];
         }
 
-        public abstract void AttachComponentTo(GameObject gameObjectToAttachTo);
+        public void AttachAbilityTo(GameObject gameObjectToAttachTo)
+        {
+            AbilityBehaviour behaviourComponent = GetBehaviourComponent(gameObjectToAttachTo);
+            behaviourComponent.SetConfig(this);
+            behaviour = behaviourComponent;
+        }
+
+        public abstract AbilityBehaviour GetBehaviourComponent(GameObject gameObjectToAttachTo);
 
         public void Use(AbilityUseParameters abilityUseParameters)
         {

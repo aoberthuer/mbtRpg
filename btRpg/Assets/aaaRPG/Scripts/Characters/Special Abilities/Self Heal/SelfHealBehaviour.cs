@@ -7,11 +7,6 @@ namespace RPG.Characters
     public class SelfHealBehaviour : AbilityBehaviour
     {
 
-        public void SetConfig(SelfHealConfig config)
-        {
-            this.config = config;
-        }
-
         public override void Use(AbilityUseParameters abilityUseParameters)
         {
             base.Use(abilityUseParameters);

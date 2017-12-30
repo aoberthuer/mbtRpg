@@ -19,6 +19,11 @@ namespace RPG.Characters
             player = GetComponent<Player>();
         }
 
+        public void SetConfig(AbilityConfig configToSet)
+        {
+            config = configToSet;
+        }
+
         public virtual void Use(AbilityUseParameters abilityUseParameters)
         {
             PlayParticleEffect();

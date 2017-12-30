@@ -70,7 +70,7 @@ namespace RPG.Characters
         {
             for (int abilityIndex = 0; abilityIndex < specialAbilities.Length; abilityIndex++)
             {
-                specialAbilities[abilityIndex].AttachComponentTo(gameObject);
+                specialAbilities[abilityIndex].AttachAbilityTo(gameObject);
             }
         }
 

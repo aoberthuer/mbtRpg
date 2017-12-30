@@ -7,11 +7,6 @@ namespace RPG.Characters
     public class PowerAttackBehaviour : AbilityBehaviour
     {
         
-        public void SetConfig(PowerAttackConfig config)
-        {
-            this.config = config;
-        }
-
         public override void Use(AbilityUseParameters abilityUseParameters)
         {
             base.Use(abilityUseParameters);
