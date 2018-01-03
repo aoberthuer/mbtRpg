@@ -12,8 +12,7 @@ MonoBehaviour:
   m_Name: PowerAttack L1
   m_EditorClassIdentifier: 
   energyCost: 1
-  particlePrefab: {fileID: 1839633942893400, guid: cf8f8f87320145c47991a7af64ed0dcf,
-    type: 2}
+  particlePrefab: {fileID: 101886, guid: 60af6c546b87d8247a1eea8e6c7ee9cf, type: 2}
   audioClips:
   - {fileID: 8300000, guid: 9876b6f7b404f7f4cad9765c6fe6bec8, type: 3}
   extraDamage: 11

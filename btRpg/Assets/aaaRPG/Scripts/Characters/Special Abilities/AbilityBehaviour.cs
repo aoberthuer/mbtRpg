@@ -51,7 +51,7 @@ namespace RPG.Characters
         IEnumerator DestroyParticleWhenFinished(GameObject particleObject)
         {
             ParticleSystem particleSystem = particleObject.GetComponent<ParticleSystem>();
-            while (particleSystem.isPlaying)
+            while (particleSystem!= null && particleSystem.isPlaying)
             {
                 yield return new WaitForSeconds(PARTICLE_CLEAN_DELAY);
             }
