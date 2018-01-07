@@ -16,11 +16,14 @@ namespace RPG.Characters
     {
         private const string ANIM_TRIGGER_ATTACK = "Attack";
         private const string ANIM_TRIGGER_DEATH = "Death";
+        private const string PLAYER_DEFAULT_ATTACK = "Player Default Attack";
 
         [SerializeField] float maxHealthPoints = 100f;
         [SerializeField] float baseDamage = 10f;
 
-        [SerializeField] Weapon weaponInUse = null;
+        [SerializeField] Weapon currentWeaponConfig = null;
+
+        private GameObject weaponObject;
         private float lastHitTime = 0f;
         private float currentHealthPoints;
 
@@ -40,6 +43,7 @@ namespace RPG.Characters
 
         [Header("Critical Hit")]
         [Range(0.0f, 1.0f)] [SerializeField] float criticalHitChance = 0.1f;
+
         [SerializeField] float criticalHitMultiplier = 1.25f;
         [SerializeField] ParticleSystem criticalHitParticle = null;
 
@@ -52,8 +56,8 @@ namespace RPG.Characters
             RegisterForMouseClick();
             SetCurrentMaxHealth();
 
-            PutWeaponInHand();
-            SetupRuntimeAnimator();
+            PutWeaponInHand(currentWeaponConfig);
+            SetAttackAnimation();
 
             AttachSpecialAbilities();
         }
@@ -97,23 +101,26 @@ namespace RPG.Characters
             currentHealthPoints = maxHealthPoints;
         }
 
-        private void PutWeaponInHand()
+        public void PutWeaponInHand(Weapon weaponToUse)
         {
-            GameObject weaponPrefab = weaponInUse.GetWeaponPrefab();
+            Destroy(weaponObject); // empty hands
+
+            currentWeaponConfig = weaponToUse;
+            GameObject weaponPrefab = currentWeaponConfig.GetWeaponPrefab();
 
             GameObject dominantHand = RequestDominantHand();
-            GameObject weapon = Instantiate(weaponPrefab);
-            weapon.transform.SetParent(dominantHand.transform);
+            weaponObject = Instantiate(weaponPrefab);
+            weaponObject.transform.SetParent(dominantHand.transform);
 
-            weapon.transform.localPosition = weaponInUse.gripTransform.localPosition;
-            weapon.transform.localRotation = weaponInUse.gripTransform.localRotation;
+            weaponObject.transform.localPosition = currentWeaponConfig.gripTransform.localPosition;
+            weaponObject.transform.localRotation = currentWeaponConfig.gripTransform.localRotation;
         }
 
-        private void SetupRuntimeAnimator()
+        private void SetAttackAnimation()
         {
             animator = GetComponent<Animator>();
             animator.runtimeAnimatorController = animatorOverrideController;
-            animatorOverrideController["Player Default Attack"] = weaponInUse.GetAttackAnimation();
+            animatorOverrideController[PLAYER_DEFAULT_ATTACK] = currentWeaponConfig.GetAttackAnimation();
 
         }
 
@@ -157,13 +164,14 @@ namespace RPG.Characters
         private bool IsTargetInRange(GameObject target)
         {
             float distanceToTarget = (target.transform.position - transform.position).magnitude;
-            return distanceToTarget <= weaponInUse.GetMaxAttackRange();
+            return distanceToTarget <= currentWeaponConfig.GetMaxAttackRange();
         }
 
         private void AttackTarget()
         {
-            if (Time.time - lastHitTime > weaponInUse.GetMinTimeBetweenHits())
+            if (Time.time - lastHitTime > currentWeaponConfig.GetMinTimeBetweenHits())
             {
+                SetAttackAnimation(); // set here as only setting weapon change will not suffice (for e.g. a power attack)
                 animator.SetTrigger(ANIM_TRIGGER_ATTACK);
                 enemy.TakeDamage(CalculateDamage());
                 lastHitTime = Time.time;
@@ -173,7 +181,7 @@ namespace RPG.Characters
         private float CalculateDamage()
         {
             bool isCriticalHit = UnityEngine.Random.Range(0f, 1f) <= criticalHitChance;
-            float damageBeforeCritical = baseDamage + weaponInUse.GetAdditionalDamage();
+            float damageBeforeCritical = baseDamage + currentWeaponConfig.GetAdditionalDamage();
             if (isCriticalHit)
             {
                 if (criticalHitParticle != null)

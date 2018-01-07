@@ -2744,10 +2744,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealthPoints: 50
   baseDamage: 10
-  weaponInUse: {fileID: 11400000, guid: 38607269f12c5ef4dae7a31bc03fc03c, type: 2}
+  currentWeaponConfig: {fileID: 11400000, guid: 22986c5845d1a86488f2083872c28f6e,
+    type: 2}
   animatorOverrideController: {fileID: 22100000, guid: f119d25ccdb55fd4780a3f379714ed01,
     type: 2}
   specialAbilities:
+  - {fileID: 11400000, guid: 7e990e136e4322843ab7c3ea37268e70, type: 2}
+  - {fileID: 11400000, guid: 6c5cc468ecd0eea4b9bc7107aad2e278, type: 2}
   - {fileID: 11400000, guid: 1522a8bffe14b7349aa19512208526aa, type: 2}
   deathSounds:
   - {fileID: 8300000, guid: 2066e8f869826f544be6a251ba5166fe, type: 3}
@@ -2760,6 +2763,9 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 5a0ffe0644b82fd48be1247e5fdc665c, type: 3}
   - {fileID: 8300000, guid: ad2d418a97745b040bf0a504b6bfd80a, type: 3}
   - {fileID: 8300000, guid: e4db04b1d5bda1d4fa22e67028e67417, type: 3}
+  criticalHitChance: 0.1
+  criticalHitMultiplier: 1.25
+  criticalHitParticle: {fileID: 0}
 --- !u!114 &114230080337729344
 MonoBehaviour:
   m_ObjectHideFlags: 1
