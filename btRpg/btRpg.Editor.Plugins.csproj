@@ -122,7 +122,7 @@
       <HintPath>Library\UnityAssemblies\SyntaxTree.VisualStudio.Unity.Bridge.dll</HintPath>
     </Reference>
     <Reference Include="JMOAssets">
-      <HintPath>Assets\JMO Assets\Editor\JMOAssets.dll</HintPath>
+      <HintPath>Assets\aaaRPG Assets\JMO Assets\Editor\JMOAssets.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -216,15 +216,6 @@
     <None Include="Assets\Enviro - Dynamic Enviroment\Shaders\Transparent\EnviroTransparent.shader" />
     <None Include="Assets\Enviro - Dynamic Enviroment\Update Notes.txt" />
     <None Include="Assets\Enviro - Dynamic Enviroment\version.txt" />
-    <None Include="Assets\JMO Assets\!JMO Assets Readme.txt" />
-    <None Include="Assets\JMO Assets\Shape FX\Demo\Demo Assets\ShapeFX Demo Assets.txt" />
-    <None Include="Assets\JMO Assets\Shape FX\Documentation\Note.txt" />
-    <None Include="Assets\JMO Assets\Shape FX\Shaders\CbFX Particle Add.shader" />
-    <None Include="Assets\JMO Assets\Shape FX\Shaders\CbFX Particle AddSoft.shader" />
-    <None Include="Assets\JMO Assets\Shape FX\Shaders\CbFX Particle AlphaBlend.shader" />
-    <None Include="Assets\JMO Assets\Shape FX\Shaders\CbFX Particle AlphaBlendPremultiply.shader" />
-    <None Include="Assets\JMO Assets\Shape FX\Shaders\CbFX Particle Multiply.shader" />
-    <None Include="Assets\JMO Assets\Shape FX\ShapeFX Readme.txt" />
     <None Include="Assets\PostProcessing\Editor Resources\Monitors\HistogramCompute.compute" />
     <None Include="Assets\PostProcessing\Editor Resources\Monitors\HistogramRender.shader" />
     <None Include="Assets\PostProcessing\Editor Resources\Monitors\ParadeRender.shader" />
@@ -340,6 +331,15 @@
     <None Include="Assets\Standard Assets\Environment\Water\Water4\Shaders\FXWater4Simple.shader" />
     <None Include="Assets\Standard Assets\Environment\Water\Water4\Shaders\WaterInclude.cginc" />
     <None Include="Assets\Synty Polygon\SimpleFX\Materials\UnlitVertexColour_Alpha.shader" />
+    <None Include="Assets\aaaRPG Assets\JMO Assets\!JMO Assets Readme.txt" />
+    <None Include="Assets\aaaRPG Assets\JMO Assets\Shape FX\Demo\Demo Assets\ShapeFX Demo Assets.txt" />
+    <None Include="Assets\aaaRPG Assets\JMO Assets\Shape FX\Documentation\Note.txt" />
+    <None Include="Assets\aaaRPG Assets\JMO Assets\Shape FX\Shaders\CbFX Particle Add.shader" />
+    <None Include="Assets\aaaRPG Assets\JMO Assets\Shape FX\Shaders\CbFX Particle AddSoft.shader" />
+    <None Include="Assets\aaaRPG Assets\JMO Assets\Shape FX\Shaders\CbFX Particle AlphaBlend.shader" />
+    <None Include="Assets\aaaRPG Assets\JMO Assets\Shape FX\Shaders\CbFX Particle AlphaBlendPremultiply.shader" />
+    <None Include="Assets\aaaRPG Assets\JMO Assets\Shape FX\Shaders\CbFX Particle Multiply.shader" />
+    <None Include="Assets\aaaRPG Assets\JMO Assets\Shape FX\ShapeFX Readme.txt" />
     <None Include="Assets\aaaRPG\Prefabs\Characters\ThirdPersonCharacter\ThirdPersonCharacterGuidelines.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
