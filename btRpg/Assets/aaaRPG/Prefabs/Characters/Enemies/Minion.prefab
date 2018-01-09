@@ -532,7 +532,6 @@ GameObject:
   - component: {fileID: 136690416043886622}
   - component: {fileID: 195228541720405798}
   - component: {fileID: 114953535076198946}
-  - component: {fileID: 114214227280599536}
   - component: {fileID: 114157979617033406}
   m_Layer: 9
   m_Name: Minion
@@ -2808,18 +2807,6 @@ MonoBehaviour:
     type: 2}
   projectileSocket: {fileID: 1793574417753546}
   aimOffset: {x: 0, y: 1, z: 0}
---- !u!114 &114214227280599536
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1477458253811838}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8c5335f0882fe4d478883cc8c58ce906, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  target: {fileID: 0}
 --- !u!114 &114269915948514360
 MonoBehaviour:
   m_ObjectHideFlags: 1
