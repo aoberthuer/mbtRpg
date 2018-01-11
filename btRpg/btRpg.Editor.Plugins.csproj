@@ -216,6 +216,7 @@
     <None Include="Assets\Enviro - Dynamic Enviroment\Shaders\Transparent\EnviroTransparent.shader" />
     <None Include="Assets\Enviro - Dynamic Enviroment\Update Notes.txt" />
     <None Include="Assets\Enviro - Dynamic Enviroment\version.txt" />
+    <None Include="Assets\GeNa\README.txt" />
     <None Include="Assets\PostProcessing\Editor Resources\Monitors\HistogramCompute.compute" />
     <None Include="Assets\PostProcessing\Editor Resources\Monitors\HistogramRender.shader" />
     <None Include="Assets\PostProcessing\Editor Resources\Monitors\ParadeRender.shader" />
@@ -257,6 +258,7 @@
     <None Include="Assets\PostProcessing\Resources\Shaders\Uber.shader" />
     <None Include="Assets\PostProcessing\Resources\Shaders\UberSecondPass.cginc" />
     <None Include="Assets\PostProcessing\Utilities\CustomMotionTexture\Shaders\CustomMotionVectorTexture.shader" />
+    <None Include="Assets\Quantum Theory\Polyworld\Shaders\PolyWorldSurface_Linear.shader" />
     <None Include="Assets\Standard Assets\CrossPlatformInput\CrossPlatformInputGuidelines.txt" />
     <None Include="Assets\Standard Assets\Effects\ImageEffects\Shaders\BlendModesOverlay.shader" />
     <None Include="Assets\Standard Assets\Effects\ImageEffects\Shaders\BlurEffectConeTaps.shader" />
