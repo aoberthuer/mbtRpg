@@ -233,7 +233,7 @@ public class EnviroVolumeLight : MonoBehaviour
 
         if (_light.shadows != LightShadows.None && forceShadowsOff == false)
         {
-			if (UnityEngine.VR.VRSettings.enabled) 
+			if (UnityEngine.XR.XRSettings.enabled) 
 			{
 				if (EnviroSky.instance.singlePassVR) 
 				{
@@ -364,7 +364,7 @@ public class EnviroVolumeLight : MonoBehaviour
 
         if (_light.shadows != LightShadows.None && forceShadowsOff == false)
         {
-			if (UnityEngine.VR.VRSettings.enabled) {
+			if (UnityEngine.XR.XRSettings.enabled) {
 				if (EnviroSky.instance.singlePassVR) {
 					clip = Matrix4x4.TRS (new Vector3 (0.5f, 0.5f, 0.5f), Quaternion.identity, new Vector3 (0.5f, 0.5f, 0.5f));
 

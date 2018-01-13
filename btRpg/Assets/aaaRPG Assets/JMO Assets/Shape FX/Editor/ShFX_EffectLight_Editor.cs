@@ -127,7 +127,7 @@ namespace ShapeFX
 			if(prop_intensityCurve.isInstantiatedPrefab)
 			{
 				Rect lastRect = GUILayoutUtility.GetLastRect();
-				if(Event.current.type == EventType.mouseDown && Event.current.button == 1 && lastRect.Contains(Event.current.mousePosition))
+				if(Event.current.type == EventType.MouseDown && Event.current.button == 1 && lastRect.Contains(Event.current.mousePosition))
 				{
 					revertValueMenu.ShowAsContext();
 				}

@@ -906,11 +906,11 @@ namespace ShapeFX
 					shape = (Shape)(selected+1);
 				}
 				Rect r = GUILayoutUtility.GetLastRect();
-				if(overrideLabels != null && overrideLabels.Length == 3 && Event.current.type == EventType.repaint)
+				if(overrideLabels != null && overrideLabels.Length == 3 && Event.current.type == EventType.Repaint)
 				{
 					EditorStyles.popup.Draw(r, new GUIContent(overrideLabels[0]), -1);
 				}
-				if(Event.current.type == EventType.mouseDown && Event.current.button == 1 && r.Contains(Event.current.mousePosition))
+				if(Event.current.type == EventType.MouseDown && Event.current.button == 1 && r.Contains(Event.current.mousePosition))
 				{
 					shape = GetEnumNextValue<Shape>(shape);
 					if(shape == Shape.Unknown) shape = GetEnumNextValue<Shape>(shape);
@@ -926,11 +926,11 @@ namespace ShapeFX
 					style = (Style)(selected+1);
 				}
 				r = GUILayoutUtility.GetLastRect();
-				if(overrideLabels != null && overrideLabels.Length == 3 && Event.current.type == EventType.repaint)
+				if(overrideLabels != null && overrideLabels.Length == 3 && Event.current.type == EventType.Repaint)
 				{
 					EditorStyles.popup.Draw(r, new GUIContent(overrideLabels[1]), -1);
 				}
-				if(Event.current.type == EventType.mouseDown && Event.current.button == 1 && r.Contains(Event.current.mousePosition))
+				if(Event.current.type == EventType.MouseDown && Event.current.button == 1 && r.Contains(Event.current.mousePosition))
 				{
 					style = GetEnumNextValue<Style>(style);
 					if(style == Style.Unknown) style = GetEnumNextValue<Style>(style);
@@ -946,11 +946,11 @@ namespace ShapeFX
 					blendMode = (BlendMode)(selected+1);
 				}
 				r = GUILayoutUtility.GetLastRect();
-				if(overrideLabels != null && overrideLabels.Length == 3 && Event.current.type == EventType.repaint)
+				if(overrideLabels != null && overrideLabels.Length == 3 && Event.current.type == EventType.Repaint)
 				{
 					EditorStyles.popup.Draw(r, new GUIContent(overrideLabels[2]), -1);
 				}
-				if(Event.current.type == EventType.mouseDown && Event.current.button == 1 && r.Contains(Event.current.mousePosition))
+				if(Event.current.type == EventType.MouseDown && Event.current.button == 1 && r.Contains(Event.current.mousePosition))
 				{
 					blendMode = GetEnumNextValue<BlendMode>(blendMode);
 					if(blendMode == BlendMode.Unknown) blendMode = GetEnumNextValue<BlendMode>(blendMode);
@@ -1253,7 +1253,7 @@ namespace ShapeFX
 
 			EditorGUILayout.HelpBox("Use this editor to easily change the style and appearance of the effect.\n\nThis component is only a tool and will only be an empty component when you build your application.", MessageType.Info);
 			Rect r = GUILayoutUtility.GetLastRect();
-			if(Event.current.type == EventType.mouseDown && Event.current.button == 0 && r.Contains(Event.current.mousePosition))
+			if(Event.current.type == EventType.MouseDown && Event.current.button == 0 && r.Contains(Event.current.mousePosition))
 			{
 				PreviewParticleSystem();
 				Event.current.Use();

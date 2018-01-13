@@ -1202,7 +1202,7 @@ namespace GeNa
             }
 
             //Scroll wheel
-            if (Event.current.type == EventType.scrollWheel)
+            if (Event.current.type == EventType.ScrollWheel)
             {
                 if (Event.current.control)
                 {

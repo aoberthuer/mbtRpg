@@ -437,7 +437,7 @@ public class EnviroSkyRendering : MonoBehaviour
             Matrix4x4 projLeft = Matrix4x4.Perspective(_camera.fieldOfView, _camera.aspect, 0.01f, _camera.farClipPlane);
             Matrix4x4 projRight = Matrix4x4.Perspective(_camera.fieldOfView, _camera.aspect, 0.01f, _camera.farClipPlane);
 
-            if (UnityEngine.VR.VRSettings.enabled)
+            if (UnityEngine.XR.XRSettings.enabled)
             {
                 projLeft = _camera.GetStereoProjectionMatrix(Camera.StereoscopicEye.Left);
                 projLeft = GL.GetGPUProjectionMatrix(projLeft, true);
@@ -451,7 +451,7 @@ public class EnviroSkyRendering : MonoBehaviour
             }
 
             // use very low value for near clip plane to simplify cone/frustum intersection 
-            if (UnityEngine.VR.VRSettings.enabled)
+            if (UnityEngine.XR.XRSettings.enabled)
             {
                 _viewProj = projLeft * _camera.GetStereoViewMatrix(Camera.StereoscopicEye.Left);
                 _viewProjSP = projRight * _camera.GetStereoViewMatrix(Camera.StereoscopicEye.Right);
