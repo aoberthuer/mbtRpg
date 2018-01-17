@@ -304,7 +304,6 @@
     <Compile Include="Assets\aaaRPG Assets\JMO Assets\Shape FX\Scripts\ShFX_EffectLight.cs" />
     <Compile Include="Assets\aaaRPG Assets\JMO Assets\Shape FX\Scripts\ShFX_SoftParticleFactorModifier.cs" />
     <Compile Include="Assets\aaaRPG Assets\JMO Assets\Shape FX\Scripts\ShFX_Variants.cs" />
-    <Compile Include="Assets\aaaRPG\Prefabs\Characters\ThirdPersonCharacter\Scripts\ThirdPersonCharacter.cs" />
     <Compile Include="Assets\aaaRPG\Scripts\Audio\AudioTrigger.cs" />
     <Compile Include="Assets\aaaRPG\Scripts\Camera\CameraFollow.cs" />
     <Compile Include="Assets\aaaRPG\Scripts\Camera\CameraRaycaster.cs" />
