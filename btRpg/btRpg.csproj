@@ -306,6 +306,7 @@
     <Compile Include="Assets\aaaRPG Assets\JMO Assets\Shape FX\Scripts\ShFX_Variants.cs" />
     <Compile Include="Assets\aaaRPG\Scripts\Audio\AudioTrigger.cs" />
     <Compile Include="Assets\aaaRPG\Scripts\Camera\CameraFollow.cs" />
+    <Compile Include="Assets\aaaRPG\Scripts\Camera\CameraFollowSmoothed.cs" />
     <Compile Include="Assets\aaaRPG\Scripts\Camera\CameraRaycaster.cs" />
     <Compile Include="Assets\aaaRPG\Scripts\Characters\CharacterMovement.cs" />
     <Compile Include="Assets\aaaRPG\Scripts\Characters\DominantHand.cs" />

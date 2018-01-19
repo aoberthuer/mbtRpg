@@ -20,6 +20,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4416477787903114}
   - component: {fileID: 114821760004740688}
+  - component: {fileID: 114577066533838226}
   m_Layer: 0
   m_Name: Camera Arm
   m_TagString: Untagged
@@ -58,7 +59,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1312691648402480}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1200, y: 59.4, z: 1200}
+  m_LocalPosition: {x: 1200, y: 60, z: 1200}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4670783689985384}
@@ -109,11 +110,11 @@ Camera:
   m_TargetEye: 3
   m_HDR: 1
   m_AllowMSAA: 1
+  m_AllowDynamicResolution: 0
   m_ForceIntoRT: 0
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
-  m_StereoMirrorMode: 0
 --- !u!81 &81485186141142912
 AudioListener:
   m_ObjectHideFlags: 1
@@ -190,6 +191,19 @@ MonoBehaviour:
   sunShaftsMaterial: {fileID: 0}
   simpleClearShader: {fileID: 4800000, guid: 0408b30ac8046be4a9d860508e546f6f, type: 3}
   simpleClearMaterial: {fileID: 0}
+--- !u!114 &114577066533838226
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1312691648402480}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d407f7f3ba9e3ef48a6cc6726bb3533f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 0}
+  smoothTime: 0.5
 --- !u!114 &114664255909660520
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -210,7 +224,7 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1312691648402480}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6aba79d27bd88cf43b21dc75e48c745e, type: 3}
   m_Name: 
