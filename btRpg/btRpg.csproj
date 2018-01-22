@@ -311,11 +311,10 @@
     <Compile Include="Assets\aaaRPG\Scripts\Characters\CharacterMovement.cs" />
     <Compile Include="Assets\aaaRPG\Scripts\Characters\DominantHand.cs" />
     <Compile Include="Assets\aaaRPG\Scripts\Characters\Enemies\Enemy.cs" />
-    <Compile Include="Assets\aaaRPG\Scripts\Characters\Enemies\EnemyHealthBar.cs" />
     <Compile Include="Assets\aaaRPG\Scripts\Characters\Enemies\EnemyUI.cs" />
+    <Compile Include="Assets\aaaRPG\Scripts\Characters\HealthSystem.cs" />
     <Compile Include="Assets\aaaRPG\Scripts\Characters\Player\Energy.cs" />
     <Compile Include="Assets\aaaRPG\Scripts\Characters\Player\Player.cs" />
-    <Compile Include="Assets\aaaRPG\Scripts\Characters\Player\PlayerHealthBar.cs" />
     <Compile Include="Assets\aaaRPG\Scripts\Characters\Special Abilities\AbilityBehaviour.cs" />
     <Compile Include="Assets\aaaRPG\Scripts\Characters\Special Abilities\AbilityConfig.cs" />
     <Compile Include="Assets\aaaRPG\Scripts\Characters\Special Abilities\Area of Effect\AreaOfEffectBehaviour.cs" />

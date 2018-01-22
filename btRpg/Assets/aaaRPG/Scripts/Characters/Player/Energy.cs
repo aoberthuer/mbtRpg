@@ -8,7 +8,6 @@ namespace RPG.Characters
     {
         [SerializeField] Image energyOrb;
         [SerializeField] float maxEnergyPoints = 100f;
-
         [SerializeField] float regenerateEnergyPerSecond = 1f;
 
         private float currentEnergyPoints;

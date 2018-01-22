@@ -850,6 +850,7 @@ GameObject:
   - component: {fileID: 114196217648798902}
   - component: {fileID: 114313636823713184}
   - component: {fileID: 114015942935998318}
+  - component: {fileID: 114065860265418240}
   m_Layer: 12
   m_Name: Player
   m_TagString: Player
@@ -2931,7 +2932,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2ed3b76998903fc40ab3dce0dcc31259, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealthPoints: 50
   baseDamage: 10
   currentWeaponConfig: {fileID: 11400000, guid: 22986c5845d1a86488f2083872c28f6e,
     type: 2}
@@ -2941,10 +2941,23 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 7e990e136e4322843ab7c3ea37268e70, type: 2}
   - {fileID: 11400000, guid: 6c5cc468ecd0eea4b9bc7107aad2e278, type: 2}
   - {fileID: 11400000, guid: 1522a8bffe14b7349aa19512208526aa, type: 2}
-  deathSounds:
-  - {fileID: 8300000, guid: 2066e8f869826f544be6a251ba5166fe, type: 3}
-  - {fileID: 8300000, guid: b8f2d7ca348fb414180b5da51a60c97b, type: 3}
-  - {fileID: 8300000, guid: 1bc3f53c876bf9647923437a0a0205ba, type: 3}
+  criticalHitChance: 0.1
+  criticalHitMultiplier: 1.25
+  criticalHitParticle: {fileID: 19848708, guid: 60af6c546b87d8247a1eea8e6c7ee9cf,
+    type: 2}
+--- !u!114 &114065860265418240
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1763760897697098}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe02cc92eb7dbfc4fa5c6412f92fa54e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealthPoints: 100
+  healthBar: {fileID: 0}
   damageSounds:
   - {fileID: 8300000, guid: 2598748595821b2479839f404892eaa9, type: 3}
   - {fileID: 8300000, guid: 254d3ce07dc948940ac6f4e785485e3d, type: 3}
@@ -2952,9 +2965,11 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 5a0ffe0644b82fd48be1247e5fdc665c, type: 3}
   - {fileID: 8300000, guid: ad2d418a97745b040bf0a504b6bfd80a, type: 3}
   - {fileID: 8300000, guid: e4db04b1d5bda1d4fa22e67028e67417, type: 3}
-  criticalHitChance: 0.1
-  criticalHitMultiplier: 1.25
-  criticalHitParticle: {fileID: 0}
+  deathSounds:
+  - {fileID: 8300000, guid: 2066e8f869826f544be6a251ba5166fe, type: 3}
+  - {fileID: 8300000, guid: b8f2d7ca348fb414180b5da51a60c97b, type: 3}
+  - {fileID: 8300000, guid: 1bc3f53c876bf9647923437a0a0205ba, type: 3}
+  deathVanishSeconds: 2
 --- !u!114 &114196217648798902
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2978,8 +2993,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   stoppingDistance: 1
-  moveSpeedMultiplier: 0.7
-  animationSpeedMultiplier: 0.7
+  moveSpeedMultiplier: 1
+  animationSpeedMultiplier: 1
   movingTurnSpeed: 360
   stationaryTurnSpeed: 180
 --- !u!114 &114313636823713184
@@ -3006,7 +3021,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   energyOrb: {fileID: 0}
   maxEnergyPoints: 100
-  regenerateEnergyPerSecond: 0.25
+  regenerateEnergyPerSecond: 1
 --- !u!114 &114632166170559230
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -4180,7 +4195,7 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.8
-  m_Speed: 4
+  m_Speed: 6
   m_Acceleration: 4
   avoidancePriority: 50
   m_AngularSpeed: 120

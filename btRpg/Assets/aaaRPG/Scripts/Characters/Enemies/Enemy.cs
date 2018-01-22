@@ -7,10 +7,6 @@ namespace RPG.Characters
 {
     public class Enemy : MonoBehaviour, IDamageable
     {
-
-        [SerializeField] float maxHealthPoints = 100f;
-        float currentHealthPoints;
-
         Player player = null;
 
         [SerializeField] float attackRadius = 2f;
@@ -29,20 +25,12 @@ namespace RPG.Characters
         private void Start()
         {
             player = FindObjectOfType<Player>();
-
-            currentHealthPoints = maxHealthPoints;
         }
 
         private void Update()
         {
             if (player != null)
             {
-                if(player.healthAsPercentage <= float.Epsilon)
-                {
-                    StopAllCoroutines();
-                    Destroy(this); // stop all enemy behaviour
-                }
-
                 float distanceToPlayer = Vector3.Distance(player.transform.position, transform.position);
                 if (distanceToPlayer <= attackRadius && !isAttacking)
                 {
@@ -82,23 +70,6 @@ namespace RPG.Characters
             newProjectile.GetComponent<Rigidbody>().velocity = unitVectorToPlayer * projectileSpeed;
         }
 
-        public float healthAsPercentage
-        {
-            get
-            {
-                return currentHealthPoints / maxHealthPoints;
-            }
-        }
-
-        public void TakeDamage(float damage)
-        {
-            currentHealthPoints = Mathf.Clamp(currentHealthPoints - damage, 0f, maxHealthPoints);
-            if (currentHealthPoints <= 0)
-            {
-                Destroy(gameObject);
-            }
-        }
-
         public string GetTag()
         {
             return tag;
@@ -113,6 +84,11 @@ namespace RPG.Characters
             // draw chase sphere
             Gizmos.color = new Color(0f, 0f, 255f, .5f);
             Gizmos.DrawWireSphere(transform.position, chaseRadius);
+        }
+
+        public void TakeDamage(float damage)
+        {
+            // todo remove
         }
     }
 }
