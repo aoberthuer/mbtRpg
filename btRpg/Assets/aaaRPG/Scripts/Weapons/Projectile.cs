@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-using RPG.Core;
+using RPG.Characters;
 
 namespace RPG.Weapons
 {
@@ -49,10 +49,10 @@ namespace RPG.Weapons
 
         private void DamageDamageables(Collision collision)
         {
-            Component damageableComponent = collision.gameObject.GetComponent(typeof(IDamageable));
+            Component damageableComponent = collision.gameObject.GetComponent(typeof(HealthSystem));
             if (damageableComponent != null)
             {
-                (damageableComponent as IDamageable).TakeDamage(damageCaused);
+                (damageableComponent as HealthSystem).TakeDamage(damageCaused);
             }
 
             Destroy(gameObject, DESTROY_DELAY);

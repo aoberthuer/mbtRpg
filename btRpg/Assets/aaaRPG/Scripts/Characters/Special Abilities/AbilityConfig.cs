@@ -1,22 +1,8 @@
 ﻿using UnityEngine;
 
-using RPG.Core;
-
 
 namespace RPG.Characters
 { 
-
-    public struct AbilityUseParameters
-    {
-        public IDamageable target;
-        public float baseDamage;
-
-        public AbilityUseParameters(IDamageable target, float baseDamage)
-        {
-            this.target = target;
-            this.baseDamage = baseDamage;
-        }
-    }
 
     public abstract class AbilityConfig : ScriptableObject
     {
@@ -54,9 +40,9 @@ namespace RPG.Characters
 
         public abstract AbilityBehaviour GetBehaviourComponent(GameObject gameObjectToAttachTo);
 
-        public void Use(AbilityUseParameters abilityUseParameters)
+        public void Use(GameObject target)
         {
-            behaviour.Use(abilityUseParameters);
+            behaviour.Use(target);
         }
     }
   

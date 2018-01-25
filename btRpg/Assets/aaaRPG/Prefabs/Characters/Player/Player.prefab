@@ -2937,10 +2937,6 @@ MonoBehaviour:
     type: 2}
   animatorOverrideController: {fileID: 22100000, guid: f119d25ccdb55fd4780a3f379714ed01,
     type: 2}
-  specialAbilities:
-  - {fileID: 11400000, guid: 7e990e136e4322843ab7c3ea37268e70, type: 2}
-  - {fileID: 11400000, guid: 6c5cc468ecd0eea4b9bc7107aad2e278, type: 2}
-  - {fileID: 11400000, guid: 1522a8bffe14b7349aa19512208526aa, type: 2}
   criticalHitChance: 0.1
   criticalHitMultiplier: 1.25
   criticalHitParticle: {fileID: 19848708, guid: 60af6c546b87d8247a1eea8e6c7ee9cf,
@@ -3019,6 +3015,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd32a5196bcb87148a76690964387109, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  specialAbilities:
+  - {fileID: 11400000, guid: 7e990e136e4322843ab7c3ea37268e70, type: 2}
+  - {fileID: 11400000, guid: 6c5cc468ecd0eea4b9bc7107aad2e278, type: 2}
+  - {fileID: 11400000, guid: 1522a8bffe14b7349aa19512208526aa, type: 2}
   energyOrb: {fileID: 0}
   maxEnergyPoints: 100
   regenerateEnergyPerSecond: 1

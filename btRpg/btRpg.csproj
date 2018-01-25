@@ -313,7 +313,6 @@
     <Compile Include="Assets\aaaRPG\Scripts\Characters\Enemies\Enemy.cs" />
     <Compile Include="Assets\aaaRPG\Scripts\Characters\Enemies\EnemyUI.cs" />
     <Compile Include="Assets\aaaRPG\Scripts\Characters\HealthSystem.cs" />
-    <Compile Include="Assets\aaaRPG\Scripts\Characters\Player\Energy.cs" />
     <Compile Include="Assets\aaaRPG\Scripts\Characters\Player\Player.cs" />
     <Compile Include="Assets\aaaRPG\Scripts\Characters\Special Abilities\AbilityBehaviour.cs" />
     <Compile Include="Assets\aaaRPG\Scripts\Characters\Special Abilities\AbilityConfig.cs" />
@@ -323,7 +322,7 @@
     <Compile Include="Assets\aaaRPG\Scripts\Characters\Special Abilities\Power Attack\PowerAttackConfig.cs" />
     <Compile Include="Assets\aaaRPG\Scripts\Characters\Special Abilities\Self Heal\SelfHealBehaviour.cs" />
     <Compile Include="Assets\aaaRPG\Scripts\Characters\Special Abilities\Self Heal\SelfHealConfig.cs" />
-    <Compile Include="Assets\aaaRPG\Scripts\Core\IDamageable.cs" />
+    <Compile Include="Assets\aaaRPG\Scripts\Characters\SpecialAbilities.cs" />
     <Compile Include="Assets\aaaRPG\Scripts\Weapons\Projectile.cs" />
     <Compile Include="Assets\aaaRPG\Scripts\Weapons\Weapon.cs" />
     <Compile Include="Assets\aaaRPG\Scripts\Weapons\WeaponPickupPoint.cs" />

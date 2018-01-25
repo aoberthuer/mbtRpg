@@ -5,9 +5,7 @@ using UnityEngine.Assertions;
 using UnityEngine.SceneManagement;
 
 using RPG.CameraUI;
-using RPG.Core;
 using RPG.Weapons;
-using System;
 
 namespace RPG.Characters
 {
@@ -29,8 +27,7 @@ namespace RPG.Characters
         [SerializeField] AnimatorOverrideController animatorOverrideController;
         Animator animator = null;
 
-        [Header("Special Abilities")]
-        [SerializeField] AbilityConfig[] specialAbilities;
+        SpecialAbilities specialAbilities;
 
         [Header("Critical Hit")]
         [Range(0.0f, 1.0f)] [SerializeField] float criticalHitChance = 0.1f;
@@ -41,12 +38,12 @@ namespace RPG.Characters
 
         private void Start()
         {
+            specialAbilities = GetComponent<SpecialAbilities>();
+
             RegisterForMouseClick();
             
             PutWeaponInHand(currentWeaponConfig);
             SetAttackAnimation();
-
-            AttachSpecialAbilities();
         }
 
         private void Update()
@@ -58,22 +55,14 @@ namespace RPG.Characters
             }
         }
 
-        private void AttachSpecialAbilities()
-        {
-            for (int abilityIndex = 0; abilityIndex < specialAbilities.Length; abilityIndex++)
-            {
-                specialAbilities[abilityIndex].AttachAbilityTo(gameObject);
-            }
-        }
-
         private void ScanForAbilityKeyDown()
         {
             // start by one not zero, as zero is the power attack
-            for(int abilityIndex = 1; abilityIndex < specialAbilities.Length; abilityIndex++)
+            for(int abilityIndex = 1; abilityIndex < specialAbilities.GetNumberOfAbilities(); abilityIndex++)
             {
                 if(Input.GetKeyDown(abilityIndex.ToString()))
                 {
-                    AttemptSpecialAbility(abilityIndex);
+                    specialAbilities.AttemptSpecialAbility(abilityIndex);
                 }
             }
         }
@@ -127,22 +116,10 @@ namespace RPG.Characters
             }
             else if(Input.GetMouseButtonDown(1))
             {
-                AttemptSpecialAbility(0);
+                specialAbilities.AttemptSpecialAbility(0);
             }
         }
 
-        private void AttemptSpecialAbility(int abilityIndex)
-        {
-            Energy energy = GetComponent<Energy>();
-
-            if (energy != null && energy.IsEnergyAvailable(specialAbilities[abilityIndex].getEnergyCost()))
-            {
-                energy.ConsumeEnergy(specialAbilities[abilityIndex].getEnergyCost());
-
-                AbilityUseParameters abilityUseParameters = new AbilityUseParameters(enemy, baseDamage);
-                specialAbilities[abilityIndex].Use(abilityUseParameters);
-            }
-        }
 
         private bool IsTargetInRange(GameObject target)
         {

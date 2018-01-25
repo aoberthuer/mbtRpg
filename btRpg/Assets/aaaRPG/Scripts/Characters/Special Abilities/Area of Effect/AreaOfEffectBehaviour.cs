@@ -1,16 +1,14 @@
 ﻿using UnityEngine;
 
-using RPG.Core;
-using System;
 
 namespace RPG.Characters
 {
     public class AreaOfEffectBehaviour : AbilityBehaviour
     {
 
-        public override void Use(AbilityUseParameters abilityUseParameters)
+        public override void Use(GameObject target)
         {
-            base.Use(abilityUseParameters);
+            base.Use(target);
             DealRadialDamage();
         }
 
@@ -30,26 +28,13 @@ namespace RPG.Characters
 
             foreach (RaycastHit hit in raycastHits)
             {
-                IDamageable damageable = hit.collider.gameObject.GetComponent<IDamageable>();
+                HealthSystem healthSystem = hit.collider.gameObject.GetComponent<HealthSystem>();
+                bool hitPlayer = hit.collider.gameObject.GetComponent<Player>();
 
-                // could solve it like this... (course's solution)
-                // bool hitPlayer = hit.collider.gameObject.GetComponent<Player>();
-                // if (damageable != null && !hitPlayer)
-
-                // or like this... here the origin (not specifically the player) will not be affected by the aoe.
-                if (damageable != null)
+                if (healthSystem != null && !hitPlayer)
                 {
-
-                    Debug.Log("Game object's tag: " + gameObject.tag + ", IDamageable's tag: " + damageable.GetTag());
-
-                    if (gameObject.tag != damageable.GetTag())
-                    {
-                        // float damageToDeal = abilityUseParameters.baseDamage + extraDamage;
-                        float damageToDeal = extraDamage; // do not think the base damage should factor in here...?
-                        damageable.TakeDamage(damageToDeal);
-
-                    }
-
+                    float damageToDeal = extraDamage;
+                    healthSystem.TakeDamage(damageToDeal);
                 }
             }
         }

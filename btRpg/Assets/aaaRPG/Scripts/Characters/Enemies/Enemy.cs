@@ -1,11 +1,10 @@
 ﻿using UnityEngine;
 
-using RPG.Core;
 using RPG.Weapons;
 
 namespace RPG.Characters
 {
-    public class Enemy : MonoBehaviour, IDamageable
+    public class Enemy : MonoBehaviour
     {
         Player player = null;
 
@@ -84,11 +83,6 @@ namespace RPG.Characters
             // draw chase sphere
             Gizmos.color = new Color(0f, 0f, 255f, .5f);
             Gizmos.DrawWireSphere(transform.position, chaseRadius);
-        }
-
-        public void TakeDamage(float damage)
-        {
-            // todo remove
         }
     }
 }

@@ -72,7 +72,6 @@ GameObject:
   - component: {fileID: 224525895435303674}
   - component: {fileID: 222994997101745304}
   - component: {fileID: 114096305402642960}
-  - component: {fileID: 114415466932769784}
   m_Layer: 5
   m_Name: Health Orb left
   m_TagString: Untagged
@@ -239,7 +238,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 21300000, guid: 0355c2088e8184f4696d037411606525, type: 3}
+  m_Sprite: {fileID: 21300000, guid: b1f7fc70b62d43a4d8f86a19a2e0dd47, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -266,7 +265,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 21300000, guid: c441ade904ec8ff48983463b4e32cb1e, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 0c37db74f0f5ebd429708261ba175d6d, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -301,17 +300,6 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
---- !u!114 &114415466932769784
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1445453997729090}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e94587b07b71f154f861d927f993fe9c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &114444196482027052
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -395,7 +383,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 21300000, guid: 2fa4be18692be154b991919c0d039e6c, type: 3}
+  m_Sprite: {fileID: 21300000, guid: f6a6372457c4c9e4fa9a01eee6b2e62a, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1

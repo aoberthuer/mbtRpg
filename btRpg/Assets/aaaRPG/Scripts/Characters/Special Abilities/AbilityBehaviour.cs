@@ -24,7 +24,7 @@ namespace RPG.Characters
             config = configToSet;
         }
 
-        public virtual void Use(AbilityUseParameters abilityUseParameters)
+        public virtual void Use(GameObject target)
         {
             PlayParticleEffect();
             PlayAbilityAudioClip();

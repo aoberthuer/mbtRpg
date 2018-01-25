@@ -11,6 +11,8 @@ namespace RPG.Characters
     {
         [Header("Health")]
         [SerializeField] float maxHealthPoints = 100f;
+        private float currentHealthPoints;
+
         [SerializeField] Image healthBar;
 
         [Header("Sounds")]
@@ -24,7 +26,7 @@ namespace RPG.Characters
         private const string ANIM_TRIGGER_DEATH = "Death";
         private const string PLAYER_DEFAULT_ATTACK = "Player Default Attack";
 
-        float currentHealthPoints;
+        
         Animator animator;
         AudioSource audioSource;
         CharacterMovement characterMovement;
