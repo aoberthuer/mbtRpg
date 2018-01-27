@@ -843,13 +843,10 @@ GameObject:
   - component: {fileID: 54037710008191444}
   - component: {fileID: 136903548324267206}
   - component: {fileID: 195113389118759174}
+  - component: {fileID: 82795798268533972}
   - component: {fileID: 114230080337729344}
   - component: {fileID: 114033168312273112}
   - component: {fileID: 114379271726215868}
-  - component: {fileID: 82795798268533972}
-  - component: {fileID: 114196217648798902}
-  - component: {fileID: 114313636823713184}
-  - component: {fileID: 114015942935998318}
   - component: {fileID: 114065860265418240}
   m_Layer: 12
   m_Name: Player
@@ -2910,17 +2907,6 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
---- !u!114 &114015942935998318
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1763760897697098}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 37dcd48f3757d314aaa732e3f5052b3b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &114033168312273112
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2966,17 +2952,6 @@ MonoBehaviour:
   - {fileID: 8300000, guid: b8f2d7ca348fb414180b5da51a60c97b, type: 3}
   - {fileID: 8300000, guid: 1bc3f53c876bf9647923437a0a0205ba, type: 3}
   deathVanishSeconds: 2
---- !u!114 &114196217648798902
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1763760897697098}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9229d24d15bea4d4b87f41675bab43df, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &114230080337729344
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2993,17 +2968,6 @@ MonoBehaviour:
   animationSpeedMultiplier: 1
   movingTurnSpeed: 360
   stationaryTurnSpeed: 180
---- !u!114 &114313636823713184
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1763760897697098}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2f7fddda1db7ce74a9202126bb23a052, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &114379271726215868
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3022,6 +2986,7 @@ MonoBehaviour:
   energyOrb: {fileID: 0}
   maxEnergyPoints: 100
   regenerateEnergyPerSecond: 1
+  outOfEnergyClip: {fileID: 8300000, guid: ff9f7f9da526cd84bb56cafffd957e86, type: 3}
 --- !u!114 &114632166170559230
 MonoBehaviour:
   m_ObjectHideFlags: 1

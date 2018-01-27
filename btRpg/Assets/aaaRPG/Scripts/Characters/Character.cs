@@ -6,7 +6,7 @@ using RPG.CameraUI;
 namespace RPG.Characters
 {
     [RequireComponent(typeof(NavMeshAgent))]
-    public class CharacterMovement : MonoBehaviour
+    public class Character : MonoBehaviour
     {
 
         private const float MOVE_NORMALIZE_THRESHOLD = 1f;
@@ -27,8 +27,6 @@ namespace RPG.Characters
         private NavMeshAgent agent;
 
         private Vector3 clickPoint;
-
-        private bool isInDirectMode = false;
 
 
         private void Start()

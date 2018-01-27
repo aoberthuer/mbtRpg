@@ -29,7 +29,7 @@ namespace RPG.Characters
         
         Animator animator;
         AudioSource audioSource;
-        CharacterMovement characterMovement;
+        Character character;
 
         public float healthAsPercentage { get { return currentHealthPoints / maxHealthPoints; } }
 
@@ -37,7 +37,7 @@ namespace RPG.Characters
         {
             animator = GetComponent<Animator>();
             audioSource = GetComponent<AudioSource>();
-            characterMovement = GetComponent<CharacterMovement>();
+            character = GetComponent<Character>();
 
             currentHealthPoints = maxHealthPoints;
         }
@@ -75,7 +75,7 @@ namespace RPG.Characters
         IEnumerator KillCharacter()
         {
             StopAllCoroutines();
-            characterMovement.Kill();
+            character.Kill();
             animator.SetTrigger(ANIM_TRIGGER_DEATH);
             var playerComponent = GetComponent<Player>();
             if (playerComponent && playerComponent.isActiveAndEnabled) // relying on lazy evaluation

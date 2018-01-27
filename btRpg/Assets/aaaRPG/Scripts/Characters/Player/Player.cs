@@ -62,7 +62,14 @@ namespace RPG.Characters
             {
                 if(Input.GetKeyDown(abilityIndex.ToString()))
                 {
-                    specialAbilities.AttemptSpecialAbility(abilityIndex);
+                    if (enemy != null)
+                    {
+                        specialAbilities.AttemptSpecialAbility(abilityIndex, enemy.gameObject);
+                    }
+                    else
+                    {
+                        specialAbilities.AttemptSpecialAbility(abilityIndex);
+                    }
                 }
             }
         }

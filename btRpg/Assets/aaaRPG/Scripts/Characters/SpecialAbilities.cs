@@ -13,6 +13,8 @@ namespace RPG.Characters
         [SerializeField] float maxEnergyPoints = 100f;
         [SerializeField] float regenerateEnergyPerSecond = 1f;
 
+        [SerializeField] AudioClip outOfEnergyClip;
+
         private float currentEnergyPoints;
 
         private AudioSource audioSource;
@@ -50,19 +52,20 @@ namespace RPG.Characters
             }
         }
 
-        public void AttemptSpecialAbility(int abilityIndex)
+        public void AttemptSpecialAbility(int abilityIndex, GameObject target = null)
         {
             float energyCost = specialAbilities[abilityIndex].getEnergyCost();
             if (IsEnergyAvailable(energyCost))
             {
                 ConsumeEnergy(energyCost);
-
-                print("Using special ability " + abilityIndex);  // todo make work
                 specialAbilities[abilityIndex].Use(null);
             }
             else
             {
-                // todo play out of energy sound
+                if(!audioSource.isPlaying)
+                {
+                    audioSource.PlayOneShot(outOfEnergyClip);
+                }
             }
         }
 
