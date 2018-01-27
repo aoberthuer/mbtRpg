@@ -9,7 +9,7 @@ using RPG.Weapons;
 
 namespace RPG.Characters
 {
-    [RequireComponent(typeof(Animator))]
+
     public class Player : MonoBehaviour
     {
         private const string ANIM_TRIGGER_ATTACK = "Attack";

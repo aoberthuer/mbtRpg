@@ -11,12 +11,23 @@ namespace RPG.Characters
 
         private const float MOVE_NORMALIZE_THRESHOLD = 1f;
 
+        [Header("Animator Setup Settings")]
+        [SerializeField] RuntimeAnimatorController animatorController;
+        [SerializeField] AnimatorOverrideController animatorOverrideController;
+        [SerializeField] Avatar characterAvatar;
+
+        [Header("Capsule Collider Settings")]
+        [SerializeField] Vector3 colliderCenter = new Vector3(0, 0.5f, 0);
+        [SerializeField] float colliderRadius = 0.5f;
+        [SerializeField] float colliderHeight = 2.0f;
+
+        [Header("Movement Settings")]
         [SerializeField] float stoppingDistance = 1f;
         [SerializeField] float moveSpeedMultiplier = 0.7f;
         [SerializeField] float animationSpeedMultiplier = 1.2f;
-
         [SerializeField] float movingTurnSpeed = 360;
         [SerializeField] float stationaryTurnSpeed = 180;
+
 
         float turnAmount;
         float forwardAmount;
@@ -28,6 +39,22 @@ namespace RPG.Characters
 
         private Vector3 clickPoint;
 
+        private void Awake()
+        {
+            AddRequiredComponents();
+        }
+
+        private void AddRequiredComponents()
+        {
+            animator = gameObject.AddComponent<Animator>();
+            animator.runtimeAnimatorController = animatorController;
+            animator.avatar = characterAvatar;
+
+            CapsuleCollider capsuleCollider = gameObject.AddComponent<CapsuleCollider>(); // no need to store in field
+            capsuleCollider.center = colliderCenter;
+            capsuleCollider.radius = colliderRadius;
+            capsuleCollider.height = colliderHeight;
+        }
 
         private void Start()
         {
@@ -35,8 +62,6 @@ namespace RPG.Characters
 
             cameraRaycaster.onMouseOverEnemy += OnMouseOverEnemy;
             cameraRaycaster.onMouseOverWalkable += OnMouseOverWalkable;
-
-            animator = GetComponent<Animator>();
 
             ridigBody = GetComponent<Rigidbody>();
             ridigBody.constraints = RigidbodyConstraints.FreezeRotation; // use this instead of bitwise OR for the three axis

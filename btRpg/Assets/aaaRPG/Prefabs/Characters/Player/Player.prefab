@@ -839,9 +839,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4569067691479268}
-  - component: {fileID: 95125914810350112}
   - component: {fileID: 54037710008191444}
-  - component: {fileID: 136903548324267206}
   - component: {fileID: 195113389118759174}
   - component: {fileID: 82795798268533972}
   - component: {fileID: 114230080337729344}
@@ -2890,23 +2888,6 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 0
---- !u!95 &95125914810350112
-Animator:
-  serializedVersion: 3
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1763760897697098}
-  m_Enabled: 1
-  m_Avatar: {fileID: 9000000, guid: e2958561779b1a748a4246b9d0c0b309, type: 3}
-  m_Controller: {fileID: 22100000, guid: f119d25ccdb55fd4780a3f379714ed01, type: 2}
-  m_CullingMode: 1
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 1
-  m_LinearVelocityBlending: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
 --- !u!114 &114033168312273112
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2963,6 +2944,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: be697414d08a81949b7d786a1f2f8cc9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  animatorController: {fileID: 9100000, guid: e2cf68ff4b1ffda45a77f7307dd789b9, type: 2}
+  animatorOverrideController: {fileID: 22100000, guid: f119d25ccdb55fd4780a3f379714ed01,
+    type: 2}
+  characterAvatar: {fileID: 9000000, guid: e2958561779b1a748a4246b9d0c0b309, type: 3}
+  colliderCenter: {x: 0, y: 1, z: 0}
+  colliderRadius: 0.5
+  colliderHeight: 2
   stoppingDistance: 1
   moveSpeedMultiplier: 1
   animationSpeedMultiplier: 1
@@ -2998,19 +2986,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a49a56ee9bde40c46a030d6b6afca893, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!136 &136903548324267206
-CapsuleCollider:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1763760897697098}
-  m_Material: {fileID: 13400000, guid: 52baaeb214519f347a35cf0edfd262ff, type: 2}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  m_Radius: 0.8
-  m_Height: 2
-  m_Direction: 1
-  m_Center: {x: 0, y: 0.5, z: 0}
 --- !u!137 &137062748666883858
 SkinnedMeshRenderer:
   m_ObjectHideFlags: 1
