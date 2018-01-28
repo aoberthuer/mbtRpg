@@ -35,8 +35,7 @@ namespace RPG.Characters
         bool freezeRotation = true;
 
         [Header("Movement Settings")]
-        [SerializeField] float stoppingDistance = 1f;
-        [SerializeField] float moveSpeedMultiplier = 0.7f;
+        [SerializeField] float moveSpeedMultiplier = 1f;
         [SerializeField] float animationSpeedMultiplier = 1.2f;
         [SerializeField] float movingTurnSpeed = 360;
         [SerializeField] float stationaryTurnSpeed = 180;

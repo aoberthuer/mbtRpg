@@ -14,10 +14,10 @@ TagManager:
   - 
   - 
   - Walkable
-  - 
-  - 
-  - 
-  - 
+  - FogVolumeShadowCaster
+  - FogVolume
+  - FogVolumeSurrogate
+  - FogVolumeUniform
   - 
   - 
   - 
