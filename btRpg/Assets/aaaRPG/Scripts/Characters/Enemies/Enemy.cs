@@ -6,7 +6,7 @@ namespace RPG.Characters
 {
     public class Enemy : MonoBehaviour
     {
-        Player player = null;
+        
 
         [SerializeField] float attackRadius = 2f;
         [SerializeField] float chaseRadius = 4f;
@@ -21,16 +21,18 @@ namespace RPG.Characters
         [SerializeField] GameObject projectileSocket = null;
         [SerializeField] Vector3 aimOffset = new Vector3(0, 1f, 0);
 
+        PlayerMovement playerMovement = null;
+
         private void Start()
         {
-            player = FindObjectOfType<Player>();
+            playerMovement = FindObjectOfType<PlayerMovement>();
         }
 
         private void Update()
         {
-            if (player != null)
+            if (playerMovement != null)
             {
-                float distanceToPlayer = Vector3.Distance(player.transform.position, transform.position);
+                float distanceToPlayer = Vector3.Distance(playerMovement.transform.position, transform.position);
                 if (distanceToPlayer <= attackRadius && !isAttacking)
                 {
                     isAttacking = true;
@@ -64,7 +66,7 @@ namespace RPG.Characters
             projectileComponent.setDamage(damagePerShot);
             projectileComponent.setShooter(gameObject);
 
-            Vector3 unitVectorToPlayer = (player.transform.position + aimOffset - projectileSocket.transform.position).normalized;
+            Vector3 unitVectorToPlayer = (playerMovement.transform.position + aimOffset - projectileSocket.transform.position).normalized;
             float projectileSpeed = projectileComponent.GetDefaultLaunchSpeed();
             newProjectile.GetComponent<Rigidbody>().velocity = unitVectorToPlayer * projectileSpeed;
         }

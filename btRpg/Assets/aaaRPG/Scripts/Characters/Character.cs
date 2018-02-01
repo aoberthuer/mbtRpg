@@ -47,7 +47,8 @@ namespace RPG.Characters
         private Rigidbody ridigBody;
         private NavMeshAgent navMeshAgent;
 
-        private Vector3 clickPoint;
+        bool isAlive = true;
+
 
         private void Awake()
         {
@@ -77,6 +78,7 @@ namespace RPG.Characters
             navMeshAgent.acceleration = navMeshAgentAcceleration;
             navMeshAgent.stoppingDistance = navMeshAgentStoppingDistance;
             navMeshAgent.autoBraking = navMeshAgentAutoBrake;
+            navMeshAgent.updatePosition = true;
 
             navMeshAgent.updateRotation = false;
             navMeshAgent.updatePosition = true;
@@ -90,17 +92,9 @@ namespace RPG.Characters
 
         }
 
-        private void Start()
-        {
-            CameraRaycaster cameraRaycaster = Camera.main.GetComponent<CameraRaycaster>();
-
-            cameraRaycaster.onMouseOverEnemy += OnMouseOverEnemy;
-            cameraRaycaster.onMouseOverWalkable += OnMouseOverWalkable;
-        }
-
         private void Update()
         {
-            if (navMeshAgent.remainingDistance > navMeshAgent.stoppingDistance)
+            if (navMeshAgent.remainingDistance > navMeshAgent.stoppingDistance && isAlive)
             {
                 Move(navMeshAgent.desiredVelocity);
             }
@@ -110,20 +104,14 @@ namespace RPG.Characters
             }
         }
 
-        private void OnMouseOverEnemy(Enemy enemy)
+        public void SetDestination(Vector3 worldPos)
         {
-            if(Input.GetMouseButton(0) || Input.GetMouseButtonDown(1))
-            {
-                navMeshAgent.SetDestination(enemy.transform.position);
-            }
+            navMeshAgent.destination = worldPos;
         }
 
-        private void OnMouseOverWalkable(Vector3 destination)
+        public void Kill()
         {
-            if (Input.GetMouseButton(0))
-            {
-                navMeshAgent.SetDestination(destination);
-            }
+            isAlive = false;
         }
 
         private void OnAnimatorMove()
@@ -152,16 +140,11 @@ namespace RPG.Characters
             Move(movement);
         }
 
-        public void Move(Vector3 move)
+        private void Move(Vector3 move)
         {
             SetForwardAndTurn(move);
             ApplyExtraTurnRotation();
             UpdateAnimator();
-        }
-
-        public void Kill()
-        {
-            // to allow death signaling
         }
 
         private void SetForwardAndTurn(Vector3 move)

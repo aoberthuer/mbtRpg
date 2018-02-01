@@ -15,7 +15,7 @@ namespace RPG.Characters
 
         private void HealPlayer(GameObject target)
         {
-            HealthSystem playerHealth = player.GetComponent<HealthSystem>();
+            HealthSystem playerHealth = playerMovement.GetComponent<HealthSystem>();
             playerHealth.Heal( ((SelfHealConfig) config).getExtraHealth());
         }
     }

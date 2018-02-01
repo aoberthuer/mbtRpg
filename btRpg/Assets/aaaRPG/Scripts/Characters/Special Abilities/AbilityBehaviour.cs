@@ -9,14 +9,14 @@ namespace RPG.Characters
     {
         private const float PARTICLE_CLEAN_DELAY = 10f;
 
-        protected Player player;
+        protected PlayerMovement playerMovement;
 
         protected AbilityConfig config;
 
 
         private void Start()
         {
-            player = GetComponent<Player>();
+            playerMovement = GetComponent<PlayerMovement>();
         }
 
         public void SetConfig(AbilityConfig configToSet)

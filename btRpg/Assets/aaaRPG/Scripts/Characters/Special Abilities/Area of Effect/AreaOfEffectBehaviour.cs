@@ -29,7 +29,7 @@ namespace RPG.Characters
             foreach (RaycastHit hit in raycastHits)
             {
                 HealthSystem healthSystem = hit.collider.gameObject.GetComponent<HealthSystem>();
-                bool hitPlayer = hit.collider.gameObject.GetComponent<Player>();
+                bool hitPlayer = hit.collider.gameObject.GetComponent<PlayerMovement>();
 
                 if (healthSystem != null && !hitPlayer)
                 {

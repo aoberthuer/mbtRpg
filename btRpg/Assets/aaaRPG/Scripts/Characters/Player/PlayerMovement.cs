@@ -10,7 +10,7 @@ using RPG.Weapons;
 namespace RPG.Characters
 {
 
-    public class Player : MonoBehaviour
+    public class PlayerMovement : MonoBehaviour
     {
         private const string ANIM_TRIGGER_ATTACK = "Attack";
         private const string PLAYER_DEFAULT_ATTACK = "Player Default Attack";
@@ -22,6 +22,7 @@ namespace RPG.Characters
         private GameObject weaponObject;
         private float lastHitTime = 0f;
 
+        private Character character;
         private Enemy enemy; // 'caching' the current enemy
 
         [SerializeField] AnimatorOverrideController animatorOverrideController;
@@ -31,53 +32,27 @@ namespace RPG.Characters
 
         [Header("Critical Hit")]
         [Range(0.0f, 1.0f)] [SerializeField] float criticalHitChance = 0.1f;
-
         [SerializeField] float criticalHitMultiplier = 1.25f;
         [SerializeField] ParticleSystem criticalHitParticle;
 
 
         private void Start()
         {
+            character = GetComponent<Character>();
             specialAbilities = GetComponent<SpecialAbilities>();
 
-            RegisterForMouseClick();
+            RegisterForMouseEvents();
             
             PutWeaponInHand(currentWeaponConfig);
             SetAttackAnimation();
         }
 
-        private void Update()
-        {
-            HealthSystem hs = GetComponent<HealthSystem>();
-            if (hs.healthAsPercentage > Mathf.Epsilon)
-            {
-                ScanForAbilityKeyDown();
-            }
-        }
-
-        private void ScanForAbilityKeyDown()
-        {
-            // start by one not zero, as zero is the power attack
-            for(int abilityIndex = 1; abilityIndex < specialAbilities.GetNumberOfAbilities(); abilityIndex++)
-            {
-                if(Input.GetKeyDown(abilityIndex.ToString()))
-                {
-                    if (enemy != null)
-                    {
-                        specialAbilities.AttemptSpecialAbility(abilityIndex, enemy.gameObject);
-                    }
-                    else
-                    {
-                        specialAbilities.AttemptSpecialAbility(abilityIndex);
-                    }
-                }
-            }
-        }
-
-        private void RegisterForMouseClick()
+        private void RegisterForMouseEvents()
         {
             CameraRaycaster cameraRaycaster = Camera.main.GetComponent<CameraRaycaster>();
+
             cameraRaycaster.onMouseOverEnemy += OnMouseOverEnemy;
+            cameraRaycaster.onMouseOverWalkable += OnMouseOverWalkable;
         }
 
         public void PutWeaponInHand(Weapon weaponToUse)
@@ -103,6 +78,30 @@ namespace RPG.Characters
 
         }
 
+        private void Update()
+        {
+            ScanForAbilityKeyDown();
+        }
+
+        private void ScanForAbilityKeyDown()
+        {
+            // start by one not zero, as zero is the power attack
+            for(int abilityIndex = 1; abilityIndex < specialAbilities.GetNumberOfAbilities(); abilityIndex++)
+            {
+                if(Input.GetKeyDown(abilityIndex.ToString()))
+                {
+                    if (enemy != null)
+                    {
+                        specialAbilities.AttemptSpecialAbility(abilityIndex, enemy.gameObject);
+                    }
+                    else
+                    {
+                        specialAbilities.AttemptSpecialAbility(abilityIndex);
+                    }
+                }
+            }
+        }
+
         private GameObject RequestDominantHand()
         {
             DominantHand[] dominantHands = GetComponentsInChildren<DominantHand>();
@@ -124,6 +123,23 @@ namespace RPG.Characters
             else if(Input.GetMouseButtonDown(1))
             {
                 specialAbilities.AttemptSpecialAbility(0);
+            }
+        }
+
+        // copied from Character class
+        //private void OnMouseOverEnemy(Enemy enemy)
+        //{
+        //    if(Input.GetMouseButton(0) || Input.GetMouseButtonDown(1))
+        //    {
+        //        navMeshAgent.SetDestination(enemy.transform.position);
+        //    }
+        //}
+
+        private void OnMouseOverWalkable(Vector3 destination)
+        {
+            if (Input.GetMouseButton(0))
+            {
+                character.SetDestination(destination);
             }
         }
 
