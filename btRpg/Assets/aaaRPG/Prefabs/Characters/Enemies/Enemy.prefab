@@ -698,8 +698,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4142540840089392}
   - component: {fileID: 114190711095858550}
-  - component: {fileID: 114671547709361554}
-  - component: {fileID: 114434586097321294}
   m_Layer: 0
   m_Name: Enemy
   m_TagString: Untagged
@@ -2406,8 +2404,8 @@ MonoBehaviour:
   colliderCenter: {x: 0, y: 0.5, z: 0}
   colliderRadius: 0.5
   colliderHeight: 2
-  navMeshAgentSteeringSpeed: 6
-  navMeshAgentAcceleration: 4
+  navMeshAgentSteeringSpeed: 1
+  navMeshAgentAcceleration: 1
   navMeshAgentStoppingDistance: 1.5
   navMeshAgentAutoBrake: 0
   freezeRotation: 1
@@ -2426,42 +2424,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a49a56ee9bde40c46a030d6b6afca893, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &114434586097321294
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1532785872058438}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1fe2e6016de681c44b396fc7bb6e1399, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  attackRadius: 2
-  chaseRadius: 4
-  damagePerShot: 5
-  secondsBetweenShots: 0.5
-  shotsVariationPercentage: 0.2
-  projectileToUse: {fileID: 1613784793665838, guid: 92ec40794d61a364d966462979759bab,
-    type: 2}
-  projectileSocket: {fileID: 0}
-  aimOffset: {x: 0, y: 1, z: 0}
---- !u!114 &114671547709361554
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1532785872058438}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe02cc92eb7dbfc4fa5c6412f92fa54e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  maxHealthPoints: 100
-  healthBar: {fileID: 0}
-  damageSounds: []
-  deathSounds: []
-  deathVanishSeconds: 2
 --- !u!137 &137512756991980566
 SkinnedMeshRenderer:
   m_ObjectHideFlags: 1

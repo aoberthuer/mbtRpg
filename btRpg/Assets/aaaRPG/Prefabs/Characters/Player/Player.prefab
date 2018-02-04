@@ -2524,8 +2524,8 @@ MonoBehaviour:
   colliderCenter: {x: 0, y: 1, z: 0}
   colliderRadius: 0.5
   colliderHeight: 2
-  navMeshAgentSteeringSpeed: 6
-  navMeshAgentAcceleration: 4
+  navMeshAgentSteeringSpeed: 1
+  navMeshAgentAcceleration: 2
   navMeshAgentStoppingDistance: 1.5
   navMeshAgentAutoBrake: 0
   freezeRotation: 1
