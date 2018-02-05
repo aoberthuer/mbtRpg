@@ -323,8 +323,9 @@
     <Compile Include="Assets\aaaRPG\Scripts\Characters\Special Abilities\Self Heal\SelfHealBehaviour.cs" />
     <Compile Include="Assets\aaaRPG\Scripts\Characters\Special Abilities\Self Heal\SelfHealConfig.cs" />
     <Compile Include="Assets\aaaRPG\Scripts\Characters\SpecialAbilities.cs" />
+    <Compile Include="Assets\aaaRPG\Scripts\Characters\WeaponSystem.cs" />
     <Compile Include="Assets\aaaRPG\Scripts\Weapons\Projectile.cs" />
-    <Compile Include="Assets\aaaRPG\Scripts\Weapons\Weapon.cs" />
+    <Compile Include="Assets\aaaRPG\Scripts\Weapons\WeaponConfig.cs" />
     <Compile Include="Assets\aaaRPG\Scripts\Weapons\WeaponPickupPoint.cs" />
     <Compile Include="Assets\Aquas\Scripts\AQUAS_BubbleBehaviour.cs" />
     <Compile Include="Assets\Aquas\Scripts\AQUAS_BubbleMorph.cs" />

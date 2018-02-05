@@ -176,5 +176,10 @@ namespace RPG.Characters
             animator.SetFloat("Turn", turnAmount, 0.1f, Time.deltaTime);
             animator.speed = animationSpeedMultiplier;
         }
+
+        public AnimatorOverrideController GetAnimatorOverrideController()
+        {
+            return animatorOverrideController;
+        }
     }
 }
