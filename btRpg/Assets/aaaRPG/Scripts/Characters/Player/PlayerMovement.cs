@@ -16,7 +16,7 @@ namespace RPG.Characters
         private WeaponSystem weaponSystem;
         private SpecialAbilities specialAbilities;
 
-        private Enemy enemy; // 'caching' the current enemy
+        private EnemyAI enemy; // 'caching' the current enemy
        
         //[Header("Critical Hit")]
         //[Range(0.0f, 1.0f)] [SerializeField] float criticalHitChance = 0.1f;
@@ -65,7 +65,7 @@ namespace RPG.Characters
             }
         }
 
-        private void OnMouseOverEnemy(Enemy enemyToSet)
+        private void OnMouseOverEnemy(EnemyAI enemyToSet)
         {
             this.enemy = enemyToSet;
             if(Input.GetMouseButton(0))
