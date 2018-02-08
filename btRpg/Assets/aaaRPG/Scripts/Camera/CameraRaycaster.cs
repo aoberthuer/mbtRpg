@@ -14,9 +14,12 @@ namespace RPG.CameraUI
         [SerializeField] Vector2 cursorHotspot = new Vector2(0, 0);
 
         const int WALKABLE_LAYER = 8;
+        const int ENEMY_LAYER = 13;
+
 
         float maxRaycastDepth = 250f; // Hard coded value
         Rect screenRectOnStart = new Rect(0, 0, Screen.width, Screen.height); // might need to resize in Update() as rect is now static
+       
 
         // Setup delegates for broadcasting mouse events to other classes
         public delegate void OnMouseOverEnemy(Enemy enemy); // declare new delegate type
@@ -64,7 +67,13 @@ namespace RPG.CameraUI
         private bool RaycastForEnemy(Ray ray)
         {
             RaycastHit hitInfo;
-            Physics.Raycast(ray, out hitInfo, maxRaycastDepth);
+            LayerMask enemyLayerMask = 1 << ENEMY_LAYER;
+
+            Physics.Raycast(ray, out hitInfo, maxRaycastDepth, enemyLayerMask);
+            if(hitInfo.collider == null)
+            {
+                return false;
+            }
 
             GameObject gameObjectHit = hitInfo.collider.gameObject;
             Enemy enemyHit = gameObjectHit.GetComponent<Enemy>();
@@ -80,35 +89,36 @@ namespace RPG.CameraUI
         }
 
 
-    // Recognize enemies by their enemy script component, even if blocked by something else 
-    //private bool RaycastForEnemyAo(Ray ray)
-    //{
-    //    Enemy enemyHit = null;
+        // Recognize enemies by their enemy script component, even if blocked by something else 
+        // private bool RaycastForEnemyAo(Ray ray)
+        // {
+        //    Enemy enemyHit = null;
 
-    //    RaycastHit[] raycastHits = Physics.RaycastAll(ray, maxRaycastDepth);
-    //    foreach (RaycastHit element in raycastHits)
-    //    {
-    //        GameObject gameObjectHit = element.collider.gameObject;
-    //        enemyHit = gameObjectHit.GetComponent<Enemy>();
+        //    RaycastHit[] raycastHits = Physics.RaycastAll(ray, maxRaycastDepth);
+        //    foreach (RaycastHit element in raycastHits)
+        //    {
+        //        GameObject gameObjectHit = element.collider.gameObject;
+        //        enemyHit = gameObjectHit.GetComponent<Enemy>();
 
-    //        if(enemyHit != null)
-    //        {
-    //            break;
-    //        }
-    //    }
+        //        if(enemyHit != null)
+        //        {
+        //            break;
+        //        }
+        //    }
 
-    //    if (enemyHit != null)
-    //    {
-    //        Cursor.SetCursor(cursorTarget, cursorHotspot, CursorMode.Auto);
-    //        onMouseOverEnemy(enemyHit);
-    //        return true;
-    //    }
+        //    if (enemyHit != null)
+        //    {
+        //        Cursor.SetCursor(cursorTarget, cursorHotspot, CursorMode.Auto);
+        //        onMouseOverEnemy(enemyHit);
+        //        return true;
+        //    }
 
-    //    return false;
-    //}
+        //    return false;
+        // }
 
-    // Recognize walkable by layer
-    private bool RaycastForWalkable(Ray ray)
+
+        // Recognize walkable by layer
+        private bool RaycastForWalkable(Ray ray)
         {
             RaycastHit hitInfo;
             LayerMask walkableLayerMask = 1 << WALKABLE_LAYER;

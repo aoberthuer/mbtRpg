@@ -18,10 +18,10 @@ namespace RPG.Characters
 
         private Enemy enemy; // 'caching' the current enemy
        
-        [Header("Critical Hit")]
-        [Range(0.0f, 1.0f)] [SerializeField] float criticalHitChance = 0.1f;
-        [SerializeField] float criticalHitMultiplier = 1.25f;
-        [SerializeField] ParticleSystem criticalHitParticle;
+        //[Header("Critical Hit")]
+        //[Range(0.0f, 1.0f)] [SerializeField] float criticalHitChance = 0.1f;
+        //[SerializeField] float criticalHitMultiplier = 1.25f;
+        //[SerializeField] ParticleSystem criticalHitParticle;
 
 
         private void Start()
@@ -40,8 +40,6 @@ namespace RPG.Characters
             cameraRaycaster.onMouseOverEnemy += OnMouseOverEnemy;
             cameraRaycaster.onMouseOverWalkable += OnMouseOverWalkable;
         }
-
-        
 
         private void Update()
         {
@@ -70,24 +68,22 @@ namespace RPG.Characters
         private void OnMouseOverEnemy(Enemy enemyToSet)
         {
             this.enemy = enemyToSet;
-            if(Input.GetMouseButton(0) && IsTargetInRange(this.enemy.gameObject))
+            if(Input.GetMouseButton(0))
             {
-                weaponSystem.AttackTarget(enemy.gameObject);
+                if (IsTargetInRange(this.enemy.gameObject))
+                {
+                    weaponSystem.AttackTarget(enemy.gameObject);
+                } 
+                else
+                {
+                    character.SetDestination(enemy.transform.position);
+                }
             }
             else if(Input.GetMouseButtonDown(1))
             {
                 specialAbilities.AttemptSpecialAbility(0);
             }
         }
-
-        // copied from Character class
-        //private void OnMouseOverEnemy(Enemy enemy)
-        //{
-        //    if(Input.GetMouseButton(0) || Input.GetMouseButtonDown(1))
-        //    {
-        //        navMeshAgent.SetDestination(enemy.transform.position);
-        //    }
-        //}
 
         private void OnMouseOverWalkable(Vector3 destination)
         {

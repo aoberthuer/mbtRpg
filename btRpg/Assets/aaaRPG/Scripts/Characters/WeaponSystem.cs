@@ -56,7 +56,9 @@ namespace RPG.Weapons
         {
             target = targetToAttack;
             print("Attacking " + targetToAttack);
+
             // todo use a repeat attack co-routine
+            AttackTarget();
         }
 
         public WeaponConfig GetCurrentWeapon()
