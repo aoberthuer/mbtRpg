@@ -323,6 +323,7 @@
     <Compile Include="Assets\aaaRPG\Scripts\Characters\Special Abilities\Self Heal\SelfHealBehaviour.cs" />
     <Compile Include="Assets\aaaRPG\Scripts\Characters\Special Abilities\Self Heal\SelfHealConfig.cs" />
     <Compile Include="Assets\aaaRPG\Scripts\Characters\SpecialAbilities.cs" />
+    <Compile Include="Assets\aaaRPG\Scripts\Characters\WaypointContainer.cs" />
     <Compile Include="Assets\aaaRPG\Scripts\Characters\WeaponSystem.cs" />
     <Compile Include="Assets\aaaRPG\Scripts\Weapons\Projectile.cs" />
     <Compile Include="Assets\aaaRPG\Scripts\Weapons\WeaponConfig.cs" />

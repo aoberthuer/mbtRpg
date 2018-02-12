@@ -701,7 +701,7 @@ GameObject:
   - component: {fileID: 114283718174689726}
   - component: {fileID: 114583755068169978}
   m_Layer: 13
-  m_Name: Enemy
+  m_Name: SimpleThug
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
