@@ -2,6 +2,7 @@
 using UnityEngine.Assertions;
 
 using RPG.Characters;
+using System.Collections;
 
 namespace RPG.Weapons
 {
@@ -55,10 +56,53 @@ namespace RPG.Weapons
         public void AttackTarget(GameObject targetToAttack)
         {
             target = targetToAttack;
-            print("Attacking " + targetToAttack);
+            StartCoroutine(AttackTargetRepeatedly());
+        }
 
-            // todo use a repeat attack co-routine
-            AttackTarget();
+
+        private IEnumerator AttackTargetRepeatedly()
+        {
+            // determine if alive (attacker and defender)
+            bool attackerStillAlive = GetComponent<HealthSystem>().healthAsPercentage >= Mathf.Epsilon;
+            bool targetStillAlive = target.GetComponent<HealthSystem>().healthAsPercentage >= Mathf.Epsilon;
+
+            while (attackerStillAlive && targetStillAlive)
+            {
+                float weaponHitPeriod = currentWeaponConfig.GetMinTimeBetweenHits();
+                float timeToWait = weaponHitPeriod * character.GetAnimSpeedMultiplier();
+
+                bool isTimeToHitAgain = Time.time - lastHitTime > timeToWait;
+
+                if (isTimeToHitAgain)
+                {
+                    AttackTargetOnce();
+                    lastHitTime = Time.time;
+                }
+                yield return new WaitForSeconds(timeToWait);
+            }
+        }
+
+        private void AttackTargetOnce()
+        {
+            if(target == null)
+            {
+                return;
+            }
+
+            transform.LookAt(target.transform);
+            animator.SetTrigger(ANIM_TRIGGER_ATTACK);
+            float damageDelay = 1.0f; // todo get from the weapon
+            SetAttackAnimation();
+            StartCoroutine(DamageAfterDelay(damageDelay));
+        }
+
+        IEnumerator DamageAfterDelay(float delay)
+        {
+            yield return new WaitForSecondsRealtime(delay);
+            if(target != null)
+            {
+                target.GetComponent<HealthSystem>().TakeDamage(CalculateDamage());
+            }
         }
 
         public WeaponConfig GetCurrentWeapon()
@@ -68,10 +112,17 @@ namespace RPG.Weapons
 
         private void SetAttackAnimation()
         {
-            AnimatorOverrideController animatorOverrideController = character.GetAnimatorOverrideController();
-
-            animator.runtimeAnimatorController = animatorOverrideController;
-            animatorOverrideController[PLAYER_DEFAULT_ATTACK] = currentWeaponConfig.GetAttackAnimation();
+            if (!character.GetAnimatorOverrideController())
+            {
+                Debug.Break();
+                Debug.LogAssertion("Please provide " + gameObject + " with an animator override controller.");
+            }
+            else
+            {
+                AnimatorOverrideController animatorOverrideController = character.GetAnimatorOverrideController();
+                animator.runtimeAnimatorController = animatorOverrideController;
+                animatorOverrideController[PLAYER_DEFAULT_ATTACK] = currentWeaponConfig.GetAttackAnimation();
+            }
         }
 
         private GameObject RequestDominantHand()
@@ -83,17 +134,6 @@ namespace RPG.Weapons
             Assert.IsFalse(numberOfDominantHands > 1, "Multiple DominantHand scripts on Player, please remove one");
 
             return dominantHands[0].gameObject;
-        }
-
-        private void AttackTarget()
-        {
-            if (Time.time - lastHitTime > currentWeaponConfig.GetMinTimeBetweenHits())
-            {
-                SetAttackAnimation(); // set here as only setting weapon change will not suffice (for e.g. a power attack)
-                animator.SetTrigger(ANIM_TRIGGER_ATTACK);
-                // enemy.TakeDamage(CalculateDamage());
-                lastHitTime = Time.time;
-            }
         }
 
         private float CalculateDamage()

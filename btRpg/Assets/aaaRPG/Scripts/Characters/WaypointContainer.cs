@@ -11,6 +11,8 @@ namespace RPG.Characters
 
         void OnDrawGizmos()
         {
+            Gizmos.color = Color.green;
+
             Vector3 firstPosition = transform.GetChild(0).position;
             Vector3 previousPosition = firstPosition;
 
