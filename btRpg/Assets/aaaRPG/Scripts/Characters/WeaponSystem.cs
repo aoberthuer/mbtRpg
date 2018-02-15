@@ -11,7 +11,7 @@ namespace RPG.Weapons
     public class WeaponSystem : MonoBehaviour
     {
         private const string ANIM_TRIGGER_ATTACK = "Attack";
-        private const string PLAYER_DEFAULT_ATTACK = "Player Default Attack";
+        private const string DEFAULT_ATTACK = "Player Default Attack";
 
         [SerializeField] float baseDamage = 10f;
         [SerializeField] WeaponConfig currentWeaponConfig;
@@ -35,6 +35,30 @@ namespace RPG.Weapons
 
         void Update()
         {
+            // check continuously wether we should still be attacking
+            bool targetIsDead = false;
+            bool targetIsOutofRange = false;
+
+            if(target == null)
+            {
+                StopAllCoroutines();
+            }
+            else
+            {
+                float targetHealth = target.GetComponent<HealthSystem>().healthAsPercentage;
+                targetIsDead = (targetHealth <= Mathf.Epsilon);
+
+                float targetDistance = Vector3.Distance(transform.position, target.transform.position);
+                targetIsOutofRange = targetDistance > currentWeaponConfig.GetMaxAttackRange();
+            }
+
+            float characterHealth = GetComponent<HealthSystem>().healthAsPercentage;
+            bool characterIsDead = (characterHealth <= Mathf.Epsilon);
+
+            if (characterIsDead || targetIsDead || targetIsOutofRange)
+            {
+                StopAllCoroutines();
+            }
 
         }
 
@@ -84,11 +108,6 @@ namespace RPG.Weapons
 
         private void AttackTargetOnce()
         {
-            if(target == null)
-            {
-                return;
-            }
-
             transform.LookAt(target.transform);
             animator.SetTrigger(ANIM_TRIGGER_ATTACK);
             float damageDelay = 1.0f; // todo get from the weapon
@@ -99,10 +118,7 @@ namespace RPG.Weapons
         IEnumerator DamageAfterDelay(float delay)
         {
             yield return new WaitForSecondsRealtime(delay);
-            if(target != null)
-            {
-                target.GetComponent<HealthSystem>().TakeDamage(CalculateDamage());
-            }
+            target.GetComponent<HealthSystem>().TakeDamage(CalculateDamage());
         }
 
         public WeaponConfig GetCurrentWeapon()
@@ -121,7 +137,7 @@ namespace RPG.Weapons
             {
                 AnimatorOverrideController animatorOverrideController = character.GetAnimatorOverrideController();
                 animator.runtimeAnimatorController = animatorOverrideController;
-                animatorOverrideController[PLAYER_DEFAULT_ATTACK] = currentWeaponConfig.GetAttackAnimation();
+                animatorOverrideController[DEFAULT_ATTACK] = currentWeaponConfig.GetAttackAnimation();
             }
         }
 

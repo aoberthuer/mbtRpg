@@ -680,11 +680,11 @@ GameObject:
   m_Component:
   - component: {fileID: 4569067691479268}
   - component: {fileID: 114230080337729344}
-  - component: {fileID: 114379271726215868}
   - component: {fileID: 114065860265418240}
   - component: {fileID: 114748428907277516}
+  - component: {fileID: 114379271726215868}
   - component: {fileID: 114033168312273112}
-  m_Layer: 12
+  m_Layer: 0
   m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
