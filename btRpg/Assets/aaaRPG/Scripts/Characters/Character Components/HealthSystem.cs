@@ -22,14 +22,11 @@ namespace RPG.Characters
 
         [SerializeField] float deathVanishSeconds = 2.0f;
 
-        private const string ANIM_TRIGGER_ATTACK = "Attack";
         private const string ANIM_TRIGGER_DEATH = "Death";
-        private const string PLAYER_DEFAULT_ATTACK = "Player Default Attack";
 
-        
-        Animator animator;
-        AudioSource audioSource;
-        Character character;
+        private Animator animator;
+        private AudioSource audioSource;
+        private Character character;
 
         public float healthAsPercentage { get { return currentHealthPoints / maxHealthPoints; } }
 

@@ -1,18 +1,15 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 using UnityEngine.Assertions;
 
 using RPG.Characters;
-using System.Collections;
+using RPG.Core;
 
 namespace RPG.Weapons
 {
 
-
     public class WeaponSystem : MonoBehaviour
     {
-        private const string ANIM_TRIGGER_ATTACK = "Attack";
-        private const string DEFAULT_ATTACK = "Player Default Attack";
-
         [SerializeField] float baseDamage = 10f;
         [SerializeField] WeaponConfig currentWeaponConfig;
 
@@ -109,7 +106,7 @@ namespace RPG.Weapons
         private void AttackTargetOnce()
         {
             transform.LookAt(target.transform);
-            animator.SetTrigger(ANIM_TRIGGER_ATTACK);
+            animator.SetTrigger(GameConstants.ANIM_TRIGGER_ATTACK);
             float damageDelay = 1.0f; // todo get from the weapon
             SetAttackAnimation();
             StartCoroutine(DamageAfterDelay(damageDelay));
@@ -137,7 +134,7 @@ namespace RPG.Weapons
             {
                 AnimatorOverrideController animatorOverrideController = character.GetAnimatorOverrideController();
                 animator.runtimeAnimatorController = animatorOverrideController;
-                animatorOverrideController[DEFAULT_ATTACK] = currentWeaponConfig.GetAttackAnimation();
+                animatorOverrideController[GameConstants.DEFAULT_ATTACK] = currentWeaponConfig.GetAttackAnimation();
             }
         }
 

@@ -1,10 +1,10 @@
 ﻿using System.Collections;
 using UnityEngine;
 
+using RPG.Core;
+
 namespace RPG.Characters
 {
-
-
     public abstract class AbilityBehaviour : MonoBehaviour
     {
         private const float PARTICLE_CLEAN_DELAY = 10f;
@@ -28,6 +28,7 @@ namespace RPG.Characters
         {
             PlayParticleEffect();
             PlayAbilityAudioClip();
+            PlayAbilityAnimation();
         }
 
         public void PlayParticleEffect()
@@ -48,6 +49,26 @@ namespace RPG.Characters
             }
         }
 
+        private void PlayAbilityAudioClip()
+        {
+            AudioSource audioSource = GetComponent<AudioSource>(); // on the player...
+
+            if (audioSource != null && config.getRandomAudioClip() != null)
+            {
+                audioSource.clip = config.getRandomAudioClip();
+                audioSource.Play();
+            }
+        }
+
+        private void PlayAbilityAnimation()
+        {
+            AnimatorOverrideController animatorOverrideController = GetComponent<Character>().GetAnimatorOverrideController();
+            Animator animator = GetComponent<Animator>();
+            animator.runtimeAnimatorController = animatorOverrideController;
+            animatorOverrideController[GameConstants.DEFAULT_ATTACK] = config.GetAbilityAnimationClip();
+            animator.SetTrigger(GameConstants.ANIM_TRIGGER_ATTACK);
+        }
+
         IEnumerator DestroyParticleWhenFinished(GameObject particleObject)
         {
             ParticleSystem particleSystem = particleObject.GetComponent<ParticleSystem>();
@@ -58,17 +79,6 @@ namespace RPG.Characters
 
             Destroy(particleObject);
             yield return new WaitForEndOfFrame();
-        }
-
-        private void PlayAbilityAudioClip()
-        {
-            AudioSource audioSource = GetComponent<AudioSource>(); // on the player...
-
-            if (audioSource != null && config.getRandomAudioClip() != null)
-            {
-                audioSource.clip = config.getRandomAudioClip();
-                audioSource.Play();
-            }
         }
 
     }

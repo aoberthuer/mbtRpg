@@ -16,4 +16,6 @@ MonoBehaviour:
     type: 2}
   audioClips:
   - {fileID: 8300000, guid: c3b2fd51905b6494eb69755bc868a411, type: 3}
+  abilityAnimationClip: {fileID: 7400000, guid: 053ec18f067de0a4c9650802e1995cb6,
+    type: 3}
   extraHealth: 10

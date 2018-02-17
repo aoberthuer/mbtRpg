@@ -308,11 +308,13 @@
     <Compile Include="Assets\aaaRPG\Scripts\Camera\CameraFollow.cs" />
     <Compile Include="Assets\aaaRPG\Scripts\Camera\CameraFollowSmoothed.cs" />
     <Compile Include="Assets\aaaRPG\Scripts\Camera\CameraRaycaster.cs" />
+    <Compile Include="Assets\aaaRPG\Scripts\Characters\Character Components\HealthSystem.cs" />
+    <Compile Include="Assets\aaaRPG\Scripts\Characters\Character Components\SpecialAbilities.cs" />
+    <Compile Include="Assets\aaaRPG\Scripts\Characters\Character Components\WeaponSystem.cs" />
     <Compile Include="Assets\aaaRPG\Scripts\Characters\Character.cs" />
     <Compile Include="Assets\aaaRPG\Scripts\Characters\DominantHand.cs" />
     <Compile Include="Assets\aaaRPG\Scripts\Characters\Enemies\EnemyAI.cs" />
     <Compile Include="Assets\aaaRPG\Scripts\Characters\Enemies\EnemyUI.cs" />
-    <Compile Include="Assets\aaaRPG\Scripts\Characters\HealthSystem.cs" />
     <Compile Include="Assets\aaaRPG\Scripts\Characters\Player\PlayerMovement.cs" />
     <Compile Include="Assets\aaaRPG\Scripts\Characters\Special Abilities\AbilityBehaviour.cs" />
     <Compile Include="Assets\aaaRPG\Scripts\Characters\Special Abilities\AbilityConfig.cs" />
@@ -322,9 +324,8 @@
     <Compile Include="Assets\aaaRPG\Scripts\Characters\Special Abilities\Power Attack\PowerAttackConfig.cs" />
     <Compile Include="Assets\aaaRPG\Scripts\Characters\Special Abilities\Self Heal\SelfHealBehaviour.cs" />
     <Compile Include="Assets\aaaRPG\Scripts\Characters\Special Abilities\Self Heal\SelfHealConfig.cs" />
-    <Compile Include="Assets\aaaRPG\Scripts\Characters\SpecialAbilities.cs" />
     <Compile Include="Assets\aaaRPG\Scripts\Characters\WaypointContainer.cs" />
-    <Compile Include="Assets\aaaRPG\Scripts\Characters\WeaponSystem.cs" />
+    <Compile Include="Assets\aaaRPG\Scripts\Core\GameConstants.cs" />
     <Compile Include="Assets\aaaRPG\Scripts\Weapons\Projectile.cs" />
     <Compile Include="Assets\aaaRPG\Scripts\Weapons\WeaponConfig.cs" />
     <Compile Include="Assets\aaaRPG\Scripts\Weapons\WeaponPickupPoint.cs" />
