@@ -22,7 +22,7 @@ namespace RPG.CameraUI
        
 
         // Setup delegates for broadcasting mouse events to other classes
-        public delegate void OnMouseOverEnemy(EnemyAI enemy); // declare new delegate type
+        public delegate void OnMouseOverEnemy(EnemyControlAI enemy); // declare new delegate type
         public event OnMouseOverEnemy onMouseOverEnemy; // instantiate an observer set
 
         public delegate void OnMouseOverWalkable(Vector3 destination); // declare new delegate type
@@ -76,7 +76,7 @@ namespace RPG.CameraUI
             }
 
             GameObject gameObjectHit = hitInfo.collider.gameObject;
-            EnemyAI enemyHit = gameObjectHit.GetComponent<EnemyAI>();
+            EnemyControlAI enemyHit = gameObjectHit.GetComponent<EnemyControlAI>();
 
             if (enemyHit != null)
             {

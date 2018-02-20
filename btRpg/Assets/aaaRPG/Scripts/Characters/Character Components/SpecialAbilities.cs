@@ -58,7 +58,7 @@ namespace RPG.Characters
             if (IsEnergyAvailable(energyCost))
             {
                 ConsumeEnergy(energyCost);
-                specialAbilities[abilityIndex].Use(null);
+                specialAbilities[abilityIndex].Use(target);
             }
             else
             {

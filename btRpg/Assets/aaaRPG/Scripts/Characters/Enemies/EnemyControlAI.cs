@@ -8,7 +8,7 @@ namespace RPG.Characters
     [RequireComponent(typeof(Character))]
     [RequireComponent(typeof(HealthSystem))]
     [RequireComponent(typeof (WeaponSystem))]
-    public class EnemyAI : MonoBehaviour
+    public class EnemyControlAI : MonoBehaviour
     {
         
         [SerializeField] float chaseRadius = 4f;
@@ -17,7 +17,7 @@ namespace RPG.Characters
         int nextWaypointIndex;
 
         private Character character;
-        private PlayerMovement player;
+        private PlayerControl player;
 
         private float currentWeaponRange = 2f;
         private float distanceToPlayer;
@@ -28,7 +28,7 @@ namespace RPG.Characters
         private void Start()
         {
             character = GetComponent<Character>();
-            player = FindObjectOfType<PlayerMovement>();
+            player = FindObjectOfType<PlayerControl>();
         }
 
         private void Update()
@@ -72,7 +72,7 @@ namespace RPG.Characters
         {
             state = State.patrolling;
 
-            while (true)
+            while (patrolPath != null)
             {
                 Vector3 nextWaypointPos = patrolPath.transform.GetChild(nextWaypointIndex).position;
                 character.SetDestination(nextWaypointPos);

@@ -10,18 +10,11 @@ using RPG.Weapons;
 namespace RPG.Characters
 {
 
-    public class PlayerMovement : MonoBehaviour
+    public class PlayerControl : MonoBehaviour
     {
         private Character character;
         private WeaponSystem weaponSystem;
         private SpecialAbilities specialAbilities;
-
-        private EnemyAI enemy; // 'caching' the current enemy
-       
-        //[Header("Critical Hit")]
-        //[Range(0.0f, 1.0f)] [SerializeField] float criticalHitChance = 0.1f;
-        //[SerializeField] float criticalHitMultiplier = 1.25f;
-        //[SerializeField] ParticleSystem criticalHitParticle;
 
 
         private void Start()
@@ -53,36 +46,57 @@ namespace RPG.Characters
             {
                 if(Input.GetKeyDown(abilityIndex.ToString()))
                 {
-                    if (enemy != null)
-                    {
-                        specialAbilities.AttemptSpecialAbility(abilityIndex, enemy.gameObject);
-                    }
-                    else
-                    {
-                        specialAbilities.AttemptSpecialAbility(abilityIndex);
-                    }
+                    specialAbilities.AttemptSpecialAbility(abilityIndex);
                 }
             }
         }
 
-        private void OnMouseOverEnemy(EnemyAI enemyToSet)
+        private void OnMouseOverEnemy(EnemyControlAI enemy)
         {
-            this.enemy = enemyToSet;
             if(Input.GetMouseButton(0))
             {
-                if (IsTargetInRange(this.enemy.gameObject))
+                if (IsTargetInRange(enemy.gameObject))
                 {
                     weaponSystem.AttackTarget(enemy.gameObject);
                 } 
                 else
                 {
-                    character.SetDestination(enemy.transform.position);
+                    StartCoroutine(MoveAndAttack(enemy));
                 }
             }
             else if(Input.GetMouseButtonDown(1))
             {
-                specialAbilities.AttemptSpecialAbility(0);
+                if (IsTargetInRange(enemy.gameObject))
+                {
+                    specialAbilities.AttemptSpecialAbility(0, enemy.gameObject);
+                }
+                else
+                {
+                    StartCoroutine(MoveAndPowerAttack(enemy));
+                }
             }
+        }
+
+        IEnumerator MoveToTarget(GameObject target)
+        {
+            character.SetDestination(target.transform.position);
+            while (!IsTargetInRange(target))
+            {
+                yield return new WaitForEndOfFrame();
+            }
+            yield return new WaitForEndOfFrame();
+        }
+
+        IEnumerator MoveAndAttack(EnemyControlAI enemy)
+        {
+            yield return StartCoroutine(MoveToTarget(enemy.gameObject));
+            weaponSystem.AttackTarget(enemy.gameObject);
+        }
+
+        IEnumerator MoveAndPowerAttack(EnemyControlAI enemy)
+        {
+            yield return StartCoroutine(MoveToTarget(enemy.gameObject));
+            specialAbilities.AttemptSpecialAbility(0, enemy.gameObject);
         }
 
         private void OnMouseOverWalkable(Vector3 destination)
