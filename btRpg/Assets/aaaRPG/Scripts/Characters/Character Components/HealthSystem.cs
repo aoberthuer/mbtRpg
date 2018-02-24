@@ -71,7 +71,6 @@ namespace RPG.Characters
 
         IEnumerator KillCharacter()
         {
-            StopAllCoroutines();
             character.Kill();
             animator.SetTrigger(ANIM_TRIGGER_DEATH);
             var playerComponent = GetComponent<PlayerControl>();
@@ -82,7 +81,7 @@ namespace RPG.Characters
                 yield return new WaitForSecondsRealtime(audioSource.clip.length);
                 SceneManager.LoadScene(0);
             }
-            else // assume is enemy fr now, reconsider on other NPCs
+            else // assume is enemy for now, reconsider on other NPCs
             {
                 DestroyObject(gameObject, deathVanishSeconds);
             }

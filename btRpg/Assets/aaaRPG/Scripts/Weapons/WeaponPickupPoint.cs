@@ -18,6 +18,10 @@ namespace RPG.Weapons
         void Start()
         {
             audioSource = GetComponent<AudioSource>();
+            if (Application.isPlaying)
+            {
+                InstantiateWeapon();
+            }
         }
 
         void DestroyChildren()
@@ -45,10 +49,13 @@ namespace RPG.Weapons
             Instantiate(weapon, gameObject.transform);
         }
 
-        void OnTriggerEnter()
+        void OnTriggerEnter(Collider other)
         {
-            FindObjectOfType<WeaponSystem>().PutWeaponInHand(weaponConfig);
-            audioSource.PlayOneShot(pickUpSFX);
+            if(other.gameObject.GetComponent<WeaponSystem>() != null)
+            {
+                other.gameObject.GetComponent<WeaponSystem>().PutWeaponInHand(weaponConfig);
+                audioSource.PlayOneShot(pickUpSFX);
+            }                
         }
     }
 }

@@ -314,7 +314,7 @@
     <Compile Include="Assets\aaaRPG\Scripts\Characters\Character.cs" />
     <Compile Include="Assets\aaaRPG\Scripts\Characters\DominantHand.cs" />
     <Compile Include="Assets\aaaRPG\Scripts\Characters\Enemies\EnemyControlAI.cs" />
-    <Compile Include="Assets\aaaRPG\Scripts\Characters\Enemies\EnemyUI.cs" />
+    <Compile Include="Assets\aaaRPG\Scripts\Characters\Enemies\FaceCamera.cs" />
     <Compile Include="Assets\aaaRPG\Scripts\Characters\Player\PlayerControl.cs" />
     <Compile Include="Assets\aaaRPG\Scripts\Characters\Special Abilities\AbilityBehaviour.cs" />
     <Compile Include="Assets\aaaRPG\Scripts\Characters\Special Abilities\AbilityConfig.cs" />

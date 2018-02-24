@@ -13,8 +13,8 @@ namespace RPG.Weapons
 
         [SerializeField] float minTimeBetweenHits = .5f;
         [SerializeField] float maxAttackRange = 2f;
-
         [SerializeField] float additionalDamage = 10f;
+        [SerializeField] float damageDelay = .5f;
 
         public float GetMinTimeBetweenHits()
         {
@@ -26,6 +26,15 @@ namespace RPG.Weapons
             return maxAttackRange;
         }
 
+        public float GetAdditionalDamage()
+        {
+            return additionalDamage;
+        }
+
+        public float GetDamageDelay()
+        {
+            return damageDelay;
+        }
 
         public GameObject GetWeaponPrefab()
         {
@@ -36,11 +45,6 @@ namespace RPG.Weapons
         {
             RemoveAnimationEvents();
             return attackAnimation;
-        }
-
-        public float GetAdditionalDamage()
-        {
-            return additionalDamage;
         }
 
         // Method removes all animation events so they cannot break existing code.

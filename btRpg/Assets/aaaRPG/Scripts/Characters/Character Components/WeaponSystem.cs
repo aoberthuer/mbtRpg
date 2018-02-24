@@ -107,15 +107,19 @@ namespace RPG.Weapons
         {
             transform.LookAt(target.transform);
             animator.SetTrigger(GameConstants.ANIM_TRIGGER_ATTACK);
-            float damageDelay = 1.0f; // todo get from the weapon
             SetAttackAnimation();
-            StartCoroutine(DamageAfterDelay(damageDelay));
+            StartCoroutine(DamageAfterDelay(currentWeaponConfig.GetDamageDelay()));
         }
 
         IEnumerator DamageAfterDelay(float delay)
         {
             yield return new WaitForSecondsRealtime(delay);
             target.GetComponent<HealthSystem>().TakeDamage(CalculateDamage());
+        }
+
+        public void StopAttacking()
+        {
+            StopAllCoroutines();
         }
 
         public WeaponConfig GetCurrentWeapon()
