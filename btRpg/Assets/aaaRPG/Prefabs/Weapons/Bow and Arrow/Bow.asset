@@ -19,3 +19,6 @@ MonoBehaviour:
   maxAttackRange: 6
   additionalDamage: 10
   damageDelay: 0.5
+  rangedAttack: 1
+  rangedAttackPrefab: {fileID: 1872721872585388, guid: 0be948e60622ebf4c9f23137b70ea913,
+    type: 2}

@@ -16,6 +16,20 @@ namespace RPG.Weapons
         [SerializeField] float additionalDamage = 10f;
         [SerializeField] float damageDelay = .5f;
 
+        [SerializeField] bool rangedAttack = false;
+        [SerializeField] GameObject rangedAttackPrefab; // may be null if ranged attack is false, if true e.g. an arrow
+
+        public GameObject GetWeaponPrefab()
+        {
+            return weaponPrefab;
+        }
+
+        public AnimationClip GetAttackAnimation()
+        {
+            RemoveAnimationEvents();
+            return attackAnimation;
+        }
+
         public float GetMinTimeBetweenHits()
         {
             return minTimeBetweenHits;
@@ -36,15 +50,14 @@ namespace RPG.Weapons
             return damageDelay;
         }
 
-        public GameObject GetWeaponPrefab()
+        public bool GetRangedAttack()
         {
-            return weaponPrefab;
+            return rangedAttack;
         }
 
-        public AnimationClip GetAttackAnimation()
+        public GameObject GetRangedAttackPrefab()
         {
-            RemoveAnimationEvents();
-            return attackAnimation;
+            return rangedAttackPrefab;
         }
 
         // Method removes all animation events so they cannot break existing code.

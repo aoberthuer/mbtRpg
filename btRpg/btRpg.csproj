@@ -326,6 +326,7 @@
     <Compile Include="Assets\aaaRPG\Scripts\Characters\Special Abilities\Self Heal\SelfHealConfig.cs" />
     <Compile Include="Assets\aaaRPG\Scripts\Characters\WaypointContainer.cs" />
     <Compile Include="Assets\aaaRPG\Scripts\Core\GameConstants.cs" />
+    <Compile Include="Assets\aaaRPG\Scripts\Weapons\Projectile.cs" />
     <Compile Include="Assets\aaaRPG\Scripts\Weapons\WeaponConfig.cs" />
     <Compile Include="Assets\aaaRPG\Scripts\Weapons\WeaponPickupPoint.cs" />
     <Compile Include="Assets\Aquas\Scripts\AQUAS_BubbleBehaviour.cs" />

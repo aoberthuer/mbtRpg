@@ -108,7 +108,30 @@ namespace RPG.Weapons
             transform.LookAt(target.transform);
             animator.SetTrigger(GameConstants.ANIM_TRIGGER_ATTACK);
             SetAttackAnimation();
-            StartCoroutine(DamageAfterDelay(currentWeaponConfig.GetDamageDelay()));
+
+            if(currentWeaponConfig.GetRangedAttack())
+            {
+                SpawnProjectile();
+            } 
+            else
+            {
+                StartCoroutine(DamageAfterDelay(currentWeaponConfig.GetDamageDelay()));
+            }
+        }
+
+        void SpawnProjectile()
+        {
+            Vector3 positionToSpawnFrom = character.transform.position;
+            positionToSpawnFrom.y += 2; // adjust for height so arrow does not hit enemy firing the arrow
+
+            GameObject newProjectile = Instantiate(currentWeaponConfig.GetRangedAttackPrefab(), positionToSpawnFrom, Quaternion.identity);
+
+            Vector3 positionToHit = target.transform.position;
+            positionToHit.y += 1; // adjust for height we are not aiming at the feet
+            Vector3 unitVectorToPlayer = (positionToHit - character.transform.position).normalized;
+
+            float projectileSpeed = 5f;
+            newProjectile.GetComponent<Rigidbody>().velocity = unitVectorToPlayer * projectileSpeed;
         }
 
         IEnumerator DamageAfterDelay(float delay)
