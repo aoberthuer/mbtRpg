@@ -75,8 +75,8 @@
 			float4 samplePos = GetCascadeShadowCoord(float4(wpos, 1), cascadeWeights);
 
 			atten = inside ? UNITY_SAMPLE_SHADOW(_CascadeShadowMapTexture, samplePos.xyz) : 1.0f;
-			atten = _LightShadowData.r + atten * (1 - _LightShadowData.r);
 			//atten = inside ? tex2Dproj(_ShadowMapTexture, float4((samplePos).xyz, 1)).r : 1.0f;
+			atten = _LightShadowData.r + atten * (1 - _LightShadowData.r);
 #endif
 
 #elif defined (SPOT)	
@@ -130,7 +130,7 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		float GetDensityFog(float3 wpos)
 		{
-            float density = 1;
+            float density = 1.5;
 #ifdef NOISE
 			float noise = tex3D(_NoiseTexture, frac(wpos * _NoiseData.x + float3(_Time.y * _NoiseVelocity.x, 0, _Time.y * _NoiseVelocity.y)));
 			noise = saturate(noise - _NoiseData.z) * _NoiseData.y;

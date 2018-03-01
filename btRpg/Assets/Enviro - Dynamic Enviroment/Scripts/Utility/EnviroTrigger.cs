@@ -7,7 +7,7 @@ public class EnviroTrigger : MonoBehaviour {
 	public EnviroInterior myZone;
 	public string Name;
 
-	private bool entered = false;
+	//public bool entered = false;
 
 	void Start () 
 	{
@@ -23,11 +23,6 @@ public class EnviroTrigger : MonoBehaviour {
 
 	void OnTriggerEnter (Collider col)
 	{
-		if (!entered)
-			return;
-
-		entered = false;
-
 		if (EnviroSky.instance.weatherSettings.useTag) {
 			if (col.gameObject.tag == EnviroSky.instance.gameObject.tag) {
 				EnterExit ();
@@ -41,21 +36,24 @@ public class EnviroTrigger : MonoBehaviour {
 
 	void OnTriggerExit (Collider col)
 	{
-		if (entered)
-			return;
 
-		entered = true;
-
-
-		if (EnviroSky.instance.weatherSettings.useTag) {
-			if (col.gameObject.tag == EnviroSky.instance.gameObject.tag) {
-				EnterExit ();
-			}
-		} else {
-			if (col.gameObject.GetComponent<EnviroSky> ()) {
-				EnterExit ();
-			}
-		}
+        if (myZone.zoneTriggerType == EnviroInterior.ZoneTriggerType.Zone)
+        {
+            if (EnviroSky.instance.weatherSettings.useTag)
+            {
+                if (col.gameObject.tag == EnviroSky.instance.gameObject.tag)
+                {
+                    EnterExit();
+                }
+            }
+            else
+            {
+                if (col.gameObject.GetComponent<EnviroSky>())
+                {
+                    EnterExit();
+                }
+            }
+        }
 	}
 		
 
@@ -63,10 +61,20 @@ public class EnviroTrigger : MonoBehaviour {
 
 	void EnterExit ()
 	{
-		if (!EnviroSky.instance.interiorMode)
-			myZone.Enter ();
-		else
-			myZone.Exit ();
+        if (EnviroSky.instance.lastInteriorZone != myZone)
+        {
+            if (EnviroSky.instance.lastInteriorZone != null)
+                EnviroSky.instance.lastInteriorZone.StopAllFading();
+
+            myZone.Enter();
+        }
+        else
+        {
+            if (!EnviroSky.instance.interiorMode)
+                myZone.Enter();
+            else
+                myZone.Exit();
+        }
 	}
 
 	void OnDrawGizmos () 

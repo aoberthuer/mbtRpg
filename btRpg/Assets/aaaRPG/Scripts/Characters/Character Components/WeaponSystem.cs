@@ -125,9 +125,10 @@ namespace RPG.Weapons
             positionToSpawnFrom.y += 2; // adjust for height so arrow does not hit enemy firing the arrow
 
             GameObject newProjectile = Instantiate(currentWeaponConfig.GetRangedAttackPrefab(), positionToSpawnFrom, Quaternion.identity);
+            newProjectile.transform.LookAt(target.transform);
 
             Vector3 positionToHit = target.transform.position;
-            positionToHit.y += 1; // adjust for height we are not aiming at the feet
+            positionToHit.y += 1; // adjust for height we are not aiming at the feet. Should replace this by having a child on the character or even better some component marking place to hit like the DominantHand script...
             Vector3 unitVectorToPlayer = (positionToHit - character.transform.position).normalized;
 
             float projectileSpeed = 5f;

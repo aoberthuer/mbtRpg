@@ -40,7 +40,8 @@ public class FPSController : MonoBehaviour {
 		//eyes.transform.Rotate (-rotY, 0, 0);
 
 		movement = transform.rotation * movement;
-		player.Move (movement * Time.deltaTime);
+        movement.y -= 4000f * Time.deltaTime;
+        player.Move (movement * Time.deltaTime);
 
 	}
 	}

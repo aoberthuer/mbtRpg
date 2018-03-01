@@ -40,7 +40,7 @@ public class EnviroVolumeLight : MonoBehaviour
 	public event Action<EnviroSkyRendering, EnviroVolumeLight, CommandBuffer, Matrix4x4> CustomRenderEvent;
 
     private Light _light;
-	private Material _material;
+	public Material _material;
 	public Shader volumeLightShader;
 	public Shader volumeLightBlurShader;
     private CommandBuffer _commandBuffer;
@@ -64,9 +64,6 @@ public class EnviroVolumeLight : MonoBehaviour
 	[HideInInspector]public float NoiseIntensity = 1.0f;
 	[HideInInspector]public float NoiseIntensityOffset = 0.3f;
 	[HideInInspector]public Vector2 NoiseVelocity = new Vector2(3.0f, 3.0f);
-
-    //[Tooltip("")]    
-    //public float MaxRayLength = 400.0f;    
 
     public Light Light { get { return _light; } }
     public Material VolumetricMaterial { get { return _material; } }
@@ -92,6 +89,15 @@ public class EnviroVolumeLight : MonoBehaviour
         }
 #endif
 
+#if UNITY_2017_3_OR_NEWER
+        //
+#else
+        if (SystemInfo.graphicsDeviceType == GraphicsDeviceType.Direct3D9)
+        {
+            this.enabled = false;
+            return;
+        }
+#endif
         _commandBuffer = new CommandBuffer();
         _commandBuffer.name = "Light Command Buffer";
 
@@ -100,7 +106,7 @@ public class EnviroVolumeLight : MonoBehaviour
         _cascadeShadowCommandBuffer.SetGlobalTexture("_CascadeShadowMapTexture", new UnityEngine.Rendering.RenderTargetIdentifier(UnityEngine.Rendering.BuiltinRenderTextureType.CurrentActive));
 
         _light = GetComponent<Light>();
-        //_light.RemoveAllCommandBuffers();
+
 		if (_light.type == LightType.Directional) {
 			_light.AddCommandBuffer (LightEvent.BeforeScreenspaceMask, _commandBuffer);
 			_light.AddCommandBuffer (LightEvent.AfterShadowMap, _cascadeShadowCommandBuffer);
@@ -111,7 +117,10 @@ public class EnviroVolumeLight : MonoBehaviour
 		if(volumeLightShader == null)
 			volumeLightShader = Shader.Find ("Enviro/VolumeLight");
 
-		if (_light.type != LightType.Directional) {
+        if (volumeLightShader == null)
+            throw new Exception("Critical Error: \"Enviro/VolumeLight\" shader is missing.");
+
+        if (_light.type != LightType.Directional) {
 			_material = new Material (volumeLightShader);
 		}
 	}
@@ -149,6 +158,9 @@ public class EnviroVolumeLight : MonoBehaviour
     /// <param name="viewProj"></param>
 	private void VolumetricLightRenderer_PreRenderEvent(EnviroSkyRendering renderer, Matrix4x4 viewProj, Matrix4x4 viewProjSP)
     {
+        if (EnviroSky.instance == null)
+            return;
+
         // light was destroyed without deregistring, deregister now
         if (_light == null || _light.gameObject == null)
         {
@@ -228,7 +240,7 @@ public class EnviroVolumeLight : MonoBehaviour
         }
 
         bool forceShadowsOff = false;
-        if ((_light.transform.position - Camera.current.transform.position).magnitude >= QualitySettings.shadowDistance)
+        if ((_light.transform.position - EnviroSky.instance.PlayerCamera.transform.position).magnitude >= QualitySettings.shadowDistance)
             forceShadowsOff = true;
 
         if (_light.shadows != LightShadows.None && forceShadowsOff == false)
@@ -263,7 +275,9 @@ public class EnviroVolumeLight : MonoBehaviour
 					if (CustomRenderEvent != null)
 						CustomRenderEvent (renderer, this, renderer.GlobalCommandBuffer, viewProj);
 				}
-			}else{
+			}
+            else
+            {
 				_material.EnableKeyword ("SHADOWS_CUBE");
 				_commandBuffer.SetGlobalTexture ("_ShadowMapTexture", BuiltinRenderTextureType.CurrentActive);
 				_commandBuffer.SetRenderTarget (renderer.GetVolumeLightBuffer ());
@@ -275,7 +289,7 @@ public class EnviroVolumeLight : MonoBehaviour
         }
 		else 
         {
-            _material.DisableKeyword("SHADOWS_CUBE");
+            _material.DisableKeyword("SHADOWS_DEPTH");
 
 			if (EnviroSky.instance.PlayerCamera.actualRenderingPath == RenderingPath.Forward) {
 				//renderer.GlobalCommandBufferForward.Clear ();
@@ -359,7 +373,7 @@ public class EnviroVolumeLight : MonoBehaviour
         }
 
         bool forceShadowsOff = false;
-        if ((_light.transform.position - Camera.current.transform.position).magnitude >= QualitySettings.shadowDistance)
+        if ((_light.transform.position - EnviroSky.instance.PlayerCamera.transform.position).magnitude >= QualitySettings.shadowDistance)
             forceShadowsOff = true;
 
         if (_light.shadows != LightShadows.None && forceShadowsOff == false)
@@ -524,7 +538,7 @@ public class EnviroVolumeLight : MonoBehaviour
     /// <returns></returns>
     private bool IsCameraInPointLightBounds()
     {
-        float distanceSqr = (_light.transform.position - Camera.current.transform.position).sqrMagnitude;
+        float distanceSqr = (_light.transform.position - EnviroSky.instance.PlayerCamera.transform.position).sqrMagnitude;
         float extendedRange = _light.range + 1;
         if (distanceSqr < (extendedRange * extendedRange))
             return true;

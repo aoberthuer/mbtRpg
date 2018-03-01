@@ -254,7 +254,13 @@ public class EnviroZone : MonoBehaviour {
 
 	void LateUpdate () 
 	{
-		if (EnviroSky.instance.started && !init) 
+        if (EnviroSky.instance == null)
+        {
+            Debug.Log("No EnviroSky instance found!");
+            return;
+        }
+
+        if (EnviroSky.instance.started && !init) 
 		{
 			if (isDefault) {
 				CreateZoneWeatherTypeList ();
@@ -271,7 +277,13 @@ public class EnviroZone : MonoBehaviour {
 				WeatherUpdate ();
 		}
 
-		if(isDefault && init)
+        if (EnviroSky.instance.Player == null)
+        {
+            // Debug.Log("No Player Assigned in EnviroSky object!");
+            return;
+        }
+
+        if (isDefault && init)                               
 			zoneCollider.center = new Vector3(0f,(EnviroSky.instance.Player.transform.position.y-EnviroSky.instance.transform.position.y) / EnviroSky.instance.transform.lossyScale.y,0f);
 	}
 
@@ -279,7 +291,7 @@ public class EnviroZone : MonoBehaviour {
 	/// Triggers
 	void OnTriggerEnter (Collider col)
 	{
-		if (EnviroSky.instance.profile == null)
+		if (EnviroSky.instance == null)
 			return;
 
 		if (EnviroSky.instance.profile.weatherSettings.useTag) {
@@ -297,7 +309,7 @@ public class EnviroZone : MonoBehaviour {
 
 	void OnTriggerExit (Collider col)
 	{
-		if (ExitToDefault == false || EnviroSky.instance.profile == null)
+		if (ExitToDefault == false || EnviroSky.instance == null)
 			return;
 		
 		if (EnviroSky.instance.profile.weatherSettings.useTag) {

@@ -1,4 +1,4 @@
-Enviro - Dynamic Environment System 2.0.0
+Enviro - Dynamic Environment System 2.0.2
 
 Thanks for buying Enviro! 
 
@@ -282,6 +282,60 @@ v 2.0.0
 	* Fixed StartAsServer function.
 	* Fixed issue that Unity sometimes not save the profile when closing Unity.
 	* Plenty small improvements and optimizations.
+	
+----------------------------------------------------------------------------------
+v 2.0.1
+
+	* Fixed rendering issues in OpenGL and DX9. Please note that volume lighting requires at least shadermodel 3.5 and will be deactivated on dx9.
+	* Fixed some shader errors on ps4.
+	* Fixed a few issues with auto assignment, ChangeFocus function and possible null expection in EnviroSkyRendering component.
+	* Fixed issue with clouds shadow mesh could be visible in sky.
+	* Fixed multiple elements edititing for volume lights. (Thanks to rasto61 for the fix)
+	* Switched back to cutout cloud shadows for now as dithering doesn't worked well in that usecase. Will work on another improved solution in a later update.. 
+	* Added simple fog mode without scattering for low end devices.
+	* Added option for setting don't destroy flag.
+	* Added component to render multiple cameras with enviro effects at the same time.
+	* Added addional galaxy rendering to skyboxes.
+	* Added fade speed and skybox modification to interior component.
+	* Scene lighting will be updated without the need of player or camera assigned now.
+	* Deactivated weathermap rendering when it isn't required.
+
+----------------------------------------------------------------------------------
+v 2.0.2
+
+	* Fixed a few more shader errors on ps4.
+	* Fixed clouds wind direction was off from windzone direction.
+	* Fixed issue with transparent fog support when volume lighting is deactivated.
+	* Fixed issue with interior zones when walking into multiple zones in short time.
+	* Fixed issues with non working interior zone features.
+	* Fixed ambient lighting modification in interior zones.
+	* Fixed an issue with unity post processing bloom + enviro. Maybe need some more testing!
+	* Fixed volume lighting not showing up in builds.
+	* Fixed ambient audio replay issue on weather changes.
+	* Fixed metal issue with volume clouds. (Pink Sky)
+	* Fixed issue that messed up sun and moon set/rise times.
+	* Improved particle effects to use external forces to simulate wind and improved effect performance.
+	* Improved cloud shadows using light cookie. Early work in progress version!
+	* Improved volume clouds performance. Added temporal remprojetion, lod option and slider to configure sample count behind objects.
+	* Improved volume cloud blending with sky at dawn and dusk.
+	* Improved performance by not re-rendering moon on every frame.
+	* Improved Weather SFX looping.
+	* Added height fog noise for non simple fog modes.
+	* Added multiple new features and new trigger type for interior zones.
+	* Added black ground color option in skybox.
+	* Added new snow particle effect.
+	* Added new sample scene.
+	* Removed old enviro surface shaders. I will provide download link in new documentation, but better use overall better free LUX shaderframework!
+
+	VR Improvments:
+	* Note: Singlepass VR for enviro is only working in Unity 2017+ versions for now!
+	* Fixed an issue that will output image in desktop resolution in VR mode.
+	* Fixed Lightshafts in singlepass VR.
+	* Fixed volume lighting singlepass mode at half/quarter resolution in Unity 2017.2/3.
+	* Added volume clouds VR quality presets.
+	* Added weather presets and particle effect more suitable for VR.
+	* Added demo scene and envirosky prefab for VR to quickstart.
+
 	
 
 

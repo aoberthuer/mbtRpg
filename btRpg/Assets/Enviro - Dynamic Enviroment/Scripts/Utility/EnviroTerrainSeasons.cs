@@ -195,7 +195,10 @@ public class EnviroTerrainSeasons : MonoBehaviour {
 
 	void Update ()
 	{
-		if (ChangeGrassWind && EnviroSky.instance.Weather.currentActiveWeatherPreset != null) 
+        if (EnviroSky.instance == null)
+            return;
+
+        if (ChangeGrassWind && EnviroSky.instance.Weather.currentActiveWeatherPreset != null) 
 		{
 			terrain.terrainData.wavingGrassStrength = EnviroSky.instance.Weather.currentActiveWeatherPreset.WindStrenght * windSpeedModificator;
 			terrain.terrainData.wavingGrassSpeed = EnviroSky.instance.Weather.currentActiveWeatherPreset.WindStrenght * windSizeModificator;

@@ -4149,8 +4149,8 @@ ParticleSystem:
     inWorldSpace: 0
     randomizePerFrame: 0
   ExternalForcesModule:
-    enabled: 0
-    multiplier: 1
+    enabled: 1
+    multiplier: 10
   ClampVelocityModule:
     enabled: 0
     x:
@@ -5069,7 +5069,7 @@ ParticleSystem:
       m_Bits: 1
     maxCollisionShapes: 256
     quality: 2
-    voxelSize: 0.5
+    voxelSize: 0.75
     collisionMessages: 0
     collidesWithDynamic: 1
     interiorCollisions: 1

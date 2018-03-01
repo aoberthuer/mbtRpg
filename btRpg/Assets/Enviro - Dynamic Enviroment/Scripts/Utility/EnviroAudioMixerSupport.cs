@@ -16,7 +16,7 @@ public class EnviroAudioMixerSupport : MonoBehaviour {
 
 	void Start () 
 	{
-		if(audioMixer!= null)
+		if(audioMixer!= null && EnviroSky.instance != null)
 			StartCoroutine (Setup ());
 	}
 	

@@ -37,14 +37,13 @@ GameObject:
   m_Component:
   - component: {fileID: 4670783689985384}
   - component: {fileID: 20306155786030820}
-  - component: {fileID: 92575815568377492}
   - component: {fileID: 124492386209493820}
   - component: {fileID: 81485186141142912}
   - component: {fileID: 114664255909660520}
-  - component: {fileID: 114391346908587468}
-  - component: {fileID: 114891058752990046}
-  - component: {fileID: 114534862501960172}
-  - component: {fileID: 114214129074037794}
+  - component: {fileID: 114720547333150368}
+  - component: {fileID: 114008182185819134}
+  - component: {fileID: 114474723240216842}
+  - component: {fileID: 114285831917815320}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -103,7 +102,7 @@ Camera:
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 1073738751
+    m_Bits: 1073739775
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -122,14 +121,44 @@ AudioListener:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1537289530313846}
   m_Enabled: 1
---- !u!92 &92575815568377492
-Behaviour:
+--- !u!114 &114008182185819134
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1537289530313846}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7bc2158365ed6fb429515bc7eb6f8cc9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  resolution: 1
+  screenBlendMode: 0
+  sunTransform: {fileID: 0}
+  radialBlurIterations: 2
+  sunColor: {r: 1, g: 0.927166, b: 0.830653, a: 1}
+  sunThreshold: {r: 0.8021694, g: 0.8021694, b: 0.8021694, a: 1}
+  sunShaftBlurRadius: 6
+  sunShaftIntensity: 0.6
+  maxRadius: 10
+  useDepthTexture: 1
+  sunShaftsShader: {fileID: 4800000, guid: 2721eac037fc4544abddca473138e9f1, type: 3}
+  sunShaftsMaterial: {fileID: 0}
+  simpleClearShader: {fileID: 4800000, guid: ca46cc6d87e05cb4993352de483e4370, type: 3}
+  simpleClearMaterial: {fileID: 0}
+--- !u!114 &114285831917815320
+MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1537289530313846}
   m_Enabled: 1
---- !u!114 &114214129074037794
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff26db721962cdf4a8edcdfa9a767d2a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  profile: {fileID: 11400000, guid: 7881dac2f168fd344965d12aa4e7ae10, type: 2}
+--- !u!114 &114474723240216842
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -145,51 +174,14 @@ MonoBehaviour:
   sunTransform: {fileID: 0}
   radialBlurIterations: 2
   sunColor: {r: 0.5803922, g: 0.65882355, b: 0.8980392, a: 1}
-  sunThreshold: {r: 0.0298083, g: 0.0298083, b: 0.0298083, a: 1}
+  sunThreshold: {r: 0.028348383, g: 0.028348383, b: 0.028348383, a: 1}
   sunShaftBlurRadius: 6
   sunShaftIntensity: 0
   maxRadius: 10
   useDepthTexture: 1
-  sunShaftsShader: {fileID: 4800000, guid: 61cff5ff2f842b84cb138276a62064f6, type: 3}
+  sunShaftsShader: {fileID: 4800000, guid: 2721eac037fc4544abddca473138e9f1, type: 3}
   sunShaftsMaterial: {fileID: 0}
-  simpleClearShader: {fileID: 4800000, guid: 0408b30ac8046be4a9d860508e546f6f, type: 3}
-  simpleClearMaterial: {fileID: 0}
---- !u!114 &114391346908587468
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1537289530313846}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ff26db721962cdf4a8edcdfa9a767d2a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  profile: {fileID: 0}
---- !u!114 &114534862501960172
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1537289530313846}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7bc2158365ed6fb429515bc7eb6f8cc9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  resolution: 1
-  screenBlendMode: 0
-  sunTransform: {fileID: 0}
-  radialBlurIterations: 2
-  sunColor: {r: 1, g: 0.97134894, b: 0.9166514, a: 1}
-  sunThreshold: {r: 0.7985662, g: 0.7985662, b: 0.7985662, a: 1}
-  sunShaftBlurRadius: 6
-  sunShaftIntensity: 0.6
-  maxRadius: 10
-  useDepthTexture: 1
-  sunShaftsShader: {fileID: 4800000, guid: 61cff5ff2f842b84cb138276a62064f6, type: 3}
-  sunShaftsMaterial: {fileID: 0}
-  simpleClearShader: {fileID: 4800000, guid: 0408b30ac8046be4a9d860508e546f6f, type: 3}
+  simpleClearShader: {fileID: 4800000, guid: ca46cc6d87e05cb4993352de483e4370, type: 3}
   simpleClearMaterial: {fileID: 0}
 --- !u!114 &114577066533838226
 MonoBehaviour:
@@ -197,7 +189,7 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1312691648402480}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d407f7f3ba9e3ef48a6cc6726bb3533f, type: 3}
   m_Name: 
@@ -218,19 +210,7 @@ MonoBehaviour:
   cursorWalk: {fileID: 2800000, guid: adb6d0ba26f192f4794a4d28090c6244, type: 3}
   cursorTarget: {fileID: 2800000, guid: e741d3b766fd70644a3464b0b71e00e3, type: 3}
   cursorHotspot: {x: 0, y: 0}
---- !u!114 &114821760004740688
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1312691648402480}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6aba79d27bd88cf43b21dc75e48c745e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  player: {fileID: 0}
---- !u!114 &114891058752990046
+--- !u!114 &114720547333150368
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -241,19 +221,32 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 25662192fc626eb47a5e9eb586e7fd50, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  material: {fileID: 0}
-  cloudsMap: {fileID: 0}
-  cloudsMaterial: {fileID: 0}
+  isAddionalCamera: 0
+  currentReprojectionPixelSize: 2
   _volumeRenderingMaterial: {fileID: 0}
+  Resolution: 1
   DefaultSpotCookie: {fileID: 2800000, guid: d569327f9e6a94841835e2f701795322, type: 3}
+  simpleFog: 0
   volumeLighting: 1
   dirVolumeLighting: 1
   distanceFog: 1
   useRadialDistance: 1
   heightFog: 1
   height: 25
-  heightDensity: 1.000001
+  heightDensity: 1
   startDistance: 0
+--- !u!114 &114821760004740688
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1312691648402480}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6aba79d27bd88cf43b21dc75e48c745e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 0}
 --- !u!124 &124492386209493820
 Behaviour:
   m_ObjectHideFlags: 1

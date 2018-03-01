@@ -37,35 +37,22 @@ MonoBehaviour:
     cirrusColorPow: 2
     flatAlpha: 0
     flatCoverage: 0
+    flatSoftness: 0.75
+    flatBrightness: 0.75
     flatColorPow: 2
   fogStartDistance: 0
   fogDistance: 5000
   fogDensity: 0.0001
   weatherSkyMod:
-    key0:
-      serializedVersion: 2
-      rgba: 16777215
-    key1:
-      serializedVersion: 2
-      rgba: 16777215
-    key2:
-      serializedVersion: 2
-      rgba: 0
-    key3:
-      serializedVersion: 2
-      rgba: 0
-    key4:
-      serializedVersion: 2
-      rgba: 0
-    key5:
-      serializedVersion: 2
-      rgba: 0
-    key6:
-      serializedVersion: 2
-      rgba: 0
-    key7:
-      serializedVersion: 2
-      rgba: 0
+    serializedVersion: 2
+    key0: {r: 1, g: 1, b: 1, a: 0}
+    key1: {r: 1, g: 1, b: 1, a: 0}
+    key2: {r: 0, g: 0, b: 0, a: 0}
+    key3: {r: 0, g: 0, b: 0, a: 0}
+    key4: {r: 0, g: 0, b: 0, a: 0}
+    key5: {r: 0, g: 0, b: 0, a: 0}
+    key6: {r: 0, g: 0, b: 0, a: 0}
+    key7: {r: 0, g: 0, b: 0, a: 0}
     ctime0: 0
     ctime1: 65535
     ctime2: 0
@@ -86,30 +73,15 @@ MonoBehaviour:
     m_NumColorKeys: 2
     m_NumAlphaKeys: 2
   weatherLightMod:
-    key0:
-      serializedVersion: 2
-      rgba: 16777215
-    key1:
-      serializedVersion: 2
-      rgba: 16777215
-    key2:
-      serializedVersion: 2
-      rgba: 0
-    key3:
-      serializedVersion: 2
-      rgba: 0
-    key4:
-      serializedVersion: 2
-      rgba: 0
-    key5:
-      serializedVersion: 2
-      rgba: 0
-    key6:
-      serializedVersion: 2
-      rgba: 0
-    key7:
-      serializedVersion: 2
-      rgba: 0
+    serializedVersion: 2
+    key0: {r: 1, g: 1, b: 1, a: 0}
+    key1: {r: 1, g: 1, b: 1, a: 0}
+    key2: {r: 0, g: 0, b: 0, a: 0}
+    key3: {r: 0, g: 0, b: 0, a: 0}
+    key4: {r: 0, g: 0, b: 0, a: 0}
+    key5: {r: 0, g: 0, b: 0, a: 0}
+    key6: {r: 0, g: 0, b: 0, a: 0}
+    key7: {r: 0, g: 0, b: 0, a: 0}
     ctime0: 0
     ctime1: 65535
     ctime2: 0
@@ -130,30 +102,15 @@ MonoBehaviour:
     m_NumColorKeys: 2
     m_NumAlphaKeys: 2
   weatherFogMod:
-    key0:
-      serializedVersion: 2
-      rgba: 4026531840
-    key1:
-      serializedVersion: 2
-      rgba: 3774873600
-    key2:
-      serializedVersion: 2
-      rgba: 14791854
-    key3:
-      serializedVersion: 2
-      rgba: 3032452204
-    key4:
-      serializedVersion: 2
-      rgba: 0
-    key5:
-      serializedVersion: 2
-      rgba: 0
-    key6:
-      serializedVersion: 2
-      rgba: 0
-    key7:
-      serializedVersion: 2
-      rgba: 0
+    serializedVersion: 2
+    key0: {r: 0, g: 0, b: 0, a: 0.9411765}
+    key1: {r: 0, g: 0, b: 0, a: 0.88235295}
+    key2: {r: 0.68235296, g: 0.7058824, b: 0.88235295, a: 0}
+    key3: {r: 0.42352942, g: 0.54901963, b: 0.7490196, a: 0.7058824}
+    key4: {r: 0, g: 0, b: 0, a: 0}
+    key5: {r: 0, g: 0, b: 0, a: 0}
+    key6: {r: 0, g: 0, b: 0, a: 0}
+    key7: {r: 0, g: 0, b: 0, a: 0}
     ctime0: 0
     ctime1: 32198
     ctime2: 34695
@@ -176,7 +133,7 @@ MonoBehaviour:
   volumeLightIntensity: 1
   heightFogDensity: 1
   SkyFogHeight: 1.363
-  SkyFogIntensity: 0.402
+  SkyFogIntensity: 0.443
   FogScatteringIntensity: 1.17
   fogSunBlocking: 1
   effectSystems: []

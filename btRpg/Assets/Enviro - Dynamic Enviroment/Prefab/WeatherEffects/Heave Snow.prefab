@@ -101,7 +101,7 @@ ParticleSystem:
     serializedVersion: 3
     enabled: 1
     startLifetime:
-      scalar: 2
+      scalar: 3
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -128,7 +128,7 @@ ParticleSystem:
         m_RotationOrder: 0
       minMaxState: 3
     startSpeed:
-      scalar: -5
+      scalar: -2
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -458,7 +458,7 @@ ParticleSystem:
         m_RotationOrder: 4
       minMaxState: 3
     randomizeRotationDirection: 0
-    maxNumParticles: 20000
+    maxNumParticles: 10000
     size3D: 0
     rotation3D: 0
     gravityModifier:
@@ -527,7 +527,7 @@ ParticleSystem:
     enabled: 1
     serializedVersion: 3
     rateOverTime:
-      scalar: 6000
+      scalar: 3000
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -1409,7 +1409,7 @@ ParticleSystem:
     inWorldSpace: 0
     randomizePerFrame: 0
   ExternalForcesModule:
-    enabled: 0
+    enabled: 1
     multiplier: 1
   ClampVelocityModule:
     enabled: 0
@@ -2194,7 +2194,7 @@ ParticleSystem:
       minMaxState: 1
     range: {x: 0, y: 1}
   CollisionModule:
-    enabled: 0
+    enabled: 1
     serializedVersion: 3
     type: 1
     collisionMode: 0
@@ -2283,7 +2283,7 @@ ParticleSystem:
         m_RotationOrder: 4
       minMaxState: 0
     m_EnergyLossOnCollision:
-      scalar: 0.001
+      scalar: 0.1
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -2328,8 +2328,8 @@ ParticleSystem:
       serializedVersion: 2
       m_Bits: 1
     maxCollisionShapes: 256
-    quality: 0
-    voxelSize: 0.5
+    quality: 2
+    voxelSize: 0.75
     collisionMessages: 0
     collidesWithDynamic: 1
     interiorCollisions: 1

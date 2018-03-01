@@ -14,7 +14,6 @@ public class EnviroReflections : MonoBehaviour {
 
 	if (probe == null)
 			probe = GetComponent<ReflectionProbe> ();
-
 	}
 
 	void  UpdateProbe ()
@@ -26,8 +25,10 @@ public class EnviroReflections : MonoBehaviour {
 	// Update is called once per frame
 	void Update ()
 	{
-		if (EnviroSky.instance.currentTimeInHours > lastUpdate + ReflectionUpdateInGameHours || EnviroSky.instance.currentTimeInHours < lastUpdate - ReflectionUpdateInGameHours)
-			UpdateProbe ();
+        if (EnviroSky.instance == null)
+            return;
 
+        if (EnviroSky.instance.currentTimeInHours > lastUpdate + ReflectionUpdateInGameHours || EnviroSky.instance.currentTimeInHours < lastUpdate - ReflectionUpdateInGameHours)
+			UpdateProbe ();
 	}
 }

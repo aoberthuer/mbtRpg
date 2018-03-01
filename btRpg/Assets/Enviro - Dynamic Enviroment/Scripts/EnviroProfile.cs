@@ -101,6 +101,8 @@ public class EnviroSkySettings
 	public Material customSkyboxMaterial;
 	[Tooltip("If SkyboxMode == CustomColor : Select your sky color here!")]
 	public Color customSkyboxColor;
+    [Tooltip("Enable to render black skybox at ground level.")]
+    public bool blackGroundMode = false;
 
 	[Header("Scattering")]
 	[Tooltip("Light Wavelength used for atmospheric scattering. Keep it near defaults for earthlike atmospheres, or change for alien or fantasy atmospheres for example.")]
@@ -130,8 +132,11 @@ public class EnviroSkySettings
 	public Gradient sunDiskColor;
 
 
-	[Header("Moon")]
-	public MoonPhases moonPhaseMode = MoonPhases.Realistic;
+    [Header("Moon")]
+    [Tooltip("Whether to render the moon.")]
+    public bool renderMoon = true;
+    [Tooltip("The Moon phase mode. Custom = for customizable phase.")]
+    public MoonPhases moonPhaseMode = MoonPhases.Realistic;
 	[Tooltip("The Moon texture.")]
 	public Texture moonTexture;
 	[Tooltip("The color of the moon")]
@@ -163,6 +168,11 @@ public class EnviroSkySettings
 	public Cubemap starsCubeMap;
 	[Tooltip("Intensity of stars based on time of day.")]
 	public AnimationCurve starsIntensity = new AnimationCurve();
+    [Header("Galaxy")]
+    [Tooltip("A cubemap for night galaxy.")]
+    public Cubemap galaxyCubeMap;
+    [Tooltip("Intensity of galaxy based on time of day.")]
+    public AnimationCurve galaxyIntensity = new AnimationCurve();
 
     [Header("Sky Dithering")]
     public float noiseScale = 10f;
@@ -188,6 +198,9 @@ public class EnviroLightSettings // All Lightning Variables
 	public AnimationCurve directLightMoonIntensity = new AnimationCurve();
 	[Tooltip("Realtime shadow strength of the directional light.")]
 	public AnimationCurve shadowIntensity = new AnimationCurve();
+    [Tooltip("Direct lighting y-offset.")]
+    [Range(0f,5000f)]
+    public float directLightAngleOffset = 0f;
     [Header("Ambient")]
 	[Tooltip("Ambient Rendering Mode.")]
 	public UnityEngine.Rendering.AmbientMode ambientMode = UnityEngine.Rendering.AmbientMode.Flat;
@@ -219,7 +232,9 @@ public class EnviroFogSettings
 	[Header("Mode")]
 	[Tooltip("Unity's fog mode.")]
 	public FogMode Fogmode = FogMode.Exponential;
-	[Header("Distance Fog")]
+    [Tooltip("Simple fog = just plain color without scattering.")]
+    public bool useSimpleFog = false;
+    [Header("Distance Fog")]
 	[Tooltip("Use distance fog?")]
 	public bool distanceFog = true;
 	[Tooltip("Use radial distance fog?")]
@@ -239,7 +254,19 @@ public class EnviroFogSettings
 	public float heightFogIntensity = 1f;
 	[HideInInspector]
 	public float heightDensity = 0.15f;
-	[Header("Fog Scattering")]
+    [Header("Height Fog Noise")]
+    [Range(0f, 1f)]
+    [Tooltip("The noise intensity of height based fog.")]
+    public float noiseIntensity = 1f;
+    [Tooltip("The noise intensity offset of height based fog.")]
+    [Range(0f, 1f)]
+    public float noiseIntensityOffset = 0.3f;
+    [Range(0f, 0.1f)]
+    [Tooltip("The noise scaling of height based fog.")]
+    public float noiseScale = 0.001f;
+    [Tooltip("The speed and direction of height based fog.")]
+    public Vector2 noiseVelocity = new Vector2(3f, 1.5f);
+    [Header("Fog Scattering")]
 	[Tooltip("Influence scattering near sun.")]
 	public float mie = 5f;
 	[Tooltip("Influence scattering near sun.")]
@@ -289,9 +316,6 @@ public class EnviroVolumeLightingSettings
     public Vector2 noiseVelocity = new Vector2(3f, 1.5f);
 }
 
-
-
-
 [Serializable]
 public class EnviroLightShaftsSettings 
 {
@@ -338,10 +362,14 @@ public class EnviroCloudSettings
 
     public enum CloudQuality
     {
+        Lowest,
         Low,
         Medium,
         High,
         Ultra,
+        VR_Low,
+        VR_Medium,
+        VR_High,
         Custom
     }
 
@@ -352,6 +380,17 @@ public class EnviroCloudSettings
         R2048,
         R4096,
     }
+
+    // Reprojection
+    public enum ReprojectionPixelSize
+    {
+        Off,
+        Low,
+        Medium,
+        High
+    }
+
+    public ReprojectionPixelSize reprojectionPixelSize;
 
     [Tooltip("Choose a clouds rendering quality or setup your own when choosing custom.")]
     public CloudQuality cloudsQuality;
@@ -378,7 +417,10 @@ public class EnviroCloudSettings
 	[Range(32,256)]
     [Tooltip("Number of raymarching samples.")]
     public int raymarchSteps = 150;
-	[Range(1,16)]
+    [Tooltip("Increase performance by using less steps when clouds are hidden by objects.")]
+    [Range(0.1f, 1f)]
+    public float stepsInDepthModificator = 0.75f;
+    [Range(1,16)]
     [Tooltip("Downsampling of clouds rendering. 1 = full res, 2 = half Res, ...")]
     public int cloudsRenderResolution = 4;
 
@@ -394,15 +436,14 @@ public class EnviroCloudSettings
 	public AnimationCurve directLightIntensity = new AnimationCurve();
 	[Tooltip("Direct Light intensity for clouds based on time of day.")]
 	public AnimationCurve ambientLightIntensity = new AnimationCurve();
-    [Tooltip("Clouds Shadowcast Intensity. 0 = disabled")]
-    [Range(0f, 1f)]
-    public float shadowIntensity = 0.0f;
-	[Header("Tonemapping")]
+
+    [Header("Tonemapping")]
 	[Tooltip("Use color tonemapping?")]
 	public bool tonemapping = false;
 	[Tooltip("Tonemapping exposure")]
 	public float cloudsExposure = 1f;
-
+    [Tooltip("Use lower base and detail uv tiling on far clouds to improve performance")]
+    public bool farCloudsLOD = true;
     [Header("Weather Map")]
     [Tooltip("Tiling of the generated weather map.")]
     public int weatherMapTiling = 5;
@@ -412,12 +453,12 @@ public class EnviroCloudSettings
     public Vector2 locationOffset;
     [Range(0f,1f)]
     [Tooltip("Weathermap animation speed.")]
-    public float weatherAnimSpeedScale = 0.5f;
+    public float weatherAnimSpeedScale = 0.33f;
 
 	[Header("Clouds Modelling")]
 	[Tooltip("The UV scale of base noise. High Values = Low performance!")]
 	[Range(2f,100f)]
-	public float baseNoiseUV = 15f;
+	public float baseNoiseUV = 20f;
 	[Tooltip("The UV scale of detail noise. High Values = Low performance!")]
 	[Range(2f,100f)]
 	public float detailNoiseUV = 50f;
@@ -438,18 +479,27 @@ public class EnviroCloudSettings
 	[Tooltip("Texture for flat procedural clouds.")]
 	public Texture flatCloudsNoiseTexture;
     [Tooltip("Resolution of generated flat clouds texture.")]
-    public FlatCloudResolution flatCloudsResolution;
+    public FlatCloudResolution flatCloudsResolution = FlatCloudResolution.R2048;
     [Tooltip("Global Color for flat clouds based sun positon.")]
 	public Gradient flatCloudsColor;
     [Tooltip("Scale/Tiling of flat clouds.")]
-    public float flatCloudsScale = 5f;
-	[Range(30f,100f)][Tooltip("Flat Clouds Altitude")]
+    public float flatCloudsScale = 2f;
+    [Range(1, 12)]
+    [Tooltip("Flat Clouds texture generation iterations.")]
+    public int flatCloudsNoiseOctaves = 6;
+    [Range(30f,100f)][Tooltip("Flat Clouds Altitude")]
 	public float flatCloudsAltitude = 70f;
+
+    [Tooltip("Clouds Shadowcast Intensity. 0 = disabled")]
+    [Range(0f, 1f)]
+    public float shadowIntensity = 0.0f;
+    [Tooltip("Size of the shadow cookie.")]
+    [Range(1000, 10000)]
+    public int shadowCookieSize = 10000;
 }
 
 
 [System.Serializable]
-//[CreateAssetMenu(fileName = "EnviroProfile", menuName = "EnviroProfile",order =1)]
 public class EnviroProfile : ScriptableObject 
 {
 	public string version;
@@ -498,7 +548,7 @@ public static class EnviroProfileCreation {
 	{
 		EnviroProfile profile = ScriptableObject.CreateInstance<EnviroProfile>();
 
-		profile.version = "2.0.0";
+		profile.version = "2.0.2";
 		// Setup new profile with default settings
 		SetupDefaults (profile);
 
@@ -542,9 +592,7 @@ public static class EnviroProfileCreation {
 		profile.lightSettings.directLightMoonIntensity.AddKey (CreateKey (0.6f, 0.5f, 2f, 2f));
 		profile.lightSettings.directLightMoonIntensity.AddKey (CreateKey (1.0f, 1f));
         //Shadow Intensity
-        profile.lightSettings.shadowIntensity.AddKey(CreateKey(0.0f, 0f));
-        profile.lightSettings.shadowIntensity.AddKey(CreateKey(0.01f, 0.42f));
-        profile.lightSettings.shadowIntensity.AddKey(CreateKey(0.6f, 0.5f, 2f, 2f));
+        profile.lightSettings.shadowIntensity.AddKey(CreateKey(1.0f, 0f));
         profile.lightSettings.shadowIntensity.AddKey(CreateKey(1.0f, 1f));
 
         //Ambient Intensity
@@ -603,9 +651,16 @@ public static class EnviroProfileCreation {
 		// Get Texture
 		profile.skySettings.moonTexture = GetAssetTexture ("tex_enviro_moon");
 		profile.skySettings.starsCubeMap = GetAssetCubemap ("cube_enviro_stars");
+        //Galaxy
+        profile.skySettings.galaxyIntensity.AddKey(CreateKey(1f, 0f));
+        profile.skySettings.galaxyIntensity.AddKey(CreateKey(0.015f, 0.5f));
+        profile.skySettings.galaxyIntensity.AddKey(CreateKey(0.0f, 0.6f));
+        profile.skySettings.galaxyIntensity.AddKey(CreateKey(0.0f, 1f));
+        profile.skySettings.galaxyCubeMap = GetAssetCubemap("cube_enviro_galaxy");
 
-		//Clouds:
-		Texture clouds1 = GetAssetTexture("tex_enviro_noise");
+
+    //Clouds:
+    Texture clouds1 = GetAssetTexture("tex_enviro_noise");
 		Texture clouds2 = GetAssetTexture("tex_enviro_cirrus");
 		if (clouds1 == null || clouds2 == null)
 			Debug.Log ("Cannot find cloud textures");
@@ -685,7 +740,7 @@ public static class EnviroProfileCreation {
 		if (profile == null)
 			return false;
 
-		if ((fromV == "1.9.0" || fromV == "1.9.1") && toV == "2.0.0") {
+		if ((fromV == "1.9.0" || fromV == "1.9.1") && toV == "2.0.2") {
 			//Sun Intensity
 			profile.lightSettings.directLightSunIntensity = new AnimationCurve();
 			profile.lightSettings.directLightSunIntensity.AddKey (CreateKey (0f, 0f));
@@ -702,9 +757,7 @@ public static class EnviroProfileCreation {
 
             //Shadow Intensity
             profile.lightSettings.shadowIntensity = new AnimationCurve();
-            profile.lightSettings.shadowIntensity.AddKey(CreateKey(0.0f, 0f));
-            profile.lightSettings.shadowIntensity.AddKey(CreateKey(0.01f, 0.42f));
-            profile.lightSettings.shadowIntensity.AddKey(CreateKey(0.6f, 0.5f, 2f, 2f));
+            profile.lightSettings.shadowIntensity.AddKey(CreateKey(1.0f, 0f));
             profile.lightSettings.shadowIntensity.AddKey(CreateKey(1.0f, 1f));
        
             //clouds light intensity
@@ -766,13 +819,33 @@ public static class EnviroProfileCreation {
 
 			// Moon tex
 			profile.skySettings.moonTexture = GetAssetTexture ("tex_enviro_moon");
-
 			profile.skySettings.moonBrightness = 1f;
 
-			profile.version = toV;
+            //Galaxy
+            profile.skySettings.galaxyIntensity = new AnimationCurve();
+            profile.skySettings.galaxyIntensity.AddKey(CreateKey(0.4f, 0f));
+            profile.skySettings.galaxyIntensity.AddKey(CreateKey(0.015f, 0.5f));
+            profile.skySettings.galaxyIntensity.AddKey(CreateKey(0.0f, 0.6f));
+            profile.skySettings.galaxyIntensity.AddKey(CreateKey(0.0f, 1f));
+            profile.skySettings.galaxyCubeMap = GetAssetCubemap("cube_enviro_galaxy");
+
+            profile.version = toV;
 			return true;
 		}
-		return false;
+
+        if (fromV == "2.0.0" || fromV == "2.0.1" && toV == "2.0.2")
+        {
+            //Galaxy
+            profile.skySettings.galaxyIntensity = new AnimationCurve();
+            profile.skySettings.galaxyIntensity.AddKey(CreateKey(0.4f, 0f));
+            profile.skySettings.galaxyIntensity.AddKey(CreateKey(0.015f, 0.5f));
+            profile.skySettings.galaxyIntensity.AddKey(CreateKey(0.0f, 0.6f));
+            profile.skySettings.galaxyIntensity.AddKey(CreateKey(0.0f, 1f));
+            profile.skySettings.galaxyCubeMap = GetAssetCubemap("cube_enviro_galaxy");
+            profile.version = toV;
+            return true;
+        }
+        return false;
 	}
 
 	public static GameObject GetAssetPrefab(string name)
@@ -818,6 +891,10 @@ public static class EnviroProfileCreation {
 			{
 				return AssetDatabase.LoadAssetAtPath<Cubemap>(path);
 			}
+            else if (path.Contains(".jpg"))
+            {
+                return AssetDatabase.LoadAssetAtPath<Cubemap>(path);
+            }
 		}
 		#endif
 		return null;

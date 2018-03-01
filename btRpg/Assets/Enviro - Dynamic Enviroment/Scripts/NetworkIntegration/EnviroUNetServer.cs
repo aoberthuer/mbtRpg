@@ -81,7 +81,10 @@ public class EnviroUNetServer : NetworkBehaviour {
 
 	void Update ()
 	{
-		if (!isServer) 
+        if (EnviroSky.instance == null)
+            return;
+
+        if (!isServer) 
 		{
 			if (networkHours < 1f && EnviroSky.instance.internalHour > 23f)
 				EnviroSky.instance.SetInternalTimeOfDay(networkHours);

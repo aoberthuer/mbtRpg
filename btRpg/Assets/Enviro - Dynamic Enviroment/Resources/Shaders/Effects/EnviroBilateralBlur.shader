@@ -1,3 +1,5 @@
+// Upgrade NOTE: replaced 'defined UNITY2017_2_SP' with 'defined (UNITY2017_2_SP)'
+
 // Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
 
 //  Copyright(c) 2016, Michal Skalsky
@@ -29,7 +31,7 @@
 
 
 
-Shader "Hidden/BilateralBlur"
+Shader "Hidden/EnviroBilateralBlur"
 {
 	Properties
 	{
@@ -42,6 +44,7 @@ Shader "Hidden/BilateralBlur"
 
 		CGINCLUDE
 
+		#pragma shader_feature UNITY2017_2_SP
         //--------------------------------------------------------------------------------------------
         // Downsample, bilateral blur and upsample config
         //--------------------------------------------------------------------------------------------        
@@ -168,9 +171,15 @@ Shader "Hidden/BilateralBlur"
 			[branch]
 			if (accumDiff < threshold) // small error, not an edge -> use bilinear filter
 			{
+#if defined (UNITY2017_2_SP)
+				return loColor.Sample(linearSampler, UnityStereoTransformScreenSpaceTex(input.uv));
+#else
 				return loColor.Sample(linearSampler, input.uv);
+#endif
 			}
-            
+
+
+
 			// find nearest sample
 			float minDepthDiff = depthDiff[0];
 			float2 nearestUv = input.uv00;
@@ -193,7 +202,11 @@ Shader "Hidden/BilateralBlur"
 				minDepthDiff = depthDiff[3];
 			}
 
-            return loColor.Sample(pointSampler, nearestUv);
+#if defined (UNITY2017_2_SP)
+			return loColor.Sample(pointSampler, UnityStereoTransformScreenSpaceTex(nearestUv));
+#else
+			return loColor.Sample(pointSampler, nearestUv);
+#endif
 		}
 
 		//-----------------------------------------------------------------------------------------
@@ -276,9 +289,9 @@ Shader "Hidden/BilateralBlur"
 				weightSum += weight;
 			}
 
-			[unroll] for (i = 1; i <= kernelRadius; i += 1)
+			[unroll] for (int k = 1; k <= kernelRadius; k += 1)
 			{
-				float2 offset = (direction * i);
+				float2 offset = (direction * k);
                 float3 sampleColor = _MainTex.Sample(sampler_MainTex, UnityStereoTransformScreenSpaceTex(input.uv), offset);
                 float sampleDepth = (LinearEyeDepth(depth.Sample(depthSampler, UnityStereoTransformScreenSpaceTex(input.uv), offset)));
 
@@ -287,7 +300,7 @@ Shader "Hidden/BilateralBlur"
 				float w = exp(-(dFactor * dFactor));
 				
 				// gaussian weight is computed from constants only -> will be computed in compile time
-				weight = GaussianWeight(i, deviation) * w;
+				weight = GaussianWeight(k, deviation) * w;
 
 				color += weight * sampleColor;
 				weightSum += weight;
@@ -323,7 +336,7 @@ Shader "Hidden/BilateralBlur"
 			CGPROGRAM
 			#pragma vertex vert
 			#pragma fragment verticalFrag
-            #pragma target 3.5
+		#pragma target 3.5
 			
 			fixed4 verticalFrag(v2f input) : SV_Target
 			{
@@ -399,7 +412,7 @@ Shader "Hidden/BilateralBlur"
 			CGPROGRAM
 			#pragma vertex vertUpsampleToFull
 			#pragma fragment frag		
-           #pragma target 3.5
+            #pragma target 3.5
 
 			v2fUpsample vertUpsampleToFull(appdata v)
 			{

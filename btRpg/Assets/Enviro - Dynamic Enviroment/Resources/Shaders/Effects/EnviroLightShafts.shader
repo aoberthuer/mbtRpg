@@ -86,6 +86,7 @@ Shader "Enviro/Effects/LightShafts" {
 		o.pos = UnityObjectToClipPos(v.vertex);
 		
 		o.uv.xy =  v.texcoord.xy;
+
 		o.blurVector = (_SunPosition.xy - v.texcoord.xy) * _BlurRadius4.xy;	
 		
 		return o; 
@@ -122,9 +123,9 @@ Shader "Enviro/Effects/LightShafts" {
 		// consider maximum radius
 
 		#if UNITY_UV_STARTS_AT_TOP
-		half2 vec = _SunPosition.xy - i.uv1.xy;
+		half2 vec = _SunPosition.xy - UnityStereoScreenSpaceUVAdjust(i.uv.xy, _MainTex_ST);
 		#else
-		half2 vec = _SunPosition.xy - i.uv.xy;
+		half2 vec = _SunPosition.xy - UnityStereoScreenSpaceUVAdjust(i.uv.xy, _MainTex_ST);
 		#endif
 
 		half dist = saturate (_SunPosition.w - length (vec.xy));		
@@ -134,7 +135,7 @@ Shader "Enviro/Effects/LightShafts" {
 		// consider shafts blockers
 		if (depthSample > 0.99)
 		{
-			outColor = TransformColor (tex) * dist;
+			outColor = TransformColor(tex) *dist;
 		}
 		return outColor;
 	}

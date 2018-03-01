@@ -39,8 +39,8 @@
  			int _Tiling;
  			float2 _WindDir;
 			float2 _Location;
- 			//float _WindSpeed;
  			float _AnimSpeedScale;
+
 			float set_range(float value, float low, float high) {
 							return saturate((value - low)/(high - low));
 			}
@@ -54,7 +54,6 @@
 
  			float4 frag(VertexInput input) : SV_Target 
  			{
-				//float2 xy_offset = _WindDir * (_Time * _AnimSpeedScale);
 				float2 xy_offset = _WindDir * 10 * _AnimSpeedScale;
  				float2 xy_offset1 = xy_offset;
 

@@ -79,7 +79,7 @@ Category {
 				UNITY_APPLY_FOG(i.fogCoord, col);
 
 				float4 fog = TransparentFog(col,i.posWorld,i.projPos.xy,sceneZ);
-				//fog.rgb *= col.rgb;
+
 				return float4(fog.rgb,col.a);
 			}
 			ENDCG 

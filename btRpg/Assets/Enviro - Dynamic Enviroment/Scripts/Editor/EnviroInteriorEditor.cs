@@ -9,7 +9,8 @@ public class EnviroInteriorEditor : Editor {
 
 	GUIStyle boxStyle;
 	GUIStyle wrapStyle;
-	EnviroInterior myTarget;
+    GUIStyle headerStyle;
+    EnviroInterior myTarget;
 
 
 	void OnEnable()
@@ -37,14 +38,25 @@ public class EnviroInteriorEditor : Editor {
 			wrapStyle.alignment = TextAnchor.UpperLeft;
 		}
 
-		GUILayout.BeginVertical("Enviro - Interior Zone", boxStyle);
+        if (headerStyle == null)
+        {
+            headerStyle = new GUIStyle(GUI.skin.label);
+            headerStyle.fontStyle = FontStyle.Bold;
+            headerStyle.wordWrap = true;
+            headerStyle.alignment = TextAnchor.UpperLeft;
+        }
+
+
+        GUILayout.BeginVertical("Enviro - Interior Zone", boxStyle);
 		GUILayout.Space(20);
 		EditorGUILayout.LabelField("Welcome to the Interior Zone for Enviro - Sky and Weather!", wrapStyle);
 		GUILayout.EndVertical ();
 
 		GUILayout.BeginVertical("Setup", boxStyle);
 		GUILayout.Space(20);
-		if (GUILayout.Button ("Create New Trigger")) {
+        myTarget.zoneTriggerType = (EnviroInterior.ZoneTriggerType)EditorGUILayout.EnumPopup("Zone Trigger Type", myTarget.zoneTriggerType);
+
+        if (GUILayout.Button ("Create New Trigger")) {
 			myTarget.CreateNewTrigger ();
 		} 
 
@@ -70,7 +82,8 @@ public class EnviroInteriorEditor : Editor {
 		GUILayout.Space(20);
 		myTarget.directLighting = EditorGUILayout.BeginToggleGroup("Direct Light Modifications", myTarget.directLighting);
 		myTarget.directLightingMod = EditorGUILayout.ColorField ("Direct Lighting Mod", myTarget.directLightingMod);
-		EditorGUILayout.EndToggleGroup ();
+        myTarget.directLightFadeSpeed = EditorGUILayout.Slider("Direct Fading Speed", myTarget.directLightFadeSpeed, 0.01f, 100f);
+        EditorGUILayout.EndToggleGroup ();
 	
 		myTarget.ambientLighting = EditorGUILayout.BeginToggleGroup("Ambient Light Modifications", myTarget.ambientLighting);
 		myTarget.ambientLightingMod = EditorGUILayout.ColorField ("Ambient Sky Lighting Mod", myTarget.ambientLightingMod);
@@ -78,9 +91,17 @@ public class EnviroInteriorEditor : Editor {
 			myTarget.ambientEQLightingMod = EditorGUILayout.ColorField ("Ambient Equator Lighting Mod", myTarget.ambientEQLightingMod);
 			myTarget.ambientGRLightingMod = EditorGUILayout.ColorField ("Ambient Ground Lighting Mod", myTarget.ambientGRLightingMod);
 		}
-		EditorGUILayout.EndToggleGroup ();
+        myTarget.ambientLightFadeSpeed = EditorGUILayout.Slider("Ambient Fading Speed", myTarget.ambientLightFadeSpeed, 0.01f, 100f);
+        EditorGUILayout.EndToggleGroup ();
 		GUILayout.EndVertical ();
-		GUILayout.BeginVertical("Audio", boxStyle);
+        GUILayout.BeginVertical("Skybox", boxStyle);
+        GUILayout.Space(20);
+        myTarget.skybox = EditorGUILayout.BeginToggleGroup("Skybox Modifications", myTarget.skybox);
+        myTarget.skyboxColorMod = EditorGUILayout.ColorField("Skybox Color Mod", myTarget.skyboxColorMod);
+        myTarget.skyboxFadeSpeed = EditorGUILayout.Slider("Skybox Fading Speed", myTarget.skyboxFadeSpeed, 0.01f, 100f);
+        EditorGUILayout.EndToggleGroup();
+        GUILayout.EndVertical();
+        GUILayout.BeginVertical("Audio", boxStyle);
 		GUILayout.Space(20);
 		myTarget.ambientAudio = EditorGUILayout.BeginToggleGroup("Ambient Audio Modifications", myTarget.ambientAudio);
 		myTarget.ambientVolume = EditorGUILayout.Slider ("Ambient Audio Mod", myTarget.ambientVolume,-1f,0f);
@@ -88,19 +109,27 @@ public class EnviroInteriorEditor : Editor {
 		myTarget.weatherAudio = EditorGUILayout.BeginToggleGroup("Weather Audio Modifications", myTarget.weatherAudio);
 		myTarget.weatherVolume = EditorGUILayout.Slider ("Weather Audio Mod", myTarget.weatherVolume,-1f,0f);
 		EditorGUILayout.EndToggleGroup ();
-		GUILayout.EndVertical ();
+        GUILayout.Space(20);
+        GUILayout.Label("Zone Audio", headerStyle);
+        myTarget.zoneAudioClip = (AudioClip)EditorGUILayout.ObjectField("Zone Ambient Clip", myTarget.zoneAudioClip, typeof(AudioClip), false);
+        myTarget.zoneAudioVolume = EditorGUILayout.Slider("Zone Ambient Volume", myTarget.zoneAudioVolume, 0f, 1f);
+        myTarget.zoneAudioFadingSpeed = EditorGUILayout.Slider("Zone Ambient Fading Speed", myTarget.zoneAudioFadingSpeed, 0.01f, 100f);
+        GUILayout.EndVertical ();
         GUILayout.BeginVertical("Fog", boxStyle);
         GUILayout.Space(20);
-        myTarget.fog = EditorGUILayout.BeginToggleGroup("Fog Modifications", myTarget.fog);
-        myTarget.fogFadeSpeed = EditorGUILayout.Slider("Fog Fading Speed", myTarget.fogFadeSpeed, 0f, 100f);
+        myTarget.fogFadeSpeed = EditorGUILayout.Slider("Fog Fading Speed", myTarget.fogFadeSpeed, 0.01f, 100f);
+        myTarget.fog = EditorGUILayout.BeginToggleGroup("Fog Intensity Modifications", myTarget.fog);
         myTarget.minFogMod = EditorGUILayout.Slider("Fog Min Value", myTarget.minFogMod, 0f, 1f);
+        EditorGUILayout.EndToggleGroup();
+        myTarget.fogColor = EditorGUILayout.BeginToggleGroup("Fog Color Modifications", myTarget.fogColor);
+        myTarget.fogColorMod = EditorGUILayout.ColorField("Fog Color Mod", myTarget.fogColorMod);
         EditorGUILayout.EndToggleGroup();
         GUILayout.EndVertical();
 
         GUILayout.BeginVertical("Weather Effects", boxStyle);
         GUILayout.Space(20);
         myTarget.weatherEffects = EditorGUILayout.BeginToggleGroup("Weather Effects Modifications", myTarget.weatherEffects);
-        myTarget.weatherFadeSpeed = EditorGUILayout.Slider("Weather Effects Fading Speed", myTarget.weatherFadeSpeed, 0f, 100f);
+        myTarget.weatherFadeSpeed = EditorGUILayout.Slider("Weather Effects Fading Speed", myTarget.weatherFadeSpeed, 0.01f, 100f);
         EditorGUILayout.EndToggleGroup();
         GUILayout.EndVertical();
     }

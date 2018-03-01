@@ -47,6 +47,9 @@ public class EnviroAquasIntegration : MonoBehaviour {
 
 	void Update () 
 	{
+         if (EnviroSky.instance == null)
+            return;
+
 		//Check if we are underwater! Deactivate the workaround plane and enviro fog.
 		if (waterObject != null && aquasUnderWater != null) {
 			if (aquasUnderWater.underWater && !isUnderWater) {
@@ -54,8 +57,10 @@ public class EnviroAquasIntegration : MonoBehaviour {
 					EnviroSky.instance.fogSettings.distanceFog = false;
 					EnviroSky.instance.fogSettings.heightFog = false;
 					EnviroSky.instance.customFogIntensity = underwaterFogColorInfluence;
+                    
 				}
 				EnviroSky.instance.updateFogDensity = false;
+                EnviroSky.instance.Audio.ambientSFXVolumeMod = -1f;
 				isUnderWater = true;
 			} else if (!aquasUnderWater.underWater && isUnderWater) {
 				if (deactivateEnviroFogUnderwater) {
@@ -66,6 +71,7 @@ public class EnviroAquasIntegration : MonoBehaviour {
 					EnviroSky.instance.customFogColor = aquasUnderWater.underWaterParameters.fogColor;
 					EnviroSky.instance.customFogIntensity = 0f;
 				}
+                EnviroSky.instance.Audio.ambientSFXVolumeMod = 0f;
 				isUnderWater = false;
 			}
 		}

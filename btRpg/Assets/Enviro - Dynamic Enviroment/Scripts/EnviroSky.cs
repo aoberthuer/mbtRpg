@@ -51,8 +51,6 @@ public class EnviroComponents // References - setup these in inspector! Or use t
 	public GameObject Sun = null;
 	[Tooltip("The Enviro moon object.")]
 	public GameObject Moon = null;
-	//[Tooltip("The Enviro Clouds Holder object.")]
-	//public GameObject Clouds = null;
 	[Tooltip("The directional light for direct sun and moon lighting.")]
 	public Transform DirectLight;
 	[Tooltip("The Enviro global reflection probe for dynamic reflections.")]
@@ -217,7 +215,7 @@ public class EnviroSky : MonoBehaviour
 		}
 	}
 
-	public string prefabVersion = "2.0.0";
+	public string prefabVersion = "2.0.1";
 
 	[Tooltip("Assign your player gameObject here. Required Field! or enable AssignInRuntime!")]
 	public GameObject Player;
@@ -229,7 +227,10 @@ public class EnviroSky : MonoBehaviour
 	public string PlayerTag = "";
 	[Tooltip("Your CameraTag")]
 	public string CameraTag = "MainCamera";
-	[Header("Camera Settings")]
+    [Header("General")]
+    [Tooltip("Enable this when using singlepass rendering.")]
+    public bool dontDestroy = false;
+    [Header("Camera Settings")]
 	[Tooltip("Enable HDR Rendering. You want to use a third party tonemapping effect for best results!")]
 	public bool HDR = true;
 	[Header("Layer Setup")]
@@ -243,9 +244,13 @@ public class EnviroSky : MonoBehaviour
 	[Tooltip("Enable this when using singlepass rendering.")]
 	public bool singlePassVR = false;
 	[Tooltip("Enable this to activate volume lighing")]
-	public bool volumeLighting = true;
+    [HideInInspector]
+    public bool volumeLighting = true;
+    [Tooltip("Enable this to activate global scattering fog. Disabled will also disable volume lighting")]
+    [HideInInspector]
+    public bool globalFog = true;
 
-	[Header("Profile")]
+    [Header("Profile")]
 	public EnviroProfile profile = null;
 	// Parameters
 	[Header("Control")]
@@ -284,9 +289,11 @@ public class EnviroSky : MonoBehaviour
     }
 
     public EnviroCloudsMode cloudsMode;
+
     private EnviroCloudsMode lastCloudsMode;
     private EnviroCloudSettings.CloudQuality lastCloudsQuality;
     private Material cloudShadows;
+
     // Camera Components
     [HideInInspector]public Camera moonCamera;
     [HideInInspector]public Camera satCamera;
@@ -302,8 +309,9 @@ public class EnviroSky : MonoBehaviour
 	[HideInInspector]public EnviroAudioSource AudioSourceAmbient;
 	[HideInInspector]public EnviroAudioSource AudioSourceAmbient2;
 	[HideInInspector]public AudioSource AudioSourceThunder;
-	// Vegeation Growth
-	[HideInInspector]public List<EnviroVegetationInstance> EnviroVegetationInstances = new List<EnviroVegetationInstance>(); // All EnviroInstance that getting updated at the moment.
+    [HideInInspector]public EnviroAudioSource AudioSourceZone;
+    // Vegeation Growth
+    [HideInInspector]public List<EnviroVegetationInstance> EnviroVegetationInstances = new List<EnviroVegetationInstance>(); // All EnviroInstance that getting updated at the moment.
 	//Sky runtime
 	[HideInInspector]public Color currentWeatherSkyMod;
 	[HideInInspector]public Color currentWeatherLightMod;
@@ -313,8 +321,13 @@ public class EnviroSky : MonoBehaviour
 	[HideInInspector]public Color currentInteriorAmbientLightMod;
 	[HideInInspector]public Color currentInteriorAmbientEQLightMod;
 	[HideInInspector]public Color currentInteriorAmbientGRLightMod;
+    [HideInInspector]public Color currentInteriorSkyboxMod;
+    [HideInInspector]public Color currentInteriorFogColorMod = new Color(0,0,0,0);
     [HideInInspector]public float currentInteriorFogMod = 1f;
     [HideInInspector]public float currentInteriorWeatherEffectMod = 1f;
+    [HideInInspector]public float currentInteriorZoneAudioVolume = 1f;
+    [HideInInspector]public float currentInteriorZoneAudioFadingSpeed = 1f;
+
     //VolueLighting
     [HideInInspector]public float globalVolumeLightIntensity;
     //clouds runtime
@@ -332,10 +345,10 @@ public class EnviroSky : MonoBehaviour
 	[HideInInspector]public double currentTimeInHours;
 	// Render Textures
 	[HideInInspector]public RenderTexture cloudsRenderTarget;
-    public RenderTexture flatCloudsRenderTarget;
-    public Material flatCloudsMat;
+    [HideInInspector]public RenderTexture flatCloudsRenderTarget;
+    [HideInInspector]public Material flatCloudsMat;
     [HideInInspector]public RenderTexture weatherMap;
-	[HideInInspector]public RenderTexture moonRenderTarget;
+    [HideInInspector]public RenderTexture moonRenderTarget;
 	[HideInInspector]public RenderTexture satRenderTarget;
 	// Moon Phase
 	[HideInInspector]public float customMoonPhase = 0.0f;
@@ -346,9 +359,10 @@ public class EnviroSky : MonoBehaviour
     // Profile
 	[HideInInspector]public bool profileLoaded = false;
 	[HideInInspector]public bool interiorMode = false;
+    [HideInInspector]public EnviroInterior lastInteriorZone;
     //Wind
-    public Vector2 cloudAnim;
-    public Vector2 cloudAnimNonScaled;
+    [HideInInspector]public Vector2 cloudAnim;
+    [HideInInspector]public Vector2 cloudAnimNonScaled;
 
     //private
     private Material skyMat;
@@ -362,22 +376,24 @@ public class EnviroSky : MonoBehaviour
 	private float starsRot;
 	private float lastHour;
 	private double lastRelfectionUpdate;
+    private double lastMoonUpdate;
     private float lastAmbientSkyUpdate;
 	private float OrbitRadius
 	{
 		get { return DomeTransform.localScale.x; }
 	}
 	private bool serverMode = false;
+    //Cloud Shadows
+    private RenderTexture cloudShadowMap;
+    private Material cloudShadowMat;
 
-	// Scattering constants
-	const float pi = Mathf.PI;
+    // Scattering constants
+    const float pi = Mathf.PI;
 	private Vector3 K =  new Vector3(686.0f, 678.0f, 666.0f);
 	private const float n =  1.0003f;   
 	private const float N =  2.545E25f;
 	private const float pn =  0.035f;
 	private float hourTime;
-	private float E0 = 0f;
-	private float E1 = 0f;
 	private float LST;
 
 	//menu
@@ -460,6 +476,9 @@ public class EnviroSky : MonoBehaviour
 		Weather.weatherFullyChanged = false;
 		thunder = 0f;
         lastCloudsQuality = cloudsSettings.cloudsQuality;
+
+        if (Application.isPlaying && dontDestroy)
+            DontDestroyOnLoad(gameObject);
 
         // Check for Profile
         if (profileLoaded) {
@@ -579,15 +598,23 @@ public class EnviroSky : MonoBehaviour
 
         // Set ambient mode
         RenderSettings.ambientMode = lightSettings.ambientMode;
-		RenderSettings.fogDensity = 0f;
+        // Set Fog
+        RenderSettings.fogDensity = 0f;
+        RenderSettings.fogStartDistance = 0f;
+        RenderSettings.fogEndDistance = 1000f;
 
-		// Setup ReflectionProbe
-		Components.GlobalReflectionProbe.size = transform.localScale;
+        // Setup ReflectionProbe
+        Components.GlobalReflectionProbe.size = transform.localScale;
 		Components.GlobalReflectionProbe.refreshMode = UnityEngine.Rendering.ReflectionProbeRefreshMode.ViaScripting;
 
-		if (Components.Sun) { 
-			SunTransform = Components.Sun.transform; } 
-		else { Debug.LogError("Please set Sun object in inspector!"); }
+		if (Components.Sun)
+        {
+            SunTransform = Components.Sun.transform;
+        } 
+		else
+        {
+            Debug.LogError("Please set sun object in inspector!");
+        }
 
 		if (Components.Moon){
 			MoonTransform = Components.Moon.transform;
@@ -615,14 +642,10 @@ public class EnviroSky : MonoBehaviour
 		}
 		else { Debug.LogError("Please set moon object in inspector!"); }
 
+        // Destroy old Shadowplane. Only needed to not break when updating enviro from 2.0.1. This will be removed in a future update.
         if(Components.cloudsShadowPlane != null)
         {
-            MeshRenderer renderer = Components.cloudsShadowPlane.GetComponent<MeshRenderer>();
-
-            cloudShadows = new Material(Shader.Find("Enviro/CloudsShadows"));
-
-            if (renderer != null && cloudShadows != null)
-                renderer.material = cloudShadows;
+            DestroyImmediate(Components.cloudsShadowPlane);
         }
 
         if (weatherMap == null)
@@ -635,19 +658,67 @@ public class EnviroSky : MonoBehaviour
             cloudShadows.SetTexture("_MainTex", weatherMap);
 
         if (Components.DirectLight) 
-		{ 
+		{
+            if (Components.DirectLight.name == "Direct Lght")
+            {
+                DestroyImmediate(Components.DirectLight.gameObject);
+                Components.DirectLight = CreateDirectionalLight();
+            }
+
 			MainLight = Components.DirectLight.GetComponent<Light>(); 
 
 			if (directVolumeLight == null)
-				Components.DirectLight.GetComponent<EnviroVolumeLight> ();
+                directVolumeLight = Components.DirectLight.GetComponent<EnviroVolumeLight> ();
 
 			if (directVolumeLight == null)
 				directVolumeLight = Components.DirectLight.gameObject.AddComponent<EnviroVolumeLight> ();
-		} 
+
+            if (dontDestroy && Application.isPlaying)
+                DontDestroyOnLoad(Components.DirectLight);
+        } 
 		else 
-		{ 
-			Debug.LogError ("Please set direct light object in inspector!"); }
-	}
+		{
+            GameObject oldLight = GameObject.Find("Enviro Directional Light");
+
+            if(oldLight != null)
+               Components.DirectLight = oldLight.transform;
+            else
+               Components.DirectLight = CreateDirectionalLight();
+
+            MainLight = Components.DirectLight.GetComponent<Light>();
+
+            if (directVolumeLight == null)
+                directVolumeLight = Components.DirectLight.GetComponent<EnviroVolumeLight>();
+
+            if (directVolumeLight == null)
+                directVolumeLight = Components.DirectLight.gameObject.AddComponent<EnviroVolumeLight>();
+
+            if (dontDestroy && Application.isPlaying)
+                DontDestroyOnLoad(Components.DirectLight);
+        }
+
+        if (cloudShadowMap != null)
+            DestroyImmediate(cloudShadowMap);
+
+        cloudShadowMap = new RenderTexture(2048, 2048, 0,RenderTextureFormat.Default);
+        cloudShadowMap.wrapMode = TextureWrapMode.Repeat;
+
+        if (cloudShadowMat != null)
+            DestroyImmediate(cloudShadowMat);
+
+        cloudShadowMat = new Material(Shader.Find("Enviro/ShadowCookie"));
+
+         if (cloudsSettings.shadowIntensity > 0)
+         {
+             Graphics.Blit(weatherMap, cloudShadowMap, cloudShadowMat);
+
+             MainLight.cookie = cloudShadowMap;
+             MainLight.cookieSize = 10000;
+         }
+         else
+             MainLight.cookie = null;
+             
+    }
 
 
     private void SetupSkybox()
@@ -662,7 +733,11 @@ public class EnviroSky : MonoBehaviour
             else
                 skyMat = new Material(Shader.Find("Enviro/SkyboxFlatClouds"));
 
-            skyMat.SetTexture("_Stars", skySettings.starsCubeMap);
+            if (skySettings.starsCubeMap != null)
+                skyMat.SetTexture("_Stars", skySettings.starsCubeMap);
+            if(skySettings.galaxyCubeMap != null)
+                skyMat.SetTexture("_Galaxy", skySettings.galaxyCubeMap);
+
             RenderSettings.skybox = skyMat;
         }
         else if (skySettings.skyboxMode == EnviroSkySettings.SkyboxModi.CustomSkybox)
@@ -717,6 +792,8 @@ public class EnviroSky : MonoBehaviour
                     if (cams[i] != moonCamera)
                         cams[i].cullingMask &= ~(1 << moonRenderingLayer);
                 }
+
+                moonCamera.enabled = false;
             }
         }
 
@@ -729,8 +806,19 @@ public class EnviroSky : MonoBehaviour
 		if(satelliteSettings.additionalSatellites.Count > 0)
             InitSatCamera();
 
-		started = true;
-	}
+        started = true;
+
+        //Render moon once always on start
+        if (MoonShader != null)
+        {
+            MoonShader.SetFloat("_Phase", customMoonPhase);
+            MoonShader.SetColor("_Color", skySettings.moonColor);
+            MoonShader.SetFloat("_Brightness", skySettings.moonBrightness * (1 - GameTime.solarTime));
+        }
+
+        if (moonCamera != null)
+            moonCamera.Render();
+    }
 	/// <summary>
 	/// Helper function to set camera hdr for different unity versions.
 	/// </summary>
@@ -753,6 +841,18 @@ public class EnviroSky : MonoBehaviour
 		return cam.hdr;
 		#endif
 	}
+
+    private Transform CreateDirectionalLight ()
+    {
+        GameObject newGO = new GameObject();
+        newGO.name = "Enviro Directional Light";
+        newGO.transform.parent = transform;
+        newGO.transform.parent = null;
+        Light newLight = newGO.AddComponent<Light>();
+        newLight.type = LightType.Directional;
+        newLight.shadows = LightShadows.Soft;
+        return newGO.transform;
+    }
 
 	private void InitImageEffects ()
 	{
@@ -846,7 +946,7 @@ public class EnviroSky : MonoBehaviour
         satCamera.renderingPath = RenderingPath.Forward;
         satCamera.fieldOfView = PlayerCamera.fieldOfView;
         satCamera.clearFlags = CameraClearFlags.SolidColor;
-        satCamera.backgroundColor = Color.black;
+        satCamera.backgroundColor = new Color(0f,0f,0f,0f);
         satCamera.cullingMask = (1 << satelliteRenderingLayer);
         satCamera.depth = PlayerCamera.depth + 1;
         satCamera.enabled = true;
@@ -887,19 +987,30 @@ public class EnviroSky : MonoBehaviour
 		moonCamera.backgroundColor = Color.black;
 		moonCamera.cullingMask = (1 << moonRenderingLayer);
 		PlayerCamera.cullingMask &= ~(1 << moonRenderingLayer);
+        moonCamera.enabled = false;
     }
 
-	/// <summary>
-	/// Re-create the camera and render texture for background rendering
-	/// </summary>
-	private void CreateMoonTexture ()
+    private void RenderMoon ()
+    {
+        if ((currentTimeInHours > lastMoonUpdate + 0.1) || (currentTimeInHours < lastMoonUpdate - 0.1) && skySettings.renderMoon)
+        {
+            moonCamera.Render();
+            lastMoonUpdate = currentTimeInHours;
+        }
+    }
+
+    /// <summary>
+    /// Re-create the camera and render texture for background rendering
+    /// </summary>
+    private void CreateMoonTexture ()
 	{
 		if (moonRenderTarget != null && moonCamera != null) {
 			moonCamera.targetTexture = null;
 			DestroyImmediate (moonRenderTarget);
 		}
+
 		var format = GetCameraHDR(moonCamera) ? RenderTextureFormat.DefaultHDR: RenderTextureFormat.Default;
-		moonRenderTarget = new RenderTexture (512, 512 ,0 ,format);
+		moonRenderTarget = new RenderTexture (512, 512, 0 ,format);
 		moonCamera.targetTexture = moonRenderTarget;
 	}
 
@@ -909,24 +1020,35 @@ public class EnviroSky : MonoBehaviour
 	/// </summary>
 	public void CreateEffects ()
 	{
-		GameObject old = GameObject.Find ("Enviro Effects");
+		EffectsHolder = GameObject.Find ("Enviro Effects");
 
-		if (old != null)
-			DestroyImmediate (old);
+		if (EffectsHolder == null)
+        {
+            EffectsHolder = new GameObject();
+            EffectsHolder.name = "Enviro Effects";
+            // Fix from Thorskin - Make sure that Effect Object will be moved to same scene as envirosky object.
+            EffectsHolder.transform.parent = transform;
+            EffectsHolder.transform.parent = null;
+        }
+        else
+        {
+            int childs = EffectsHolder.transform.childCount;
 
-		EffectsHolder = new GameObject ();
-		EffectsHolder.name = "Enviro Effects";
+            for (int i = childs - 1; i >= 0; i--)
+            {
+                DestroyImmediate(EffectsHolder.transform.GetChild(i).gameObject);
+            }
+        }
 
-        if (Application.isPlaying)
+        CreateWeatherEffectHolder();
+
+        if (Application.isPlaying && dontDestroy)
             DontDestroyOnLoad(EffectsHolder);
 
 		if(Player != null)
-			EffectsHolder.transform.position = Player.transform.position;
+            EffectsHolder.transform.position = Player.transform.position;
 		else
-			EffectsHolder.transform.position = EnviroSky.instance.transform.position;
-
-
-		CreateWeatherEffectHolder ();
+            EffectsHolder.transform.position = transform.position;
 
 		GameObject SFX = (GameObject)Instantiate (Audio.SFXHolderPrefab, Vector3.zero, Quaternion.identity);
 
@@ -952,7 +1074,10 @@ public class EnviroSky : MonoBehaviour
 			case EnviroAudioSource.AudioSourceFunction.Thunder:
 				AudioSourceThunder = srcs [i].audiosrc;
 				break;
-			}
+            case EnviroAudioSource.AudioSourceFunction.ZoneAmbient:
+                AudioSourceZone = srcs[i];
+            break;
+            }
 		}
 
 		Weather.currentAudioSource = AudioSourceWeather; 
@@ -1025,7 +1150,8 @@ public class EnviroSky : MonoBehaviour
 	private void PlayAmbient (AudioClip sfx)
 	{
 		if (sfx == Audio.currentAmbientSource.audiosrc.clip) {
-			Audio.currentAmbientSource.FadeIn (sfx);
+            if (!Audio.currentAmbientSource.audiosrc.isPlaying)
+                 Audio.currentAmbientSource.audiosrc.Play();
 			return;
 		}
 		if (Audio.currentAmbientSource == AudioSourceAmbient){
@@ -1205,7 +1331,14 @@ public class EnviroSky : MonoBehaviour
 		if (EnviroSkyRender != null) 
 		{
             EnviroSkyRender.dirVolumeLighting = volumeLightSettings.dirVolumeLighting;
-            EnviroSkyRender.volumeLighting = volumeLighting;
+
+            if (SystemInfo.graphicsDeviceType == UnityEngine.Rendering.GraphicsDeviceType.Direct3D9)   
+                EnviroSkyRender.volumeLighting = false;
+            else
+                EnviroSkyRender.volumeLighting = volumeLighting;
+
+
+            EnviroSkyRender.simpleFog = fogSettings.useSimpleFog;
             EnviroSkyRender.distanceFog = fogSettings.distanceFog;
             EnviroSkyRender.heightFog = fogSettings.heightFog;
             EnviroSkyRender.height = fogSettings.height;
@@ -1269,8 +1402,8 @@ public class EnviroSky : MonoBehaviour
 
     void RenderFlatCloudsMap()
     {
-        if (flatCloudsMat == null)
-            flatCloudsMat = new Material(Shader.Find("Enviro/FlatCloudMap"));
+       // if (flatCloudsMat == null)
+        flatCloudsMat = new Material(Shader.Find("Enviro/FlatCloudMap"));
 
         flatCloudsRenderTarget = RenderTexture.GetTemporary(512 * ((int)cloudsSettings.flatCloudsResolution + 1), 512 * ((int)cloudsSettings.flatCloudsResolution + 1), 0, RenderTextureFormat.DefaultHDR);
         flatCloudsRenderTarget.wrapMode = TextureWrapMode.Repeat;
@@ -1278,7 +1411,7 @@ public class EnviroSky : MonoBehaviour
         flatCloudsMat.SetTexture("_NoiseTex", cloudsSettings.flatCloudsNoiseTexture);
         flatCloudsMat.SetFloat("_CloudScale", cloudsSettings.flatCloudsScale);
         flatCloudsMat.SetFloat("_Coverage", cloudsConfig.flatCoverage);
-
+        flatCloudsMat.SetInt("noiseOctaves", cloudsSettings.flatCloudsNoiseOctaves);
         flatCloudsMat.SetFloat("_Softness", cloudsConfig.flatSoftness);
         flatCloudsMat.SetFloat("_Brightness", cloudsConfig.flatBrightness);
 
@@ -1295,11 +1428,18 @@ public class EnviroSky : MonoBehaviour
 
 		if (!started && !serverMode) 
 		{
-			if (AssignInRuntime && PlayerTag != "" && CameraTag != "" && Application.isPlaying) {
-				Player = GameObject.FindGameObjectWithTag (PlayerTag);
+            UpdateTime();
+            UpdateSunAndMoonPosition();
+            CalculateDirectLight();
+            UpdateAmbientLight();
+            UpdateReflections();
+            RenderMoon();
+
+            if (AssignInRuntime && PlayerTag != "" && CameraTag != "" && Application.isPlaying) {
+                if (GameObject.FindGameObjectWithTag(PlayerTag) != null)
+                    Player = GameObject.FindGameObjectWithTag (PlayerTag);
 				if(GameObject.FindGameObjectWithTag (CameraTag) != null)
 					PlayerCamera = GameObject.FindGameObjectWithTag (CameraTag).GetComponent<Camera>();
-
 				if (Player != null && PlayerCamera != null) {
 					Init ();
 					started = true;
@@ -1317,33 +1457,24 @@ public class EnviroSky : MonoBehaviour
             if (lastCloudsMode != cloudsMode)
                 SetupSkybox();
 
-
             if(cloudsMode == EnviroCloudsMode.Flat || cloudsMode == EnviroCloudsMode.Both)
-            RenderFlatCloudsMap();
+              RenderFlatCloudsMap();
 
             UpdateCameraComponents ();
 			UpdateAmbientLight ();
 			UpdateReflections ();
 			UpdateWeather ();
-			CalculateSatPositions (LST);
             UpdateCloudShadows();
+            UpdateSkyRenderingComponent ();
+            RenderMoon();
+            UpdateSunAndMoonPosition();
+            CalculateDirectLight();
+            CalculateSatPositions(LST);
 
-            if (EffectsHolder != null)
-				EffectsHolder.transform.position = Player.transform.position;
-
-			UpdateAdvancedFog ();
-
-			// Update sun and fog color according to the new position of the sun
-			if (skySettings.sunAndMoonPosition == EnviroSkySettings.SunAndMoonCalc.Realistic)
-				UpdateSunAndMoonPosition ();
-			else
-				UpdateSimpleSunAndMoonPosition ();
-
-			CalculateDirectLight ();
-
-			if (moonCamera != null) {
-				moonCamera.transform.localPosition = Components.Moon.transform.localPosition + (Components.Moon.transform.forward * 0.1f);
-				moonCamera.transform.LookAt(Components.Moon.transform,new Vector3(0.5f,0f,0f));
+            if (moonCamera != null) {
+               moonCamera.transform.localPosition = Components.Moon.transform.localPosition + (Components.Moon.transform.forward * 0.1f);
+             // moonCamera.transform.localPosition = Components.Moon.transform.localPosition + (transform.InverseTransformDirection(Components.Moon.transform.forward) * 0.1f);
+                moonCamera.transform.LookAt(Components.Moon.transform,new Vector3(0.5f,0f,0f));
 			}
 
 			if (!isNight && GameTime.solarTime < 0.45f) {
@@ -1361,7 +1492,8 @@ public class EnviroSky : MonoBehaviour
             //Change Clouds Quality Settings
             if (lastCloudsQuality != cloudsSettings.cloudsQuality && (cloudsMode == EnviroCloudsMode.Volume || cloudsMode == EnviroCloudsMode.Both))
                 ChangeCloudsQuality(cloudsSettings.cloudsQuality);
-		} 
+
+        } 
 		else 
 		{
 			UpdateWeather ();
@@ -1370,31 +1502,47 @@ public class EnviroSky : MonoBehaviour
 
 	void LateUpdate()
 	{
-		if (!serverMode && PlayerCamera != null) {
+		if (!serverMode && PlayerCamera != null && Player != null) {
 			transform.position = Player.transform.position;
 			transform.localScale = new Vector3 (PlayerCamera.farClipPlane, PlayerCamera.farClipPlane, PlayerCamera.farClipPlane);
-		}
+
+            if (EffectsHolder != null)
+                EffectsHolder.transform.position = Player.transform.position;
+        }
 	}
 
     private void UpdateCloudShadows ()
     {
-        if (Components.cloudsShadowPlane == null)
-            return;
-
-        if (cloudsSettings.shadowIntensity <= 0f)
+        if (cloudsSettings.shadowIntensity == 0 || cloudsMode == EnviroCloudsMode.None || cloudsMode == EnviroCloudsMode.Flat)
         {
-            if (Components.cloudsShadowPlane.activeSelf == true)
-                Components.cloudsShadowPlane.SetActive(false);
+            if (MainLight.cookie != null)
+                MainLight.cookie = null;
         }
-        else
+        else if (cloudsSettings.shadowIntensity > 0)
         {
-            if (Components.cloudsShadowPlane.activeSelf == false)
-                Components.cloudsShadowPlane.SetActive(true);
-        
-           Components.cloudsShadowPlane.transform.localPosition = new Vector3(0f, cloudsSettings.bottomCloudHeight / transform.localScale.x, 0f);
+            cloudShadowMap.DiscardContents(true,true);
 
-            if (cloudShadows != null)
-                cloudShadows.SetFloat("_ShadowStrength", cloudsSettings.shadowIntensity);
+            cloudShadowMat.SetFloat("_shadowIntensity", cloudsSettings.shadowIntensity);
+
+            if (cloudsMode == EnviroCloudsMode.Volume || cloudsMode == EnviroCloudsMode.Both)
+            {
+                cloudShadowMat.SetTexture("_MainTex", weatherMap);
+            //    cloudShadowMat.SetInt("_shadowMode", 1);
+                Graphics.Blit(weatherMap, cloudShadowMap, cloudShadowMat);
+            }
+            /* else
+             {
+                 cloudShadowMat.SetTexture("_MainTex", flatCloudsRenderTarget);
+                 cloudShadowMat.SetInt("_shadowMode", 0);
+                 Graphics.Blit(flatCloudsRenderTarget, cloudShadowMap, cloudShadowMat);
+             }*/
+
+            if (Application.isPlaying)
+                MainLight.cookie = cloudShadowMap;
+            else
+                MainLight.cookie = null;
+
+            MainLight.cookieSize = cloudsSettings.shadowCookieSize;
         }
     }
 
@@ -1444,12 +1592,14 @@ public class EnviroSky : MonoBehaviour
 		RenderSettings.skybox.SetColor("_MoonColor",skySettings.moonColor);
 		RenderSettings.skybox.SetFloat ("_MoonSize", skySettings.moonSize);
 		RenderSettings.skybox.SetFloat ("_MoonBrightness", skySettings.moonBrightness);
-		RenderSettings.skybox.SetTexture ("_MoonTex", moonRenderTarget);
-		//RenderSettings.skybox.SetTexture ("_MoonNormal", skySettings.moonNormal);
-		RenderSettings.skybox.SetColor("_scatteringColor",skySettings.scatteringColor.Evaluate(GameTime.solarTime));
+        if(skySettings.renderMoon)
+		    RenderSettings.skybox.SetTexture ("_MoonTex", moonRenderTarget);
+        else
+            RenderSettings.skybox.SetTexture("_MoonTex", null);
+        RenderSettings.skybox.SetColor("_scatteringColor",skySettings.scatteringColor.Evaluate(GameTime.solarTime));
 		RenderSettings.skybox.SetColor("_sunDiskColor", skySettings.sunDiskColor.Evaluate(GameTime.solarTime));
-		RenderSettings.skybox.SetColor("_weatherSkyMod",currentWeatherSkyMod);
-		RenderSettings.skybox.SetColor("_weatherFogMod",currentWeatherFogMod);
+		RenderSettings.skybox.SetColor("_weatherSkyMod", Color.Lerp(currentWeatherSkyMod, currentInteriorSkyboxMod, currentInteriorSkyboxMod.a));
+		RenderSettings.skybox.SetColor("_weatherFogMod", Color.Lerp(currentWeatherFogMod, currentInteriorFogColorMod, currentInteriorFogColorMod.a));
 		RenderSettings.skybox.SetVector ("_Bm", BetaMie () * (skySettings.mie * Fog.scatteringStrenght));
 		RenderSettings.skybox.SetVector ("_Br", BetaRay() * skySettings.rayleigh);
 		RenderSettings.skybox.SetVector ("_mieG",GetMieG ());
@@ -1462,15 +1612,25 @@ public class EnviroSky : MonoBehaviour
 		RenderSettings.skybox.SetFloat ("_scatteringPower", skySettings.scatteringCurve.Evaluate(GameTime.solarTime));
 		RenderSettings.skybox.SetFloat ("_SkyColorPower", skySettings.skyColorPower.Evaluate(GameTime.solarTime));
 		RenderSettings.skybox.SetFloat ("_StarsIntensity", skySettings.starsIntensity.Evaluate(GameTime.solarTime));
-		RenderSettings.skybox.SetColor ("_moonGlowColor", skySettings.moonGlowColor);
-		float hdr = HDR ? 1f : 0f;
+        RenderSettings.skybox.SetFloat ("_GalaxyIntensity", skySettings.galaxyIntensity.Evaluate(GameTime.solarTime));
+        RenderSettings.skybox.SetColor ("_moonGlowColor", skySettings.moonGlowColor);
+
+        if (skySettings.blackGroundMode)
+            RenderSettings.skybox.SetInt("_blackGround",1);
+        else
+            RenderSettings.skybox.SetInt("_blackGround", 0);
+
+        float hdr = HDR ? 1f : 0f;
 		RenderSettings.skybox.SetFloat ("_hdr", hdr);
 		RenderSettings.skybox.SetFloat("_moonGlowStrenght", skySettings.moonGlow.Evaluate(GameTime.solarTime));
-		//Clouds
+
+        //Clouds
 		RenderSettings.skybox.SetVector ("_CloudAnimation", cloudAnim);
-		//cirrus
+		
+        //cirrus
 		if (cloudsSettings.cirrusCloudsTexture != null)
 			RenderSettings.skybox.SetTexture ("_CloudMap", cloudsSettings.cirrusCloudsTexture);
+
 		RenderSettings.skybox.SetColor("_CloudColor",cloudsSettings.cirrusCloudsColor.Evaluate(GameTime.solarTime));
 		RenderSettings.skybox.SetFloat ("_CloudAltitude", cloudsSettings.cirrusCloudsAltitude);
 		RenderSettings.skybox.SetFloat ("_CloudAlpha", cloudsConfig.cirrusAlpha);
@@ -1484,48 +1644,47 @@ public class EnviroSky : MonoBehaviour
             RenderSettings.skybox.SetColor("_Cloud1Color", cloudsSettings.flatCloudsColor.Evaluate(GameTime.solarTime));
             RenderSettings.skybox.SetFloat("_Cloud1Altitude", cloudsSettings.flatCloudsAltitude);
             RenderSettings.skybox.SetFloat("_Cloud1Alpha", cloudsConfig.flatAlpha);
-           // RenderSettings.skybox.SetFloat("_Cloud1Coverage", cloudsConfig.flatCoverage);
             RenderSettings.skybox.SetFloat("_Cloud1ColorPower", cloudsConfig.flatColorPow);
         }
-        RenderSettings.skybox.SetFloat("_noiseScale", skySettings.noiseScale);
-        RenderSettings.skybox.SetFloat("_noiseIntensity", skySettings.noiseIntensity);
 
-        Shader.SetGlobalVector ("_SunDir", -EnviroSky.instance.Components.Sun.transform.forward);
+       //RenderSettings.skybox.SetFloat("_noiseScale", skySettings.noiseScale);
+       //RenderSettings.skybox.SetFloat("_noiseIntensity", skySettings.noiseIntensity);
+
+        Shader.SetGlobalVector ("_SunDir", -Components.Sun.transform.forward);
 		Shader.SetGlobalVector ("_MoonDir", -Components.Moon.transform.forward);
-		Shader.SetGlobalColor("_scatteringColor", EnviroSky.instance.skySettings.scatteringColor.Evaluate(EnviroSky.instance.GameTime.solarTime));
-		Shader.SetGlobalColor("_sunDiskColor", EnviroSky.instance.skySettings.sunDiskColor.Evaluate(EnviroSky.instance.GameTime.solarTime));
-		Shader.SetGlobalColor("_weatherSkyMod", EnviroSky.instance.currentWeatherSkyMod);
-		Shader.SetGlobalColor("_weatherFogMod", EnviroSky.instance.currentWeatherFogMod);
+		Shader.SetGlobalColor("_scatteringColor", skySettings.scatteringColor.Evaluate(GameTime.solarTime));
+		Shader.SetGlobalColor("_sunDiskColor", skySettings.sunDiskColor.Evaluate(GameTime.solarTime));
+		Shader.SetGlobalColor("_weatherSkyMod", Color.Lerp(currentWeatherSkyMod, currentInteriorSkyboxMod, currentInteriorSkyboxMod.a));
+        Shader.SetGlobalColor("_weatherFogMod", Color.Lerp(currentWeatherFogMod, currentInteriorFogColorMod, currentInteriorFogColorMod.a));
 
-		Shader.SetGlobalFloat ("_gameTime", Mathf.Clamp(1f-EnviroSky.instance.GameTime.solarTime,0.5f,1f));
-		Shader.SetGlobalFloat ("_SkyFogHeight", EnviroSky.instance.Fog.skyFogHeight);
-		Shader.SetGlobalFloat ("_scatteringStrenght", EnviroSky.instance.Fog.scatteringStrenght);
-		Shader.SetGlobalFloat ("_skyFogIntensity", EnviroSky.instance.fogSettings.skyFogIntensity);
-		Shader.SetGlobalFloat ("_SunBlocking", EnviroSky.instance.Fog.sunBlocking);
+		Shader.SetGlobalFloat ("_gameTime", Mathf.Clamp(1f-GameTime.solarTime,0.5f,1f));
+		Shader.SetGlobalFloat ("_SkyFogHeight", Fog.skyFogHeight);
+		Shader.SetGlobalFloat ("_scatteringStrenght", Fog.scatteringStrenght);
+		Shader.SetGlobalFloat ("_skyFogIntensity", fogSettings.skyFogIntensity);
+		Shader.SetGlobalFloat ("_SunBlocking", Fog.sunBlocking);
 
-		Shader.SetGlobalVector ("_EnviroParams", new Vector4(Mathf.Clamp(1f-EnviroSky.instance.GameTime.solarTime,0.5f,1f),fogSettings.distanceFog ? 1f:0f,fogSettings.heightFog ? 1f:0f,HDR ? 1f:0f));
+		Shader.SetGlobalVector ("_EnviroParams", new Vector4(Mathf.Clamp(1f-GameTime.solarTime,0.5f,1f),fogSettings.distanceFog ? 1f:0f,fogSettings.heightFog ? 1f:0f,HDR ? 1f:0f));
 
-		Shader.SetGlobalVector ("_Bm", EnviroSky.instance.BetaMie () * (EnviroSky.instance.skySettings.mie * (EnviroSky.instance.Fog.scatteringStrenght * EnviroSky.instance.GameTime.solarTime)));
-		Shader.SetGlobalVector ("_BmScene", EnviroSky.instance.BetaMie () * (EnviroSky.instance.fogSettings.mie * (EnviroSky.instance.Fog.scatteringStrenght * EnviroSky.instance.GameTime.solarTime)));
-		Shader.SetGlobalVector ("_Br", EnviroSky.instance.BetaRay() * EnviroSky.instance.skySettings.rayleigh);
-		Shader.SetGlobalVector ("_mieG", EnviroSky.instance.GetMieG ());
-		Shader.SetGlobalVector ("_mieGScene", EnviroSky.instance.GetMieGScene ());
-		Shader.SetGlobalFloat ("_SunIntensity",  EnviroSky.instance.skySettings.sunIntensity);
+		Shader.SetGlobalVector ("_Bm", BetaMie () * (skySettings.mie * (Fog.scatteringStrenght * GameTime.solarTime)));
+		Shader.SetGlobalVector ("_BmScene", BetaMie () * (fogSettings.mie * (Fog.scatteringStrenght * GameTime.solarTime)));
+		Shader.SetGlobalVector ("_Br", BetaRay() * skySettings.rayleigh);
+		Shader.SetGlobalVector ("_mieG", GetMieG ());
+		Shader.SetGlobalVector ("_mieGScene", GetMieGScene ());
+		Shader.SetGlobalFloat ("_SunIntensity",  skySettings.sunIntensity);
 
-		Shader.SetGlobalFloat ("_SunDiskSize",  EnviroSky.instance.skySettings.sunDiskScale);
-		Shader.SetGlobalFloat ("_SunDiskIntensity",  EnviroSky.instance.skySettings.sunDiskIntensity);
-		Shader.SetGlobalFloat ("_SunDiskSize",  EnviroSky.instance.skySettings.sunDiskScale);
+		Shader.SetGlobalFloat ("_SunDiskSize",  skySettings.sunDiskScale);
+		Shader.SetGlobalFloat ("_SunDiskIntensity",  skySettings.sunDiskIntensity);
+		Shader.SetGlobalFloat ("_SunDiskSize", skySettings.sunDiskScale);
 
-		Shader.SetGlobalFloat ("_Exposure", EnviroSky.instance.skySettings.skyExposure);
-		Shader.SetGlobalFloat ("_SkyLuminance", EnviroSky.instance.skySettings.skyLuminence.Evaluate(EnviroSky.instance.GameTime.solarTime));
-		Shader.SetGlobalFloat ("_scatteringPower", EnviroSky.instance.skySettings.scatteringCurve.Evaluate(EnviroSky.instance.GameTime.solarTime));
-		Shader.SetGlobalFloat ("_SkyColorPower", EnviroSky.instance.skySettings.skyColorPower.Evaluate(EnviroSky.instance.GameTime.solarTime));
+		Shader.SetGlobalFloat ("_Exposure", skySettings.skyExposure);
+		Shader.SetGlobalFloat ("_SkyLuminance", skySettings.skyLuminence.Evaluate(GameTime.solarTime));
+		Shader.SetGlobalFloat ("_scatteringPower", skySettings.scatteringCurve.Evaluate(GameTime.solarTime));
+		Shader.SetGlobalFloat ("_SkyColorPower", skySettings.skyColorPower.Evaluate(GameTime.solarTime));
 
-		Shader.SetGlobalFloat ("_heightFogIntensity", EnviroSky.instance.fogSettings.heightFogIntensity);
-		Shader.SetGlobalFloat ("_scatteringStrenght", EnviroSky.instance.Fog.scatteringStrenght);
-		Shader.SetGlobalFloat ("_distanceFogIntensity", EnviroSky.instance.fogSettings.distanceFogIntensity);
-		Shader.SetGlobalFloat ("_maximumFogDensity", 1 - EnviroSky.instance.fogSettings.maximumFogDensity);
-		Shader.SetGlobalFloat ("_lightning", EnviroSky.instance.thunder);
+		Shader.SetGlobalFloat ("_heightFogIntensity", fogSettings.heightFogIntensity);
+		Shader.SetGlobalFloat ("_distanceFogIntensity", fogSettings.distanceFogIntensity);
+		Shader.SetGlobalFloat ("_maximumFogDensity", 1 - fogSettings.maximumFogDensity);
+		Shader.SetGlobalFloat ("_lightning", thunder);
 
 		//if (Sky.StarsBlinking > 0.0f)
 		//{
@@ -1541,8 +1700,8 @@ public class EnviroSky : MonoBehaviour
 			windStrenght = Weather.currentActiveWeatherPreset.WindStrenght;
 
 		if (cloudsSettings.useWindZoneDirection) {
-			cloudsSettings.cloudsWindDirectionX = Components.windZone.transform.forward.x;
-			cloudsSettings.cloudsWindDirectionY = Components.windZone.transform.forward.z;
+			cloudsSettings.cloudsWindDirectionX = -Components.windZone.transform.forward.x;
+			cloudsSettings.cloudsWindDirectionY = -Components.windZone.transform.forward.z;
 		}
 
 		cloudAnim += new Vector2(((cloudsSettings.cloudsTimeScale * (windStrenght * cloudsSettings.cloudsWindDirectionX)) * cloudsSettings.cloudsWindStrengthModificator) * Time.deltaTime,((cloudsSettings.cloudsTimeScale * (windStrenght * cloudsSettings.cloudsWindDirectionY)) * cloudsSettings.cloudsWindStrengthModificator) * Time.deltaTime);
@@ -1566,18 +1725,15 @@ public class EnviroSky : MonoBehaviour
 		}
 	}
 
-	void UpdateAdvancedFog ()
+	void UpdateSkyRenderingComponent ()
 	{
 		if (EnviroSkyRender == null)
 			return;
 
-		if (EnviroSkyRender._volumeRenderingMaterial != null) {
+        EnviroSkyRender.Resolution = volumeLightSettings.Resolution;
 
+        if (EnviroSkyRender._volumeRenderingMaterial != null) {
             EnviroSkyRender._volumeRenderingMaterial.SetTexture ("_Clouds", cloudsRenderTarget);
-
-			//if (backgroundSettings.backgroundRendering && bgCamera != null)
-			//	volumeFogAndLight._volumeRenderingMaterial.SetTexture ("_Background", bgCamera.targetTexture);
-
 			float hdr = HDR ? 1f : 0f;
             EnviroSkyRender._volumeRenderingMaterial.SetFloat ("_hdr", hdr);
 		}
@@ -1601,16 +1757,26 @@ public class EnviroSky : MonoBehaviour
 
 		float ecl = 23.4393f - 3.563E-7f * d;
 
-		CalculateSunPosition (d, ecl);
-		CalculateMoonPosition (d, ecl);
-	}
+        if (skySettings.sunAndMoonPosition == EnviroSkySettings.SunAndMoonCalc.Realistic)
+        {
+            CalculateSunPosition(d, ecl, false);
+            CalculateMoonPosition(d, ecl);
+        }
+        else
+        {
+            CalculateSunPosition(d, ecl, true);
+        }
+
+        CalculateStarsPosition(LST);
+
+    }
 
 
 	private float Remap (float value, float from1, float to1, float from2, float to2) {
 		return (value - from1) / (to1 - from1) * (to2 - from2) + from2;
 	}
 
-	void CalculateSunPosition (float d, float ecl)
+	void CalculateSunPosition (float d, float ecl, bool simpleMoon)
 	{
 		/////http://www.stjarnhimlen.se/comp/ppcomp.html#5////
 		///////////////////////// SUN ////////////////////////
@@ -1642,18 +1808,13 @@ public class EnviroSky : MonoBehaviour
 		float GMST0 = (l + 180);
 		float GMST  = GMST0 + GetUniversalTimeOfDay() * 15;
 		LST = GMST + GameTime.Longitude;
-
-		if (LST > 24)LST -= 24;  
-		else if (LST < 0)LST += 24;
-
-		CalculateStarsPosition (LST);
-
-		float HA_deg = LST - Mathf.Rad2Deg * Mathf.Atan2(ye, xe);
+        
+        float HA_deg = LST - Mathf.Rad2Deg * Mathf.Atan2(ye, xe);
 		float HA_rad = Mathf.Deg2Rad * HA_deg;
 		float HA_sin = Mathf.Sin(HA_rad);
 		float HA_cos = Mathf.Cos(HA_rad);
 
-		float x = HA_cos * decl_cos;
+        float x = HA_cos * decl_cos;
 		float y = HA_sin * decl_cos;
 		float z = decl_sin;
 
@@ -1674,198 +1835,101 @@ public class EnviroSky : MonoBehaviour
 		GameTime.solarTime = Mathf.Clamp01(Remap (sunTheta, -1.5f, 0f, 1.5f, 1f));
 
 		SunTransform.localPosition = OrbitalToLocal(sunTheta, sunPhi);
+		SunTransform.LookAt(DomeTransform.position);
 
-		// Always Face dome or better face the playerCamera!
-		if(PlayerCamera != null)
-			SunTransform.LookAt(PlayerCamera.transform.position);
-		else
-			SunTransform.transform.LookAt(DomeTransform.position);
+        if(simpleMoon)
+        {
+          MoonTransform.localPosition = OrbitalToLocal(sunTheta - pi, sunPhi);
+          MoonTransform.LookAt(DomeTransform.position);
+        }
 
         SetupShader(sunTheta);
 	}
 
-	void CalculateMoonPosition (float d, float ecl)
-	{
-		float N = 125.1228f - 0.0529538083f * d;
-		float i = 5.1454f;
-		float w = 318.0634f + 0.1643573223f * d;
-		float a = 60.2666f;
-		float e = 0.054900f;
-		float M = 115.3654f + 13.0649929509f * d;
+    void CalculateMoonPosition(float d, float ecl)
+    {
 
-		float sun_w = 282.9404f + 4.70935E-5f * d;
-		float sun_M = 356.0470f + 0.9856002585f * d;
+        float N = 125.1228f - 0.0529538083f * d;
+        float i = 5.1454f;
+        float w = 318.0634f + 0.1643573223f * d;
+        float a = 60.2666f;
+        float e = 0.054900f;
+        float M = 115.3654f + 13.0649929509f * d;
 
-		float sin_M = Mathf.Sin(Mathf.Deg2Rad * M);
-		float cos_M = Mathf.Cos(Mathf.Deg2Rad * M);
+        float rad_M = Mathf.Deg2Rad * M;
 
-		float E = M + e * Mathf.Rad2Deg * sin_M * (1 + e * cos_M);
+        float E = rad_M + e * Mathf.Sin(rad_M) * (1f + e * Mathf.Cos(rad_M));
 
-		E0 = E;
+        float xv = a * (Mathf.Cos(E) - e);
+        float yv = a * (Mathf.Sqrt(1f - e * e) * Mathf.Sin(E));
 
-		for (int eL = 0; eL < 1000; eL++){
-			E1 = E0 - (E0 - (180.0f/pi) * e * Mathf.Sin(E0 * Mathf.Deg2Rad) - M) / ( 1.0f - e * Mathf.Cos(Mathf.Deg2Rad * E0));
-			if (Mathf.Abs(E1)-Mathf.Abs(E0) < 0.005f){
-				break;
-			} else {
-				E0 = E1;
-			}
-		}
-		E = E1;
+        float v = Mathf.Rad2Deg * Mathf.Atan2(yv, xv);
+        float r = Mathf.Sqrt(xv * xv + yv * yv);
 
-		float xv = a * (Mathf.Cos(Mathf.Deg2Rad * E) - e);
-		float yv = a * (Mathf.Sin(Mathf.Deg2Rad * E) * Mathf.Sqrt(1 - e*e));
+        float rad_N = Mathf.Deg2Rad * N;
+        float sin_N = Mathf.Sin(rad_N);
+        float cos_N = Mathf.Cos(rad_N);
 
-		float v = Mathf.Rad2Deg * Mathf.Atan2(yv, xv);
-		float r = Mathf.Sqrt(xv*xv + yv*yv);
+        float l = Mathf.Deg2Rad * (v + w);
+        float sin_l = Mathf.Sin(l);
+        float cos_l = Mathf.Cos(l);
 
-		float l = v + w;
+        float rad_i = Mathf.Deg2Rad * i;
+        float cos_i = Mathf.Cos(rad_i);
 
-		float sin_l = Mathf.Sin(Mathf.Deg2Rad * l);
-		float cos_l = Mathf.Cos(Mathf.Deg2Rad * l);
-		float cos_i = Mathf.Cos(Mathf.Sin(Mathf.Deg2Rad * i));
-		float sin_N = Mathf.Sin(Mathf.Deg2Rad * N);
-		float cos_N = Mathf.Cos(Mathf.Deg2Rad * N);
+        float xh = r * (cos_N * cos_l - sin_N * sin_l * cos_i);
+        float yh = r * (sin_N * cos_l + cos_N * sin_l * cos_i);
+        float zh = r * (sin_l * Mathf.Sin(rad_i));
 
-		float xh = r * (cos_N * cos_l - sin_N * sin_l * cos_i);
-		float yh = r * (sin_N * cos_l + cos_N * sin_l * cos_i);
-		float zh = r * (sin_l * Mathf.Sin(Mathf.Deg2Rad * i));
+        float cos_ecl = Mathf.Cos(Mathf.Deg2Rad * ecl);
+        float sin_ecl = Mathf.Sin(Mathf.Deg2Rad * ecl);
 
-		float moonLongitude = Mathf.Atan2(yh,xh)*Mathf.Rad2Deg;
-		float moonLatitude = Mathf.Atan2(zh,Mathf.Sqrt(xh*xh+yh*yh))*Mathf.Rad2Deg;
+        float xe = xh;
+        float ye = yh * cos_ecl - zh * sin_ecl;
+        float ze = yh * sin_ecl + zh * cos_ecl;
 
-		float Ms = sun_M;	// Mean Anomaly of the Sun
-		float Mm = M;	// Mean Anomaly of the Moon
-		float Nm = N;	// Longitude of the Moon's node
-		//float ws = sun_w;	// Argument of perihelion for the Sun
-		float wm = w;	// Argument of perihelion for the Moon
+        float ra = Mathf.Atan2(ye, xe);
+        float decl = Mathf.Atan2(ze, Mathf.Sqrt(xe * xe + ye * ye));
 
-		float Ls = sun_w + sun_M;										// Mean Longitude of the Sun  (Ns=0)
-		float Lm = Mm + wm + Nm;								// Mean longitude of the Moon
-		float Dm = Lm - Ls;									// Mean elongation of the Moon
-		float F = Lm - Nm;									// Argument of latitude for the Moon
+        float HA = Mathf.Deg2Rad * LST - ra;
 
-		//Add these terms to the Moon's longitude (degrees):
-		moonLongitude -= 1.274f * Mathf.Sin((Mm - (2.0f*Dm))* Mathf.Deg2Rad );          		// (the Evection)
-		moonLongitude += 0.658f * Mathf.Sin((2.0f*Dm) * Mathf.Deg2Rad);               		// (the Variation)
-		moonLongitude -= 0.186f * Mathf.Sin(Ms* Mathf.Deg2Rad);                 		// (the Yearly Equation)
-		moonLongitude -= 0.059f * Mathf.Sin(((2.0f*Mm) - (2.0f*Dm)) * Mathf.Deg2Rad);
-		moonLongitude -= 0.057f * Mathf.Sin((Mm - (2.0f*Dm) + Ms) * Mathf.Deg2Rad);
-		moonLongitude += 0.053f * Mathf.Sin((Mm + (2.0f*Dm)) * Mathf.Deg2Rad);
-		moonLongitude += 0.046f * Mathf.Sin(((2.0f*Dm) - Ms) * Mathf.Deg2Rad);
-		moonLongitude += 0.041f * Mathf.Sin((Mm - Ms) * Mathf.Deg2Rad);
-		moonLongitude -= 0.035f * Mathf.Sin(Dm * Mathf.Deg2Rad);                 		// (the Parallactic Equation)
-		moonLongitude -= 0.031f * Mathf.Sin((Mm + Ms) * Mathf.Deg2Rad);
-		moonLongitude -= 0.015f * Mathf.Sin(((2.0f*F) - (2.0f*Dm)) * Mathf.Deg2Rad);
-		moonLongitude += 0.011f * Mathf.Sin((Mm - (4.0f*Dm)) * Mathf.Deg2Rad);
+        float x = Mathf.Cos(HA) * Mathf.Cos(decl);
+        float y = Mathf.Sin(HA) * Mathf.Cos(decl);
+        float z = Mathf.Sin(decl);
 
-		//Add these terms to the Moon's latitude (degrees):
-		moonLatitude -= 0.173f * Mathf.Sin((F - (2.0f*Dm)) * Mathf.Deg2Rad);
-		moonLatitude -= 0.055f * Mathf.Sin(((Mm) - F - (2.0f*Dm)) * Mathf.Deg2Rad);
-		moonLatitude -= 0.046f * Mathf.Sin(((Mm) + F - (2.0f*Dm)) * Mathf.Deg2Rad);
-		moonLatitude += 0.033f * Mathf.Sin((F + (2.0f*Dm)) * Mathf.Deg2Rad);
-		moonLatitude += 0.017f * Mathf.Sin(((2.0f*Mm) + F) * Mathf.Deg2Rad);
+        float latitude = Mathf.Deg2Rad * GameTime.Latitude;
+        float sin_latitude = Mathf.Sin(latitude);
+        float cos_latitude = Mathf.Cos(latitude);
 
-		xh = 1f * Mathf.Cos(moonLongitude * Mathf.Deg2Rad) * Mathf.Cos(moonLatitude * Mathf.Deg2Rad);
-		yh = 1f * Mathf.Sin(moonLongitude* Mathf.Deg2Rad) * Mathf.Cos(moonLatitude* Mathf.Deg2Rad);
-		zh = 1f * Mathf.Sin(moonLatitude* Mathf.Deg2Rad);
+        float xhor = x * sin_latitude - z * cos_latitude;
+        float yhor = y;
+        float zhor = x * cos_latitude + z * sin_latitude;
 
-		float xe = xh;
-		float ye = yh * Mathf.Cos(Mathf.Deg2Rad * ecl) - zh * Mathf.Sin(Mathf.Deg2Rad * ecl);
-		float ze = zh * Mathf.Sin(Mathf.Deg2Rad * ecl) + zh * Mathf.Cos(Mathf.Deg2Rad * ecl);
+        float azimuth = Mathf.Atan2(yhor, xhor) + Mathf.Deg2Rad * 180f;
+        float altitude = Mathf.Atan2(zhor, Mathf.Sqrt(xhor * xhor + yhor * yhor));
 
-		float HA = Mathf.Deg2Rad * ( LST - Mathf.Rad2Deg * Mathf.Atan2(ye , xe));
-		float cos_decl = Mathf.Cos(Mathf.Atan2( ze, Mathf.Sqrt(xe * xe + ye * ye)));
+        float MoonTheta = (90f * Mathf.Deg2Rad) - altitude;
+        float MoonPhi = azimuth;
 
-		float x = Mathf.Cos(HA) * cos_decl;
-		float y = Mathf.Sin(HA) * cos_decl;
-		float z = Mathf.Sin(Mathf.Atan2(ze, Mathf.Sqrt(xe*xe + ye*ye)));
+        MoonTransform.localPosition = OrbitalToLocal(MoonTheta, MoonPhi);
+        GameTime.lunarTime = Mathf.Clamp01(Remap(MoonTheta, -1.5f, 0f, 1.5f, 1f));
+        MoonTransform.LookAt(DomeTransform.position, new Vector3(0f, 1f, 0f));
+    }
 
-		float sin_Lat = Mathf.Sin(Mathf.Deg2Rad * GameTime.Latitude);
-		float cos_Lat = Mathf.Cos(Mathf.Deg2Rad * GameTime.Latitude);
-
-		float xhor = x * sin_Lat - z * cos_Lat;
-		float yhor = y;
-		float zhor = x * cos_Lat + z * sin_Lat;
-
-		float azimuth = Mathf.Atan2(yhor, xhor) + Mathf.Deg2Rad * 180;
-		float altitude = Mathf.Atan2(zhor, Mathf.Sqrt(xhor*xhor + yhor*yhor));
-
-		float MoonTheta = (90 * Mathf.Deg2Rad) - altitude;
-		float MoonPhi = azimuth;
-
-		MoonTransform.localPosition = OrbitalToLocal(MoonTheta, MoonPhi);
-		GameTime.lunarTime = Mathf.Clamp01(Remap (MoonTheta, -1.5f, 0f, 1.5f, 1f));
-		//MoonTransform.LookAt (Vector3.zero);
-		// Always Face dome or better face the playerCamera!
-		if(PlayerCamera != null)
-			MoonTransform.LookAt(PlayerCamera.transform.position,new Vector3(0f,1f,0f));
-		else
-			MoonTransform.transform.LookAt(DomeTransform.position,new Vector3(0f,1f,0f));
-	}
 
 	void CalculateStarsPosition (float siderealTime)
 	{
-		Quaternion starsRotation = Quaternion.Euler (90 - GameTime.Latitude, GameTime.Longitude, 0); 
+      
+        if (siderealTime > 24) siderealTime -= 24;
+        else if (siderealTime < 0) siderealTime += 24;
+
+        Quaternion starsRotation = Quaternion.Euler (90 - GameTime.Latitude, Mathf.Deg2Rad * GameTime.Longitude, 0); 
 		starsRotation *= Quaternion.Euler(0, siderealTime, 0);
 
 		Components.starsRotation.localRotation = starsRotation;
 		RenderSettings.skybox.SetMatrix ("_StarsMatrix", Components.starsRotation.worldToLocalMatrix);
 		//Matrix4x4 starsMatrix = Matrix4x4.TRS (DomeTransform.localPosition, starsRotation, new Vector3 (1f, 1f, 1f));
 		//RenderSettings.skybox.SetMatrix ("_StarsMatrix", starsMatrix);
-	}
-
-
-
-
-	void UpdateSimpleSunAndMoonPosition ()
-	{
-		// Calculates the Solar latitude
-		float latitudeRadians = Mathf.Deg2Rad * GameTime.Latitude;
-		float latitudeRadiansSin = Mathf.Sin(latitudeRadians);
-		float latitudeRadiansCos = Mathf.Cos(latitudeRadians);
-
-		// Calculates the Solar longitude
-		float longitudeRadians = Mathf.Deg2Rad * GameTime.Longitude;
-
-		// Solar declination - constant for the whole globe at any given day
-		float solarDeclination = 0.4093f * Mathf.Sin(2f * pi / 368f * (GameTime.Days - 81f));
-		float solarDeclinationSin = Mathf.Sin(solarDeclination);
-		float solarDeclinationCos = Mathf.Cos(solarDeclination);
-
-		// Calculate Solar time
-		float timeZone = (int)(GameTime.Longitude / 15f);
-		float meridian = Mathf.Deg2Rad * 15f * timeZone;
-		float solarTime = GetUniversalTimeOfDay() + 0.170f * Mathf.Sin(4f * pi / 373f * (GameTime.Days - 80f)) - 0.129f * Mathf.Sin(2f * pi / 355f * (GameTime.Days - 8f))  + 12f / pi * (meridian - longitudeRadians);
-		float solarTimeRadians = pi / 12f * solarTime;
-		float solarTimeSin = Mathf.Sin(solarTimeRadians);
-		float solarTimeCos = Mathf.Cos(solarTimeRadians);
-
-		// Solar altitude angle between the sun and the horizon
-		float solarAltitudeSin = latitudeRadiansSin * solarDeclinationSin - latitudeRadiansCos * solarDeclinationCos * solarTimeCos;
-		float solarAltitude = Mathf.Asin(solarAltitudeSin);
-
-		// Solar azimuth angle of the sun around the horizon
-		float solarAzimuthY = -solarDeclinationCos * solarTimeSin;
-		float solarAzimuthX = latitudeRadiansCos * solarDeclinationSin - latitudeRadiansSin * solarDeclinationCos * solarTimeCos;
-		float solarAzimuth = Mathf.Atan2(solarAzimuthY, solarAzimuthX);
-
-		// Convert to spherical coords
-		float theta = pi / 2 - solarAltitude;
-		float phi = solarAzimuth;
-
-		GameTime.solarTime = Mathf.Clamp01(Remap (theta, -1.5f, 0f, 1.5f, 1f));
-		GameTime.lunarTime = Mathf.Clamp01(Remap (theta - pi, -1.5f, 0f, 1.5f, 1f));
-
-		// Update sun position
-		SunTransform.localPosition = OrbitalToLocal(theta, phi);
-		SunTransform.LookAt(DomeTransform.position);
-		// Update moon position
-		MoonTransform.localPosition = OrbitalToLocal(theta - pi, phi);
-		MoonTransform.LookAt(DomeTransform.position);
-
-		SetupShader(theta);
-		RenderSettings.skybox.SetMatrix ("_StarsMatrix", SunTransform.worldToLocalMatrix);
 	}
 
 	Vector3 UpdateSatellitePosition (float orbit,float orbit2,float speed)
@@ -1912,21 +1976,19 @@ public class EnviroSky : MonoBehaviour
 
 	Vector3 OrbitalToLocal(float theta, float phi)
 	{
-		Vector3 res;
+		Vector3 pos;
 
 		float sinTheta = Mathf.Sin(theta);
 		float cosTheta = Mathf.Cos(theta);
 		float sinPhi   = Mathf.Sin(phi);
 		float cosPhi   = Mathf.Cos(phi);
 
-		res.z = sinTheta * cosPhi;
-		res.y = cosTheta;
-		res.x = sinTheta * sinPhi;
+        pos.z = sinTheta * cosPhi;
+        pos.y = cosTheta;
+        pos.x = sinTheta * sinPhi;
 
-		return res;
+		return pos;
 	}
-
-
 
 	void UpdateReflections ()
 	{
@@ -2050,12 +2112,12 @@ public class EnviroSky : MonoBehaviour
 		switch (lightSettings.ambientMode) {
 		case UnityEngine.Rendering.AmbientMode.Flat:
 			Color lightClr = Color.Lerp(lightSettings.ambientSkyColor.Evaluate (GameTime.solarTime),currentWeatherLightMod,currentWeatherLightMod.a) * lightSettings.ambientIntensity.Evaluate(GameTime.solarTime);
-			RenderSettings.ambientSkyColor = Color.Lerp (lightClr, currentInteriorAmbientLightMod, currentInteriorDirectLightMod.a);
+			RenderSettings.ambientSkyColor = Color.Lerp (lightClr, currentInteriorAmbientLightMod, currentInteriorAmbientLightMod.a);
 			break;
 
 		case UnityEngine.Rendering.AmbientMode.Trilight:
 			Color lClr = Color.Lerp(lightSettings.ambientSkyColor.Evaluate (GameTime.solarTime),currentWeatherLightMod,currentWeatherLightMod.a) * lightSettings.ambientIntensity.Evaluate(GameTime.solarTime);
-			RenderSettings.ambientSkyColor = Color.Lerp (lClr, currentInteriorAmbientLightMod, currentInteriorDirectLightMod.a);
+			RenderSettings.ambientSkyColor = Color.Lerp (lClr, currentInteriorAmbientLightMod, currentInteriorAmbientLightMod.a);
 			Color eqClr = Color.Lerp(lightSettings.ambientEquatorColor.Evaluate (GameTime.solarTime),currentWeatherLightMod,currentWeatherLightMod.a) * lightSettings.ambientIntensity.Evaluate(GameTime.solarTime);
 			RenderSettings.ambientEquatorColor =  Color.Lerp (eqClr, currentInteriorAmbientEQLightMod, currentInteriorAmbientEQLightMod.a);
 			Color grClr = Color.Lerp(lightSettings.ambientGroundColor.Evaluate (GameTime.solarTime),currentWeatherLightMod,currentWeatherLightMod.a) * lightSettings.ambientIntensity.Evaluate(GameTime.solarTime);
@@ -2072,12 +2134,9 @@ public class EnviroSky : MonoBehaviour
 		}
 	}
 
-
-
 	// Calculate sun and moon light intensity and color
 	private void CalculateDirectLight()
 	{ 
-
 		Color lightClr = Color.Lerp(lightSettings.LightColor.Evaluate (GameTime.solarTime),currentWeatherLightMod,currentWeatherLightMod.a);
 		MainLight.color = Color.Lerp (lightClr, currentInteriorDirectLightMod, currentInteriorDirectLightMod.a);
 
@@ -2086,33 +2145,35 @@ public class EnviroSky : MonoBehaviour
 
 		Shader.SetGlobalVector ("_SunPosition", Components.Sun.transform.localPosition + (-Components.Sun.transform.forward * 10000f));
 		Shader.SetGlobalVector ("_MoonPosition", Components.Moon.transform.localPosition);
+        //MOON
+       // Shader.SetGlobalVector("_lightVector", (Components.Sun.transform.localPosition + (-Components.Sun.transform.forward * 10000f)) - Components.Moon.transform.localPosition);
 
-		float lightIntensity;
+        float lightIntensity;
 
 		// Set sun and moon intensity
 		if (!isNight)
 		{
 			lightIntensity = lightSettings.directLightSunIntensity.Evaluate (GameTime.solarTime);
-			Components.DirectLight.position = Components.Sun.transform.position;
-			//Components.DirectLight.rotation = Components.Sun.transform.rotation;
-
-		}
+            Components.Sun.transform.LookAt(new Vector3(DomeTransform.position.x, DomeTransform.position.y - lightSettings.directLightAngleOffset, DomeTransform.position.z));
+            Components.DirectLight.rotation = Components.Sun.transform.rotation;
+        }
 		else
 		{
-			lightIntensity = lightSettings.directLightMoonIntensity.Evaluate (GameTime.lunarTime);// * Mathf.Clamp01(2f - Mathf.Abs(customMoonPhase));
-			Components.DirectLight.position = Components.Moon.transform.position;
-			//Components.DirectLight.rotation = Components.Moon.transform.rotation;
-		}
+			lightIntensity = lightSettings.directLightMoonIntensity.Evaluate (GameTime.lunarTime);
+            Components.Moon.transform.LookAt(new Vector3(DomeTransform.position.x, DomeTransform.position.y - lightSettings.directLightAngleOffset, DomeTransform.position.z));
+            Components.DirectLight.rotation = Components.Moon.transform.rotation;
+        }
 
-		if(PlayerCamera != null)
-		 Components.DirectLight.LookAt(PlayerCamera.transform);
-		else
-		 Components.DirectLight.LookAt(DomeTransform);
-		
-		// Set the light and shadow intensity
-		MainLight.intensity = Mathf.Lerp (MainLight.intensity, lightIntensity, 5f * Time.deltaTime);
+        // Set the light and shadow intensity
+        MainLight.intensity = Mathf.Lerp (MainLight.intensity, lightIntensity, 5f * Time.deltaTime);
 		MainLight.shadowStrength = lightSettings.shadowIntensity.Evaluate(GameTime.solarTime);
 	}
+
+    private Quaternion LightLookAt (Quaternion inputRotation, Quaternion newRotation)
+    {
+        return Quaternion.Lerp(inputRotation, newRotation, 500f * Time.deltaTime);
+    }
+
 
 	// Make the parameters stay in reasonable range
 	private void ValidateParameters()
@@ -2202,8 +2263,6 @@ public class EnviroSky : MonoBehaviour
 			AudioSourceWeather.FadeOut();
 			AudioSourceWeather2.FadeOut();
 		}
-
-		EnviroSky.instance.ChangeSeason (EnviroSeasons.Seasons.Spring);
 	}
 
 	private void UpdateClouds (EnviroWeatherPreset i, bool withTransition)
@@ -2450,7 +2509,7 @@ public class EnviroSky : MonoBehaviour
 	{
 		bool changed = false;
 
-		if(cloudsConfig.coverage >= Weather.currentActiveWeatherPreset.cloudsConfig.coverage)
+		if(cloudsConfig.coverage >= Weather.currentActiveWeatherPreset.cloudsConfig.coverage - 0.01f)
 			changed = true;
 		else
 			changed = false;
@@ -2540,49 +2599,112 @@ public class EnviroSky : MonoBehaviour
             return;
 
         switch (q)
-        {
-            case EnviroCloudSettings.CloudQuality.Low:
-                cloudsSettings.bottomCloudHeight = 3000f;
-                cloudsSettings.topCloudHeight = 6000f;
-                cloudsSettings.raymarchSteps = 150;
-                cloudsSettings.cloudsRenderResolution = 5;
-                cloudsSettings.baseNoiseUV = 12f;
-                cloudsSettings.detailNoiseUV = 30f;
+        { 
+
+         case EnviroCloudSettings.CloudQuality.Lowest:
+            cloudsSettings.bottomCloudHeight = 3500f;
+            cloudsSettings.topCloudHeight = 4750f;
+            cloudsSettings.cloudsWorldScale = 120000f;
+            cloudsSettings.raymarchSteps = 75;
+            cloudsSettings.stepsInDepthModificator = 0.7f;
+            cloudsSettings.cloudsRenderResolution = 2;
+            cloudsSettings.reprojectionPixelSize = EnviroCloudSettings.ReprojectionPixelSize.Medium;
+            cloudsSettings.baseNoiseUV = 26f;
+            cloudsSettings.detailNoiseUV = 1f;
+            cloudsSettings.detailQuality = EnviroCloudSettings.CloudDetailQuality.Low;
+        break;
+
+        case EnviroCloudSettings.CloudQuality.Low:
+                cloudsSettings.bottomCloudHeight = 3500f;
+                cloudsSettings.topCloudHeight = 5000f;
+                cloudsSettings.cloudsWorldScale = 120000f;
+                cloudsSettings.raymarchSteps = 90;
+                cloudsSettings.stepsInDepthModificator = 0.7f;
+                cloudsSettings.cloudsRenderResolution = 2;
+                cloudsSettings.reprojectionPixelSize = EnviroCloudSettings.ReprojectionPixelSize.Low;
+                cloudsSettings.baseNoiseUV = 28f;
+                cloudsSettings.detailNoiseUV = 1f;
                 cloudsSettings.detailQuality = EnviroCloudSettings.CloudDetailQuality.Low;
                 break;
 
             case EnviroCloudSettings.CloudQuality.Medium:
-                cloudsSettings.bottomCloudHeight = 3000f;
-                cloudsSettings.topCloudHeight = 6000f;
-                cloudsSettings.raymarchSteps = 200;
-                cloudsSettings.cloudsRenderResolution = 4;
-                cloudsSettings.baseNoiseUV = 15f;
-                cloudsSettings.detailNoiseUV = 40f;
+                cloudsSettings.bottomCloudHeight = 3500f;
+                cloudsSettings.topCloudHeight = 5500f;
+                cloudsSettings.cloudsWorldScale = 120000f;
+                cloudsSettings.raymarchSteps = 100;
+                cloudsSettings.stepsInDepthModificator = 0.7f;
+                cloudsSettings.cloudsRenderResolution = 1;
+                cloudsSettings.reprojectionPixelSize = EnviroCloudSettings.ReprojectionPixelSize.Medium;
+                cloudsSettings.baseNoiseUV = 30f;
+                cloudsSettings.detailNoiseUV = 2f;
                 cloudsSettings.detailQuality = EnviroCloudSettings.CloudDetailQuality.Low;
                 break;
 
             case EnviroCloudSettings.CloudQuality.High:
-                cloudsSettings.bottomCloudHeight = 3000f;
+                cloudsSettings.bottomCloudHeight = 3500f;
                 cloudsSettings.topCloudHeight = 6000f;
-                cloudsSettings.raymarchSteps = 220;
-                cloudsSettings.cloudsRenderResolution = 3;
-                cloudsSettings.baseNoiseUV = 17f;
+                cloudsSettings.cloudsWorldScale = 120000f;
+                cloudsSettings.raymarchSteps = 128;
+                cloudsSettings.stepsInDepthModificator = 0.6f;
+                cloudsSettings.cloudsRenderResolution = 1;
+                cloudsSettings.reprojectionPixelSize = EnviroCloudSettings.ReprojectionPixelSize.Medium;
+                cloudsSettings.baseNoiseUV = 30f;
                 cloudsSettings.detailNoiseUV = 50f;
                 cloudsSettings.detailQuality = EnviroCloudSettings.CloudDetailQuality.Low;
                 break;
 
             case EnviroCloudSettings.CloudQuality.Ultra:
+                cloudsSettings.bottomCloudHeight = 3500f;
+                cloudsSettings.topCloudHeight = 6500f;
+                cloudsSettings.cloudsWorldScale = 120000f;
+                cloudsSettings.raymarchSteps = 150;
+                cloudsSettings.stepsInDepthModificator = 0.5f;
+                cloudsSettings.cloudsRenderResolution = 1;
+                cloudsSettings.reprojectionPixelSize = EnviroCloudSettings.ReprojectionPixelSize.Low;
+                cloudsSettings.baseNoiseUV = 30f;
+                cloudsSettings.detailNoiseUV = 70f;
+                cloudsSettings.detailQuality = EnviroCloudSettings.CloudDetailQuality.Low;
+                break;
+
+            case EnviroCloudSettings.CloudQuality.VR_Low:
                 cloudsSettings.bottomCloudHeight = 3000f;
-                cloudsSettings.topCloudHeight = 6000f;
-                cloudsSettings.raymarchSteps = 256;
-                cloudsSettings.cloudsRenderResolution = 3;
+                cloudsSettings.topCloudHeight = 4200f;
+                cloudsSettings.cloudsWorldScale = 30000f;
+                cloudsSettings.raymarchSteps = 60;
+                cloudsSettings.cloudsRenderResolution = 2;
+                cloudsSettings.reprojectionPixelSize = EnviroCloudSettings.ReprojectionPixelSize.Low;
                 cloudsSettings.baseNoiseUV = 20f;
-                cloudsSettings.detailNoiseUV = 60f;
-                cloudsSettings.detailQuality = EnviroCloudSettings.CloudDetailQuality.High;
+                cloudsSettings.detailNoiseUV = 1f;
+                cloudsSettings.detailQuality = EnviroCloudSettings.CloudDetailQuality.Low;
+                break;
+
+            case EnviroCloudSettings.CloudQuality.VR_Medium:
+                cloudsSettings.bottomCloudHeight = 3000f;
+                cloudsSettings.topCloudHeight = 4500f;
+                cloudsSettings.cloudsWorldScale = 30000f;
+                cloudsSettings.raymarchSteps = 75;
+                cloudsSettings.cloudsRenderResolution = 1;
+                cloudsSettings.reprojectionPixelSize = EnviroCloudSettings.ReprojectionPixelSize.Medium;
+                cloudsSettings.baseNoiseUV = 22f;
+                cloudsSettings.detailNoiseUV = 1f;
+                cloudsSettings.detailQuality = EnviroCloudSettings.CloudDetailQuality.Low;
+                break;
+
+            case EnviroCloudSettings.CloudQuality.VR_High:
+                cloudsSettings.bottomCloudHeight = 3000f;
+                cloudsSettings.topCloudHeight = 4500f;
+                cloudsSettings.cloudsWorldScale = 30000f;
+                cloudsSettings.raymarchSteps = 80;
+                cloudsSettings.cloudsRenderResolution = 1;
+                cloudsSettings.reprojectionPixelSize = EnviroCloudSettings.ReprojectionPixelSize.Medium;
+                cloudsSettings.baseNoiseUV = 23f;
+                cloudsSettings.detailNoiseUV = 1f;
+                cloudsSettings.detailQuality = EnviroCloudSettings.CloudDetailQuality.Low;
                 break;
         }
 
         lastCloudsQuality = q;
+        cloudsSettings.cloudsQuality = q;
     }
 
     /// <summary>
@@ -2733,7 +2855,7 @@ public class EnviroSky : MonoBehaviour
 		this.Player = player;
 		RemoveEnviroCameraComponents (PlayerCamera);
 		PlayerCamera = Camera;
-		InitImageEffects ();
+        InitImageEffects();
 	}
 	/// <summary>
 	/// Destroy all enviro related camera components on this camera.
@@ -2742,21 +2864,18 @@ public class EnviroSky : MonoBehaviour
 	private void RemoveEnviroCameraComponents (Camera cam)
 	{
 		EnviroFog oldFog;
-		EnviroLightShafts oldSunShafts;
-		EnviroLightShafts oldMoonShafts;
 		EnviroSkyRendering renderComponent;
 
 		oldFog = cam.GetComponent<EnviroFog> ();
 		if (oldFog != null)
 			Destroy (oldFog);
 
-		oldSunShafts = cam.GetComponent<EnviroLightShafts> (); 
-		if(oldSunShafts != null)
-			Destroy (oldSunShafts);
+        EnviroLightShafts[] ls = cam.GetComponents<EnviroLightShafts>();
 
-		oldMoonShafts = cam.GetComponent<EnviroLightShafts> (); 
-		if(oldMoonShafts != null)
-			Destroy (oldMoonShafts);
+        for (int i = 0; i < ls.Length; i++)
+        {
+            Destroy(ls[i]);
+        }
 
 		renderComponent = cam.GetComponent<EnviroSkyRendering> (); 
 		if(renderComponent != null)

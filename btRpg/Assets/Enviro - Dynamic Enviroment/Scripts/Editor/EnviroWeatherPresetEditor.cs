@@ -105,7 +105,7 @@ public class EnviroWeatherPresetEditor : Editor {
 			myTarget.wetnessLevel = EditorGUILayout.Slider("Maximum Wetness",myTarget.wetnessLevel,0f,1f);
 			myTarget.snowLevel = EditorGUILayout.Slider("Maximum Snow",myTarget.snowLevel,0f,1f);
 			myTarget.isLightningStorm = EditorGUILayout.Toggle ("Lightning Storm", myTarget.isLightningStorm);
-			myTarget.lightningInterval = EditorGUILayout.Slider("Lightning Interval",myTarget.lightningInterval,1f,60f);
+			myTarget.lightningInterval = EditorGUILayout.Slider("Lightning Interval",myTarget.lightningInterval,2f,60f);
 			EditorGUILayout.EndVertical ();
 			GUILayout.BeginVertical("Particle Effects", boxStyle);
 			GUILayout.Space(15);
@@ -167,7 +167,7 @@ public class EnviroWeatherPresetEditor : Editor {
 			myTarget.cloudsConfig.topColor = EditorGUILayout.ColorField ("Top Color", myTarget.cloudsConfig.topColor);
 			myTarget.cloudsConfig.bottomColor = EditorGUILayout.ColorField ("Bottom Color", myTarget.cloudsConfig.bottomColor);
 			GUILayout.Space(10);
-			myTarget.cloudsConfig.alphaCoef = EditorGUILayout.Slider ("Alpha Factor", myTarget.cloudsConfig.alphaCoef,1f,10f);
+			myTarget.cloudsConfig.alphaCoef = EditorGUILayout.Slider ("Alpha Factor", myTarget.cloudsConfig.alphaCoef,1f,4f);
 			myTarget.cloudsConfig.scatteringCoef = EditorGUILayout.Slider ("Light Scattering Factor", myTarget.cloudsConfig.scatteringCoef,0f,2f);
             myTarget.cloudsConfig.skyBlending = EditorGUILayout.Slider("Sky Blending Factor", myTarget.cloudsConfig.skyBlending, 0.25f, 1f);
             GUILayout.Space(10);

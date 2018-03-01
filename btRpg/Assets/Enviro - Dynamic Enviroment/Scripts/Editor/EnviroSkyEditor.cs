@@ -8,7 +8,7 @@ using UnityEditorInternal;
 [CustomEditor(typeof(EnviroSky))]
 public class EnviroSkyEditor : Editor {
 
-	private string latestVersion = "2.0.0";
+	private string latestVersion = "2.0.2";
 	// GUI Styles
 	private GUIStyle boxStyle;
 	private GUIStyle boxStyleModified;
@@ -17,24 +17,25 @@ public class EnviroSkyEditor : Editor {
 	//Target
 	private EnviroSky myTarget;
 	private Color modifiedColor;
-	private bool showWeatherMap;
+    private Color greenColor;
+    private bool showWeatherMap;
 	//Profile Properties
 	SerializedObject serializedObj;
 	SerializedProperty Sun,Moon,DirectLight,GlobalReflectionProbe, windZone, LightningGenerator, satellites, starsRotation, cloudsShadowPlane; 
-	SerializedProperty Player,Camera,PlayerTag,CameraTag, AssignOnRuntime, HDR, SatTag, MoonTag;
+	SerializedProperty Player,Camera,PlayerTag,CameraTag, AssignOnRuntime, HDR, SatTag, MoonTag, dontDestroy;
 	SerializedProperty ProgressMode,Years,Days,Hours,Minutes,Seconds,Longitude,Latitude, DayLength,NightLength,UTC, UpdateSeason, CurrentSeason;
 	SerializedProperty UpdateWeather,StartWeather, EnableVolumeLighting,EnableSunShafts,EnableMoonShafts,AmbientVolume,WeatherVolume;
-	SerializedProperty lightColorGradient, lightIntensityCurveSun,lightIntensityCurveMoon, shadowStrength, VolumeLightingResolution;
+	SerializedProperty angleOffset,lightColorGradient, lightIntensityCurveSun,lightIntensityCurveMoon, shadowStrength, VolumeLightingResolution;
 	SerializedProperty ambientMode, ambientIntensityCurve, ambientSkyGradient, ambientEquatorGradient, ambientGroundGradient;
 	SerializedProperty globalReflectionsScale,reflectionBool, reflectionIntensity, reflectionUpdate;
-    SerializedProperty skyNoiseScale, skyNoiseIntensity, skyboxMode, customSkyboxMaterial, customSkyboxColor, rayleigh, g, mie, scatteringCurve, scatteringColor, sunMoonPos, sunIntensity, sunDiskScale, sunDiskIntensity, sunDiskColor, moonPhaseMode, moonTexture,moonSize, moonBrightness,moonGlow, startMoonPhase, currentMoonPhase, skyLuminance, skyColorPower, skyExposure, starsCubemap, starsIntensity,moonColor, moonGlowColor;
-	SerializedProperty flatCloudsScale,flatCloudsResolution, shadowIntensity, cloudsQuality,customWeatherMap,primaryattenuation, secondaryattenuation, weatherAnimSpeedScale, tonemapping,globalCloudCoverage,cirrusCloudsAltitude,flatCloudsAltitude,cloudsWorldScale, BottomCloudHeight,TopCloudHeight, cloudsRenderQuality,raymarchSteps, directlightIntensity,ambientlightIntensity, hgPhase,baseNoiseUV,detailNoiseUV,cloudsExposure,cirrusCloudsColor,flatCloudsColor,volumeCloudsColor,volumeCloudsMoonColor,cirrusCloudsTexture,flatCloudsTexture, weatherMapTiling,detailNoiseQuality;
+    SerializedProperty renderMoon, blackGroundMode,galaxyCubeMap, galaxyIntensity, skyboxMode, customSkyboxMaterial, customSkyboxColor, rayleigh, g, mie, scatteringCurve, scatteringColor, sunMoonPos, sunIntensity, sunDiskScale, sunDiskIntensity, sunDiskColor, moonPhaseMode, moonTexture,moonSize, moonBrightness,moonGlow, startMoonPhase, currentMoonPhase, skyLuminance, skyColorPower, skyExposure, starsCubemap, starsIntensity,moonColor, moonGlowColor;
+    SerializedProperty reprojectionPixelSize,stepsInDepthModificator, farCloudsLOD, shadowCookieSize, flatCloudsTextureIteration, flatCloudsScale, flatCloudsResolution, shadowIntensity, cloudsQuality,customWeatherMap,primaryattenuation, secondaryattenuation, weatherAnimSpeedScale, tonemapping,globalCloudCoverage,cirrusCloudsAltitude,flatCloudsAltitude,cloudsWorldScale, BottomCloudHeight,TopCloudHeight, cloudsRenderQuality,raymarchSteps, directlightIntensity,ambientlightIntensity, hgPhase,baseNoiseUV,detailNoiseUV,cloudsExposure,cirrusCloudsColor,flatCloudsColor,volumeCloudsColor,volumeCloudsMoonColor,cirrusCloudsTexture,flatCloudsTexture, weatherMapTiling,detailNoiseQuality;
     SerializedProperty useTag, wetnessAccumulationSpeed,wetnessDryingSpeed, snowAccumulationSpeed,snowMeltingSpeed,cloudTransitionSpeed,fogTransitionSpeed,effectTransitionSpeed,audioTransitionSpeed, useWindZoneDirection,windTimeScale,windIntensity,windDirectionX,windDirectionY;
-	SerializedProperty fogMie,fogG, fogmode, distanceFog, useRadialFog, startDistance, distanceFogIntensity,maximumFogIntensity, heightFog, height, heightFogIntensity,useNoise, noiseIntensity,noiseIntensityOffset, noiseScale,fogDitheringScale,fogDitheringIntensity;
+	SerializedProperty useSimpleFog,fogMie, fogG, fogmode, distanceFog, useRadialFog, startDistance, distanceFogIntensity,maximumFogIntensity, heightFog, height, heightFogIntensity, useNoise, noiseIntensity, noiseIntensityOffset, noiseScale,fogDitheringScale,fogDitheringIntensity;
 	SerializedProperty resolution, screenBlendMode, useDepthTexture, lightShaftsColorSun, lightShaftsColorMoon, treshholdColorSun, treshholdColorMoon, blurRadius, shaftsIntensity, maxRadius;
 	SerializedProperty daysInSpring, daysInSummer, daysInAutumn,daysInWinter;
 	SerializedProperty effectQuality, updateInterval;
-	SerializedProperty singlePassVR, setCameraClearFlags, renderClouds;
+    SerializedProperty singlePassVR, setCameraClearFlags, renderClouds;//, globalFog;
 	SerializedProperty volumeLighting,SampleCount, ScatteringCoef, ExtinctionCoef, Anistropy, MaxRayLength, VolumeResolution,globalVolumeIntensity;
 
 	ReorderableList thunderSFX;
@@ -58,8 +59,9 @@ public class EnviroSkyEditor : Editor {
 		Camera = serializedObj.FindProperty ("PlayerCamera");
 		PlayerTag = serializedObj.FindProperty ("PlayerTag");
 		CameraTag = serializedObj.FindProperty ("CameraTag");
-		AssignOnRuntime = serializedObj.FindProperty ("AssignInRuntime"); 
-		HDR = serializedObj.FindProperty ("HDR"); 
+		AssignOnRuntime = serializedObj.FindProperty ("AssignInRuntime");
+        dontDestroy = serializedObj.FindProperty("dontDestroy");
+        HDR = serializedObj.FindProperty ("HDR"); 
 		MoonTag = serializedObj.FindProperty ("moonRenderingLayer"); 
 		SatTag = serializedObj.FindProperty ("satelliteRenderingLayer"); 
 		singlePassVR = serializedObj.FindProperty ("singlePassVR"); 
@@ -71,8 +73,9 @@ public class EnviroSkyEditor : Editor {
 		EnableVolumeLighting = serializedObj.FindProperty ("volumeLighting");
 		EnableSunShafts = serializedObj.FindProperty ("LightShafts.sunLightShafts");
 		EnableMoonShafts = serializedObj.FindProperty ("LightShafts.moonLightShafts");
-		// Audio Controls
-		AmbientVolume = serializedObj.FindProperty ("Audio.ambientSFXVolume");
+        //globalFog = serializedObj.FindProperty("globalFog");
+        // Audio Controls
+        AmbientVolume = serializedObj.FindProperty ("Audio.ambientSFXVolume");
 		WeatherVolume = serializedObj.FindProperty ("Audio.weatherSFXVolume");
 		// Time Controls
 		ProgressMode = serializedObj.FindProperty ("GameTime.ProgressTime");
@@ -93,7 +96,8 @@ public class EnviroSkyEditor : Editor {
 		lightIntensityCurveSun = serializedObj.FindProperty ("lightSettings.directLightSunIntensity");
 		lightIntensityCurveMoon = serializedObj.FindProperty ("lightSettings.directLightMoonIntensity");
 		shadowStrength = serializedObj.FindProperty ("lightSettings.shadowIntensity");
-		ambientMode = serializedObj.FindProperty ("lightSettings.ambientMode");
+        angleOffset = serializedObj.FindProperty("lightSettings.directLightAngleOffset");
+        ambientMode = serializedObj.FindProperty ("lightSettings.ambientMode");
 		ambientIntensityCurve = serializedObj.FindProperty ("lightSettings.ambientIntensity");
 		ambientSkyGradient = serializedObj.FindProperty ("lightSettings.ambientSkyColor");
 		ambientEquatorGradient = serializedObj.FindProperty ("lightSettings.ambientEquatorColor");
@@ -118,7 +122,8 @@ public class EnviroSkyEditor : Editor {
 		skyboxMode = serializedObj.FindProperty ("skySettings.skyboxMode");
 		customSkyboxMaterial = serializedObj.FindProperty ("skySettings.customSkyboxMaterial");
 		customSkyboxColor = serializedObj.FindProperty ("skySettings.customSkyboxColor");
-		rayleigh = serializedObj.FindProperty ("skySettings.rayleigh");
+        blackGroundMode = serializedObj.FindProperty("skySettings.blackGroundMode");
+        rayleigh = serializedObj.FindProperty ("skySettings.rayleigh");
 		g = serializedObj.FindProperty ("skySettings.g");
 		mie = serializedObj.FindProperty ("skySettings.mie");
 		scatteringCurve = serializedObj.FindProperty ("skySettings.scatteringCurve");
@@ -128,7 +133,8 @@ public class EnviroSkyEditor : Editor {
 		sunDiskScale = serializedObj.FindProperty ("skySettings.sunDiskScale");
 		sunDiskIntensity = serializedObj.FindProperty ("skySettings.sunDiskIntensity");
 		sunDiskColor = serializedObj.FindProperty ("skySettings.sunDiskColor");
-		moonPhaseMode = serializedObj.FindProperty ("skySettings.moonPhaseMode");
+        renderMoon = serializedObj.FindProperty("skySettings.renderMoon");
+        moonPhaseMode = serializedObj.FindProperty ("skySettings.moonPhaseMode");
 		moonTexture = serializedObj.FindProperty ("skySettings.moonTexture");
 		moonBrightness = serializedObj.FindProperty ("skySettings.moonBrightness");
 		moonGlow = serializedObj.FindProperty ("skySettings.moonGlow");
@@ -142,8 +148,11 @@ public class EnviroSkyEditor : Editor {
 		moonGlowColor = serializedObj.FindProperty ("skySettings.moonGlowColor");
 		moonColor = serializedObj.FindProperty ("skySettings.moonColor");
 		moonSize = serializedObj.FindProperty ("skySettings.moonSize");
-        skyNoiseScale = serializedObj.FindProperty("skySettings.noiseScale");
-        skyNoiseIntensity = serializedObj.FindProperty("skySettings.noiseIntensity");
+        //skyNoiseScale = serializedObj.FindProperty("skySettings.noiseScale");
+       // skyNoiseIntensity = serializedObj.FindProperty("skySettings.noiseIntensity");
+
+        galaxyCubeMap = serializedObj.FindProperty("skySettings.galaxyCubeMap");
+        galaxyIntensity = serializedObj.FindProperty("skySettings.galaxyIntensity");
         //Clouds Category
         cloudsWorldScale = serializedObj.FindProperty ("cloudsSettings.cloudsWorldScale");
 		BottomCloudHeight = serializedObj.FindProperty ("cloudsSettings.bottomCloudHeight");
@@ -151,7 +160,9 @@ public class EnviroSkyEditor : Editor {
 		weatherAnimSpeedScale = serializedObj.FindProperty ("cloudsSettings.weatherAnimSpeedScale");
 		cloudsRenderQuality = serializedObj.FindProperty ("cloudsSettings.cloudsRenderResolution");
 		raymarchSteps = serializedObj.FindProperty ("cloudsSettings.raymarchSteps");
-		hgPhase = serializedObj.FindProperty ("cloudsSettings.hgPhase");
+        stepsInDepthModificator = serializedObj.FindProperty("cloudsSettings.stepsInDepthModificator");
+        reprojectionPixelSize = serializedObj.FindProperty("cloudsSettings.reprojectionPixelSize");
+        hgPhase = serializedObj.FindProperty ("cloudsSettings.hgPhase");
 		detailNoiseUV = serializedObj.FindProperty ("cloudsSettings.detailNoiseUV");
 		baseNoiseUV = serializedObj.FindProperty ("cloudsSettings.baseNoiseUV");
 		weatherMapTiling = serializedObj.FindProperty ("cloudsSettings.weatherMapTiling");
@@ -161,7 +172,8 @@ public class EnviroSkyEditor : Editor {
 		ambientlightIntensity = serializedObj.FindProperty ("cloudsSettings.ambientLightIntensity");
 		cloudsExposure = serializedObj.FindProperty ("cloudsSettings.cloudsExposure");
 		volumeCloudsMoonColor = serializedObj.FindProperty ("cloudsSettings.volumeCloudsMoonColor");
-		cirrusCloudsTexture = serializedObj.FindProperty ("cloudsSettings.cirrusCloudsTexture");
+        farCloudsLOD = serializedObj.FindProperty("cloudsSettings.farCloudsLOD");
+        cirrusCloudsTexture = serializedObj.FindProperty ("cloudsSettings.cirrusCloudsTexture");
 		cirrusCloudsAltitude = serializedObj.FindProperty ("cloudsSettings.cirrusCloudsAltitude");
 		cirrusCloudsColor = serializedObj.FindProperty ("cloudsSettings.cirrusCloudsColor"); 
 		flatCloudsTexture = serializedObj.FindProperty ("cloudsSettings.flatCloudsNoiseTexture");
@@ -174,9 +186,10 @@ public class EnviroSkyEditor : Editor {
         cloudsQuality = serializedObj.FindProperty("cloudsSettings.cloudsQuality");
         secondaryattenuation = serializedObj.FindProperty("cloudsSettings.secondaryAttenuation");
         shadowIntensity = serializedObj.FindProperty("cloudsSettings.shadowIntensity");
+        shadowCookieSize = serializedObj.FindProperty("cloudsSettings.shadowCookieSize");
         flatCloudsResolution = serializedObj.FindProperty("cloudsSettings.flatCloudsResolution");
         flatCloudsScale = serializedObj.FindProperty("cloudsSettings.flatCloudsScale");
-
+        flatCloudsTextureIteration = serializedObj.FindProperty("cloudsSettings.flatCloudsNoiseOctaves");
         // Weather Category
         useTag = serializedObj.FindProperty ("weatherSettings.useTag");
 		wetnessAccumulationSpeed = serializedObj.FindProperty ("weatherSettings.wetnessAccumulationSpeed");
@@ -202,12 +215,18 @@ public class EnviroSkyEditor : Editor {
 		heightFog = serializedObj.FindProperty ("fogSettings.heightFog");
 		height = serializedObj.FindProperty ("fogSettings.height");
 		heightFogIntensity = serializedObj.FindProperty ("fogSettings.heightFogIntensity");
-		fogDitheringScale = serializedObj.FindProperty ("fogSettings.fogDitheringScale");
+
+        noiseIntensity = serializedObj.FindProperty("fogSettings.noiseIntensity");
+        noiseIntensityOffset = serializedObj.FindProperty("fogSettings.noiseIntensityOffset");
+        noiseScale = serializedObj.FindProperty("fogSettings.noiseScale");
+
+        fogDitheringScale = serializedObj.FindProperty ("fogSettings.fogDitheringScale");
 		fogDitheringIntensity = serializedObj.FindProperty ("fogSettings.fogDitheringIntensity");
 		fogMie = serializedObj.FindProperty ("fogSettings.mie"); 
-		fogG = serializedObj.FindProperty ("fogSettings.g"); 
-		//LightShafts
-		resolution = serializedObj.FindProperty ("lightshaftsSettings.resolution");
+		fogG = serializedObj.FindProperty ("fogSettings.g");
+        useSimpleFog = serializedObj.FindProperty("fogSettings.useSimpleFog");
+        //LightShafts
+        resolution = serializedObj.FindProperty ("lightshaftsSettings.resolution");
 		screenBlendMode = serializedObj.FindProperty ("lightshaftsSettings.screenBlendMode");
 		useDepthTexture = serializedObj.FindProperty ("lightshaftsSettings.useDepthTexture");
 		lightShaftsColorSun = serializedObj.FindProperty ("lightshaftsSettings.lightShaftsColorSun");
@@ -253,8 +272,11 @@ public class EnviroSkyEditor : Editor {
 
 		modifiedColor = Color.red;
 		modifiedColor.a = 0.5f;
-		////
-	}
+
+        greenColor = Color.green;
+        greenColor.a = 0.5f;
+        ////
+    }
 	/// <summary>
 	/// Applies the changes and set profile to modifed but not saved.
 	/// </summary>
@@ -365,8 +387,9 @@ public class EnviroSkyEditor : Editor {
 					EditorGUILayout.PropertyField (lightColorGradient, true, null);
 					EditorGUILayout.PropertyField (lightIntensityCurveSun, true, null);
 					EditorGUILayout.PropertyField (lightIntensityCurveMoon, true, null);
-					EditorGUILayout.PropertyField (shadowStrength, true, null);
-					EditorGUILayout.PropertyField (ambientMode, true, null);
+                    EditorGUILayout.PropertyField(shadowStrength, true, null);
+                    EditorGUILayout.PropertyField(angleOffset, true, null);
+                    EditorGUILayout.PropertyField (ambientMode, true, null);
 					EditorGUILayout.PropertyField (ambientIntensityCurve, true, null);
 					EditorGUILayout.PropertyField (ambientSkyGradient, true, null);
 					EditorGUILayout.PropertyField (ambientEquatorGradient, true, null);
@@ -382,7 +405,8 @@ public class EnviroSkyEditor : Editor {
 					EditorGUILayout.PropertyField (skyboxMode, true, null);
 					EditorGUILayout.PropertyField (customSkyboxMaterial, true, null);
 					EditorGUILayout.PropertyField (customSkyboxColor, true, null);
-					GUILayout.Space (10);
+                    EditorGUILayout.PropertyField(blackGroundMode, true, null);
+                    GUILayout.Space (10);
 					EditorGUILayout.LabelField ("Scattering", headerStyle);
 					myTarget.skySettings.waveLength = EditorGUILayout.Vector3Field ("Wave Length", myTarget.skySettings.waveLength);
 					EditorGUILayout.PropertyField (rayleigh, true, null);
@@ -394,8 +418,9 @@ public class EnviroSkyEditor : Editor {
 					EditorGUILayout.PropertyField (sunIntensity, true, null);
 					EditorGUILayout.PropertyField (sunDiskScale, true, null);
 					EditorGUILayout.PropertyField (sunDiskIntensity, true, null);
-					EditorGUILayout.PropertyField (sunDiskColor, true, null);
-					EditorGUILayout.PropertyField (moonPhaseMode, true, null);
+					EditorGUILayout.PropertyField (sunDiskColor, true, null);       
+                    EditorGUILayout.PropertyField(renderMoon, true, null);
+                    EditorGUILayout.PropertyField (moonPhaseMode, true, null);
 					EditorGUILayout.PropertyField (moonTexture, true, null);
 					EditorGUILayout.PropertyField (moonColor, true, null);
 					EditorGUILayout.PropertyField (moonBrightness, true, null);
@@ -411,10 +436,11 @@ public class EnviroSkyEditor : Editor {
 					EditorGUILayout.PropertyField (skyExposure, true, null);
 					EditorGUILayout.PropertyField (starsCubemap, true, null);
 					EditorGUILayout.PropertyField (starsIntensity, true, null);
-
-                    EditorGUILayout.PropertyField(skyNoiseScale, true, null);
-                    EditorGUILayout.PropertyField(skyNoiseIntensity, true, null);
-                    ApplyChanges ();
+                    EditorGUILayout.PropertyField(galaxyCubeMap, true, null);
+                    EditorGUILayout.PropertyField(galaxyIntensity, true, null);
+                        //  EditorGUILayout.PropertyField(skyNoiseScale, true, null);
+                        //  EditorGUILayout.PropertyField(skyNoiseIntensity, true, null);
+                        ApplyChanges ();
 					break;
 					// CLouds Category
 				case EnviroProfile.settingsMode.Clouds:	
@@ -423,6 +449,7 @@ public class EnviroSkyEditor : Editor {
 					GUILayout.Space (20);
                         
                     EditorGUILayout.PropertyField(cloudsQuality, true, null);
+                    EditorGUILayout.PropertyField(farCloudsLOD, true, null);
                         if (myTarget.cloudsSettings.cloudsQuality == EnviroCloudSettings.CloudQuality.Custom)
                         {
                             GUILayout.BeginVertical("", boxStyle);
@@ -431,7 +458,11 @@ public class EnviroSkyEditor : Editor {
                             EditorGUILayout.PropertyField(TopCloudHeight, true, null);
 
                             EditorGUILayout.PropertyField(raymarchSteps, true, null);
+                            
+                            EditorGUILayout.PropertyField(stepsInDepthModificator, true, null);
+                            
                             EditorGUILayout.PropertyField(cloudsRenderQuality, true, null);
+                            EditorGUILayout.PropertyField(reprojectionPixelSize, true, null);
 
                             EditorGUILayout.PropertyField(baseNoiseUV, true, null);
                             EditorGUILayout.PropertyField(detailNoiseUV, true, null);
@@ -442,13 +473,10 @@ public class EnviroSkyEditor : Editor {
                         EditorGUILayout.PropertyField(hgPhase, true, null);
                         EditorGUILayout.PropertyField(primaryattenuation, true, null);
                         EditorGUILayout.PropertyField(secondaryattenuation, true, null);
-
-
                         EditorGUILayout.PropertyField(volumeCloudsColor, true, null);
                         EditorGUILayout.PropertyField(volumeCloudsMoonColor, true, null);
                         EditorGUILayout.PropertyField(directlightIntensity, true, null);
                         EditorGUILayout.PropertyField(ambientlightIntensity, true, null);
-                        EditorGUILayout.PropertyField(shadowIntensity, true, null);
                         
                         EditorGUILayout.PropertyField(tonemapping, true, null);
                         EditorGUILayout.PropertyField(cloudsExposure, true, null);
@@ -466,7 +494,13 @@ public class EnviroSkyEditor : Editor {
 					EditorGUILayout.PropertyField (globalCloudCoverage, true, null);
                         EditorGUILayout.EndVertical();
                         EditorGUILayout.EndVertical ();
-					GUILayout.BeginVertical ("Cirrus Clouds", boxStyle);
+
+                    GUILayout.BeginVertical("Clouds Shadows", boxStyle);
+                    GUILayout.Space(20);
+                    EditorGUILayout.PropertyField(shadowIntensity, true, null);
+                    EditorGUILayout.PropertyField(shadowCookieSize, true, null);
+                    EditorGUILayout.EndVertical();
+                    GUILayout.BeginVertical ("Cirrus Clouds", boxStyle);
 					GUILayout.Space (20);
 					EditorGUILayout.PropertyField (cirrusCloudsTexture, true, null);
 					EditorGUILayout.PropertyField (cirrusCloudsColor, true, null);
@@ -477,7 +511,8 @@ public class EnviroSkyEditor : Editor {
             
                     EditorGUILayout.PropertyField(flatCloudsTexture, true, null);
                     EditorGUILayout.PropertyField (flatCloudsResolution, true, null);
-					EditorGUILayout.PropertyField (flatCloudsColor, true, null);
+                    EditorGUILayout.PropertyField(flatCloudsTextureIteration, true, null);
+                    EditorGUILayout.PropertyField (flatCloudsColor, true, null);
                     EditorGUILayout.PropertyField(flatCloudsScale, true, null);
                     EditorGUILayout.PropertyField (flatCloudsAltitude, true, null);
 					EditorGUILayout.EndVertical ();
@@ -518,7 +553,8 @@ public class EnviroSkyEditor : Editor {
 
 				case EnviroProfile.settingsMode.Fog:
 					EditorGUI.BeginChangeCheck ();
-					EditorGUILayout.PropertyField (fogmode, true, null);
+                    EditorGUILayout.PropertyField(useSimpleFog, true, null);
+                    EditorGUILayout.PropertyField (fogmode, true, null);
 					EditorGUILayout.PropertyField (distanceFog, true, null);
 					EditorGUILayout.PropertyField (useRadialFog, true, null);
 					EditorGUILayout.PropertyField (startDistance, true, null);
@@ -527,10 +563,15 @@ public class EnviroSkyEditor : Editor {
 					EditorGUILayout.PropertyField (heightFog, true, null);
 					EditorGUILayout.PropertyField (height, true, null);
 					EditorGUILayout.PropertyField (heightFogIntensity, true, null);
-
-					EditorGUILayout.PropertyField (fogMie, true, null);
-					EditorGUILayout.PropertyField (fogG, true, null);
-
+                    if (!myTarget.fogSettings.useSimpleFog)
+                    {
+                        EditorGUILayout.PropertyField(noiseIntensity, true, null);
+                        EditorGUILayout.PropertyField(noiseIntensityOffset, true, null);
+                        EditorGUILayout.PropertyField(noiseScale, true, null);
+                        myTarget.fogSettings.noiseVelocity = EditorGUILayout.Vector2Field("Noise Velocity", myTarget.fogSettings.noiseVelocity);
+                        EditorGUILayout.PropertyField(fogMie, true, null);
+                        EditorGUILayout.PropertyField(fogG, true, null);
+                    }
 					EditorGUILayout.PropertyField (fogDitheringScale, true, null);
 					EditorGUILayout.PropertyField (fogDitheringIntensity, true, null);
 					ApplyChanges ();
@@ -624,9 +665,15 @@ public class EnviroSkyEditor : Editor {
 			EditorGUI.BeginChangeCheck ();
 			// Begin Setup
 			GUILayout.BeginVertical ("", boxStyle);
-			// Player Setup
-			GUILayout.BeginVertical ("", boxStyle);
-			myTarget.profile.showPlayerSetup = EditorGUILayout.BeginToggleGroup ("Player & Camera Setup", myTarget.profile.showPlayerSetup);
+            // Player Setup
+            if ((myTarget.Player == null || myTarget.PlayerCamera == null) && !myTarget.AssignInRuntime)
+                GUI.backgroundColor = modifiedColor;
+            else if ((myTarget.Player != null && myTarget.PlayerCamera != null) || myTarget.AssignInRuntime)
+                GUI.backgroundColor = greenColor;
+
+            GUILayout.BeginVertical ("", boxStyle);
+            GUI.backgroundColor = Color.white;
+            myTarget.profile.showPlayerSetup = EditorGUILayout.BeginToggleGroup ("Player & Camera Setup", myTarget.profile.showPlayerSetup);
 			if (myTarget.profile.showPlayerSetup) {
 				GUILayout.Space (20);
 				EditorGUILayout.PropertyField (Player, true, null);
@@ -639,12 +686,14 @@ public class EnviroSkyEditor : Editor {
 			}
 			EditorGUILayout.EndToggleGroup ();
 			GUILayout.EndVertical ();
+          
 
-			/// Render Setup
-			GUILayout.BeginVertical ("", boxStyle);
+            /// Render Setup
+            GUILayout.BeginVertical ("", boxStyle);
 			myTarget.profile.showRenderingSetup = EditorGUILayout.BeginToggleGroup ("Rendering Setup", myTarget.profile.showRenderingSetup);
 			if (myTarget.profile.showRenderingSetup) {
-				EditorGUILayout.PropertyField (HDR, true, null);
+                EditorGUILayout.PropertyField(dontDestroy, true, null);
+                EditorGUILayout.PropertyField (HDR, true, null);
 				EditorGUILayout.PropertyField (setCameraClearFlags, true, null);
 				GUILayout.Space (10);
 				EditorGUILayout.LabelField ("Layer Setup",headerStyle,null);
@@ -663,7 +712,6 @@ public class EnviroSkyEditor : Editor {
 			{
 				EditorGUILayout.PropertyField (Sun, true, null);
 				EditorGUILayout.PropertyField (Moon, true, null);
-				//EditorGUILayout.PropertyField (Clouds, true, null);
 				EditorGUILayout.PropertyField (DirectLight, true, null);
 				EditorGUILayout.PropertyField (LightningGenerator, true, null);
 				EditorGUILayout.PropertyField (windZone, true, null);
@@ -757,9 +805,10 @@ public class EnviroSkyEditor : Editor {
 			GUILayout.BeginVertical ("", boxStyle);
 			myTarget.profile.showEffectsUI = EditorGUILayout.BeginToggleGroup ("Feature Controls", myTarget.profile.showEffectsUI);
 			if (myTarget.profile.showEffectsUI) {
-				EditorGUILayout.PropertyField (EnableVolumeLighting, true, null);
+              //  EditorGUILayout.PropertyField (globalFog, true, null);
+                EditorGUILayout.PropertyField (EnableVolumeLighting, true, null);
 				EditorGUILayout.PropertyField (renderClouds, true, null);
-				EditorGUILayout.PropertyField (EnableSunShafts, true, null);
+                EditorGUILayout.PropertyField (EnableSunShafts, true, null);
 				EditorGUILayout.PropertyField (EnableMoonShafts, true, null);
 			}
 			EditorGUILayout.EndToggleGroup ();

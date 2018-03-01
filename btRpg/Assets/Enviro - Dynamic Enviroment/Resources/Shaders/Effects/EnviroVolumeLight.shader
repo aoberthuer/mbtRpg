@@ -45,7 +45,6 @@ Shader "Enviro/VolumeLight"
 		LOD 100
 
 		CGINCLUDE
-
 		#if defined(SHADOWS_DEPTH) || defined(SHADOWS_CUBE)
 		#define SHADOWS_NATIVE
 		#endif
@@ -306,35 +305,35 @@ Shader "Enviro/VolumeLight"
 
 				return RayMarch(i.pos.xy, rayEnd, rayDir, rayLength);
 			}
-			ENDCG
-		}		
+				ENDCG
+		}
 
-		// pass 4 - directional light
-		Pass
-		{
-			ZTest Off
-			Cull Off
-			ZWrite Off
-			Blend One One, One Zero
+			// pass 4 - directional light
+				Pass
+			{
+				ZTest Off
+				Cull Off
+				ZWrite Off
+				Blend One One, One Zero
 
-			CGPROGRAM
+				CGPROGRAM
 
-			#pragma vertex vertDir
-			#pragma fragment fragDir
-			#pragma target 3.5
-			#pragma exclude_renderers d3d9
+				#pragma vertex vertDir
+				#pragma fragment fragDir
+				#pragma target 3.5
+				#pragma exclude_renderers d3d9
 
-			#define UNITY_HDR_ON
+				#define UNITY_HDR_ON
 
-			#pragma shader_feature HEIGHT_FOG
-			#pragma shader_feature NOISE
-			#pragma shader_feature SHADOWS_DEPTH
-			#pragma shader_feature DIRECTIONAL_COOKIE
-			#pragma shader_feature DIRECTIONAL
+				#pragma shader_feature HEIGHT_FOG
+				#pragma shader_feature NOISE
+				#pragma shader_feature SHADOWS_DEPTH
+				#pragma shader_feature DIRECTIONAL_COOKIE
+				#pragma shader_feature DIRECTIONAL
 
-			#ifdef SHADOWS_DEPTH
-			#define SHADOWS_NATIVE
-			#endif
+				#ifdef SHADOWS_DEPTH
+				#define SHADOWS_NATIVE
+				#endif
 
 
 			v2f vertDir(appdata_img i)
@@ -355,6 +354,7 @@ Shader "Enviro/VolumeLight"
 			fixed4 fragDir(v2f i) : SV_Target
 			{ 
 				float2 uv = i.uv.xy;
+
 				float3 wpos = i.interpolatedRay + _WorldSpaceCameraPos;
 
 				float depth = SAMPLE_DEPTH_TEXTURE(_CameraDepthTexture,UnityStereoTransformScreenSpaceTex(uv));
@@ -375,12 +375,50 @@ Shader "Enviro/VolumeLight"
 
 				//if (linearDepth > 0.999999)
 				//{
-				//color.w = lerp(color.w , 1, _VolumetricLight.w);
+				
 				//}
 
 				return color;
 			}
 			ENDCG
 		}
+
+		// pass 5 - black
+			Pass
+			{
+				ZTest Off
+				Cull Off
+				ZWrite Off
+				Blend One One, One Zero
+
+				CGPROGRAM
+
+				#pragma vertex vertW
+				#pragma fragment fragW
+				#pragma target 3.5
+				#pragma exclude_renderers d3d9
+
+				#ifdef SHADOWS_DEPTH
+				#define SHADOWS_NATIVE
+				#endif
+
+
+			v2f vertW(appdata_img i)
+			{
+				v2f o;
+				UNITY_INITIALIZE_OUTPUT(v2f, o);
+				half index = i.vertex.z;
+				i.vertex.z = 0.1;
+				o.pos = UnityObjectToClipPos(i.vertex);
+				o.uv.xy = i.texcoord.xy;
+				return o;
+			}
+
+			fixed4 fragW(v2f i) : SV_Target
+			{
+				return float4(0,0,0,0);
+			}
+				ENDCG
+			}
 	}
 }

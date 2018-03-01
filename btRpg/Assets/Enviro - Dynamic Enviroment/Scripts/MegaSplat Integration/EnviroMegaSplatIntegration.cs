@@ -25,7 +25,7 @@ public class EnviroMegaSplatIntegration : MonoBehaviour {
 
 	void Update () 
 	{
-		if (MegaSplatMaterial == null)
+		if (MegaSplatMaterial == null || EnviroSky.instance == null)
 			return;
 
 		if (UpdateSnow) {
