@@ -67,11 +67,15 @@ namespace RPG.Weapons
             GameObject weaponPrefab = currentWeaponConfig.GetWeaponPrefab();
 
             GameObject dominantHand = RequestDominantHand();
-            weaponObject = Instantiate(weaponPrefab);
-            weaponObject.transform.SetParent(dominantHand.transform);
 
-            weaponObject.transform.localPosition = currentWeaponConfig.gripTransform.localPosition;
-            weaponObject.transform.localRotation = currentWeaponConfig.gripTransform.localRotation;
+            if(dominantHand != null)
+            {
+                weaponObject = Instantiate(weaponPrefab);
+                weaponObject.transform.SetParent(dominantHand.transform);
+
+                weaponObject.transform.localPosition = currentWeaponConfig.gripTransform.localPosition;
+                weaponObject.transform.localRotation = currentWeaponConfig.gripTransform.localRotation;
+            }
         }
 
         public void AttackTarget(GameObject targetToAttack)
@@ -128,10 +132,10 @@ namespace RPG.Weapons
             newProjectile.transform.LookAt(target.transform);
 
             Vector3 positionToHit = target.transform.position;
-            positionToHit.y += 1; // adjust for height we are not aiming at the feet. Should replace this by having a child on the character or even better some component marking place to hit like the DominantHand script...
+            // positionToHit.y += 0.25f; // adjust for height we are not aiming at the feet. Should replace this by having a child on the character or even better some component marking place to hit like the DominantHand script...
             Vector3 unitVectorToPlayer = (positionToHit - character.transform.position).normalized;
 
-            float projectileSpeed = 5f;
+            float projectileSpeed = 10f;
             newProjectile.GetComponent<Rigidbody>().velocity = unitVectorToPlayer * projectileSpeed;
         }
 
@@ -171,8 +175,13 @@ namespace RPG.Weapons
             DominantHand[] dominantHands = GetComponentsInChildren<DominantHand>();
             int numberOfDominantHands = dominantHands.Length;
 
-            Assert.IsFalse(numberOfDominantHands <= 0, "No DominantHand found on Player, please add one");
+            // Assert.IsFalse(numberOfDominantHands <= 0, "No DominantHand found on Player, please add one");
             Assert.IsFalse(numberOfDominantHands > 1, "Multiple DominantHand scripts on Player, please remove one");
+
+            if (numberOfDominantHands <= 0)
+            {
+                return null;
+            }
 
             return dominantHands[0].gameObject;
         }
