@@ -166,6 +166,7 @@ namespace RPG.Weapons
             {
                 AnimatorOverrideController animatorOverrideController = character.GetAnimatorOverrideController();
                 animator.runtimeAnimatorController = animatorOverrideController;
+
                 animatorOverrideController[GameConstants.DEFAULT_ATTACK] = currentWeaponConfig.GetAttackAnimation();
             }
         }

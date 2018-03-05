@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4f489dc591aeea241ad62c42048a1656, type: 3}
+  m_Name: Ogre Dummy
+  m_EditorClassIdentifier: 
+  gripTransform: {fileID: 4784685802506132, guid: f58f242b976e82d488f8bdbfee722c44,
+    type: 2}
+  weaponPrefab: {fileID: 1977758422390736, guid: 4b3ff0fa9c9f9734e99c8c857c9eda62,
+    type: 2}
+  attackAnimation: {fileID: 7400000, guid: a0366762217b257429a2e1f9c832ad55, type: 3}
+  minTimeBetweenHits: 3
+  maxAttackRange: 2
+  additionalDamage: 10
+  damageDelay: 2
+  rangedAttack: 0
+  rangedAttackPrefab: {fileID: 0}

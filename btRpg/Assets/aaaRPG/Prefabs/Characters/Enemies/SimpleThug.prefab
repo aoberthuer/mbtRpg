@@ -2475,7 +2475,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animatorController: {fileID: 9100000, guid: e2cf68ff4b1ffda45a77f7307dd789b9, type: 2}
-  animatorOverrideController: {fileID: 22100000, guid: cbdfabc3c4777d64da784639f9425486,
+  animatorOverrideController: {fileID: 22100000, guid: 7720786400304ba489d1ae6b0c691d56,
     type: 2}
   characterAvatar: {fileID: 9000000, guid: e2958561779b1a748a4246b9d0c0b309, type: 3}
   audioSourceSpatialBlend: 0.5
@@ -2521,6 +2521,7 @@ MonoBehaviour:
   chaseRadius: 6
   patrolPath: {fileID: 0}
   waypointTolerance: 2
+  waypointDwellTime: 2
 --- !u!114 &114318254579880864
 MonoBehaviour:
   m_ObjectHideFlags: 1

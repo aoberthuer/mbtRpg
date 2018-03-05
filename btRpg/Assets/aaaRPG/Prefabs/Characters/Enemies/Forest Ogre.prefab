@@ -2069,7 +2069,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   baseDamage: 10
-  currentWeaponConfig: {fileID: 11400000, guid: 4743bef4d84f75c4c8ab23130346f886,
+  currentWeaponConfig: {fileID: 11400000, guid: 8fa4f3d2d014e634a99542828e7e0de8,
     type: 2}
 --- !u!114 &114622719102414338
 MonoBehaviour:
@@ -2116,7 +2116,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animatorController: {fileID: 9100000, guid: e2cf68ff4b1ffda45a77f7307dd789b9, type: 2}
-  animatorOverrideController: {fileID: 22100000, guid: 7742d6c03c7d1394183010ac5b03594d,
+  animatorOverrideController: {fileID: 22100000, guid: acec31cf00e1f0a48ac451808b557d0e,
     type: 2}
   characterAvatar: {fileID: 9000000, guid: a92eb307c7102a4418a04a87d7e1470e, type: 3}
   audioSourceSpatialBlend: 0.5
