@@ -15,6 +15,8 @@ namespace RPG.Weapons
             {
                 healthSystem.TakeDamage(damageCaused);
             }
+
+            Destroy(gameObject, 0.1f);
         }
     }
 }
