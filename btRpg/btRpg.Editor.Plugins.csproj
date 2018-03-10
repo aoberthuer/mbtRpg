@@ -404,9 +404,9 @@
     <None Include="Assets\FogVolume\Scripts\Other\TAA\Shaders\VelocityBuffer.shader" />
     <None Include="Assets\FogVolume\Scripts\Other\TAA\_LICENSE.txt" />
     <None Include="Assets\FogVolume\ShaderReplacements\SpeedTree.shader" />
-    <None Include="Assets\Forest Ogre\Read me.txt" />
-    <None Include="Assets\Forest Ogre\www.meshtint.com.txt" />
     <None Include="Assets\GeNa\README.txt" />
+    <None Include="Assets\MeshTint\Forest Ogre\Read me.txt" />
+    <None Include="Assets\MeshTint\Forest Ogre\www.meshtint.com.txt" />
     <None Include="Assets\PostProcessing\Editor Resources\Monitors\HistogramCompute.compute" />
     <None Include="Assets\PostProcessing\Editor Resources\Monitors\HistogramRender.shader" />
     <None Include="Assets\PostProcessing\Editor Resources\Monitors\ParadeRender.shader" />
