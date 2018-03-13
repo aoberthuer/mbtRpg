@@ -41,12 +41,12 @@ namespace RPG.Characters
 
         private void ScanForAbilityKeyDown()
         {
-            // start by one not zero, as zero is the power attack
-            for(int abilityIndex = 1; abilityIndex < specialAbilities.GetNumberOfAbilities(); abilityIndex++)
+           
+            for(int abilityIndex = 0; abilityIndex < specialAbilities.GetNumberOfAbilitiesOnPlayer(); abilityIndex++)
             {
                 if(Input.GetKeyDown(abilityIndex.ToString()))
                 {
-                    specialAbilities.AttemptSpecialAbility(abilityIndex);
+                    specialAbilities.AttemptSpecialAbilityOnPlayer(abilityIndex);
                 }
             }
         }
@@ -68,7 +68,7 @@ namespace RPG.Characters
             {
                 if (IsTargetInRange(enemy.gameObject))
                 {
-                    specialAbilities.AttemptSpecialAbility(0, enemy.gameObject);
+                    specialAbilities.AttemptSpecialAbilityMelee(enemy.gameObject);
                 }
                 else
                 {
@@ -96,7 +96,7 @@ namespace RPG.Characters
         IEnumerator MoveAndPowerAttack(EnemyControlAI enemy)
         {
             yield return StartCoroutine(MoveToTarget(enemy.gameObject));
-            specialAbilities.AttemptSpecialAbility(0, enemy.gameObject);
+            specialAbilities.AttemptSpecialAbilityMelee(enemy.gameObject);
         }
 
         private void OnMouseOverWalkable(Vector3 destination)
@@ -105,10 +105,19 @@ namespace RPG.Characters
             {
                 character.SetDestination(destination);
             }
+            else if (Input.GetMouseButtonDown(1))
+            {
+                GameObject targetGameObject = new GameObject();
+                targetGameObject.transform.position = destination;
+                specialAbilities.AttemptSpecialAbilityRanged(0, targetGameObject);
+            }
         }
 
         private bool IsTargetInRange(GameObject target)
         {
+            if (target == null)
+                return false;
+
             float distanceToTarget = (target.transform.position - transform.position).magnitude;
             return distanceToTarget <= weaponSystem.GetCurrentWeapon().GetMaxAttackRange();
         }

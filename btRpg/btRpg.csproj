@@ -318,6 +318,8 @@
     <Compile Include="Assets\aaaRPG\Scripts\Characters\Player\PlayerControl.cs" />
     <Compile Include="Assets\aaaRPG\Scripts\Characters\Special Abilities\AbilityBehaviour.cs" />
     <Compile Include="Assets\aaaRPG\Scripts\Characters\Special Abilities\AbilityConfig.cs" />
+    <Compile Include="Assets\aaaRPG\Scripts\Characters\Special Abilities\Area of Effect Remote\AreaOfEffectRemoteBehaviour.cs" />
+    <Compile Include="Assets\aaaRPG\Scripts\Characters\Special Abilities\Area of Effect Remote\AreaOfEffectRemoteConfig.cs" />
     <Compile Include="Assets\aaaRPG\Scripts\Characters\Special Abilities\Area of Effect\AreaOfEffectBehaviour.cs" />
     <Compile Include="Assets\aaaRPG\Scripts\Characters\Special Abilities\Area of Effect\AreaOfEffectConfig.cs" />
     <Compile Include="Assets\aaaRPG\Scripts\Characters\Special Abilities\Power Attack\PowerAttackBehaviour.cs" />

@@ -7,9 +7,9 @@ namespace RPG.Characters
     public class SelfHealBehaviour : AbilityBehaviour
     {
 
-        public override void Use(GameObject target)
+        public override void Use(GameObject target, bool useTargetPosition)
         {
-            base.Use(target);
+            base.Use(target, useTargetPosition);
             HealPlayer(target);
         }
 

@@ -2536,10 +2536,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd32a5196bcb87148a76690964387109, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  specialAbilities:
-  - {fileID: 11400000, guid: 7e990e136e4322843ab7c3ea37268e70, type: 2}
-  - {fileID: 11400000, guid: 6c5cc468ecd0eea4b9bc7107aad2e278, type: 2}
-  - {fileID: 11400000, guid: 1522a8bffe14b7349aa19512208526aa, type: 2}
+  specialAbilityMelee: {fileID: 11400000, guid: 22a79d51d9df7ca4a8dad77e5cf82447,
+    type: 2}
+  specialAbilitiesOnPlayer:
+  - {fileID: 11400000, guid: ecdb5d321e535b04eaac269d05f4728b, type: 2}
+  - {fileID: 11400000, guid: 6cfe360724e1bc84a81ed9c1a4a5e8a7, type: 2}
+  specialAbilitiesRanged:
+  - {fileID: 11400000, guid: e7b690db9f43e3448b5da9a2bd4b978c, type: 2}
+  - {fileID: 11400000, guid: def1be4e43fc7dd4cac940e73fb88268, type: 2}
   energyOrb: {fileID: 0}
   maxEnergyPoints: 100
   regenerateEnergyPerSecond: 1

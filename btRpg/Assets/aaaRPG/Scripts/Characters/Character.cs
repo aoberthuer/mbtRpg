@@ -31,8 +31,7 @@ namespace RPG.Characters
         [SerializeField] bool navMeshAgentAutoBrake = false;
 
         [Header("RigidBody")]
-        [SerializeField]
-        bool freezeRotation = true;
+        [SerializeField] bool freezeRotation = true;
 
         [Header("Movement Settings")]
         [SerializeField] float moveSpeedMultiplier = 1f;

@@ -13,6 +13,8 @@ namespace RPG.Characters
         [SerializeField] AudioClip[] audioClips;
         [SerializeField] AnimationClip abilityAnimationClip;
 
+        [SerializeField] bool rangedSpecialAbility;
+
         protected AbilityBehaviour behaviour;
 
         public float getEnergyCost()
@@ -46,9 +48,8 @@ namespace RPG.Characters
 
         public void Use(GameObject target)
         {
-            behaviour.Use(target);
+            behaviour.Use(target, rangedSpecialAbility);
         }
-    }
-  
 
+    }
 }

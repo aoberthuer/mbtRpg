@@ -24,21 +24,32 @@ namespace RPG.Characters
             config = configToSet;
         }
 
-        public virtual void Use(GameObject target)
+        public virtual void Use(GameObject target, bool rangedSpecialAbility)
         {
-            PlayParticleEffect();
+            PlayParticleEffect(target, rangedSpecialAbility);
             PlayAbilityAudioClip();
             PlayAbilityAnimation();
         }
 
-        public void PlayParticleEffect()
+        public void PlayParticleEffect(GameObject target, bool rangedSpecialAbility)
         {
-            GameObject particleObject = Instantiate(config.getParticlePrefab(), transform.position, config.getParticlePrefab().transform.rotation);
-
-            // This will child the particle system to the player.
-            // You need to set world vs local space on the particle system itself (in main) and do not forget children particle systems (check
-            // end of lesson 140 for example).
-            particleObject.transform.parent = transform;
+            GameObject particleObject = null;
+            if(rangedSpecialAbility && target != null)
+            {
+                particleObject = Instantiate(config.getParticlePrefab(), target.transform.position, config.getParticlePrefab().transform.rotation);
+                // This will child the particle system to the target.
+                // You need to set world vs local space on the particle system itself (in main) and do not forget children particle systems (check
+                // end of lesson 140 for example).
+                particleObject.transform.parent = target.transform;
+            }
+            else
+            {
+                particleObject = Instantiate(config.getParticlePrefab(), transform.position, config.getParticlePrefab().transform.rotation);
+                // This will child the particle system to the player.
+                // You need to set world vs local space on the particle system itself (in main) and do not forget children particle systems (check
+                // end of lesson 140 for example).
+                particleObject.transform.parent = transform;
+            }
 
             // Play particle system on top level component (if present)...
             ParticleSystem particleSystem = particleObject.GetComponent<ParticleSystem>();

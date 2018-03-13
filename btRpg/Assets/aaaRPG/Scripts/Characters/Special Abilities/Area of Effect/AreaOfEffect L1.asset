@@ -11,12 +11,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5300692baa126194da6ec8efa20b8997, type: 3}
   m_Name: AreaOfEffect L1
   m_EditorClassIdentifier: 
-  energyCost: 40
+  energyCost: 20
   particlePrefab: {fileID: 1087976998810502, guid: e30f20222f5a19c46aa65a96b3c6b1ba,
     type: 2}
   audioClips:
   - {fileID: 8300000, guid: f69b63aabcc6a814fa5d8f738692330d, type: 3}
   abilityAnimationClip: {fileID: 7400000, guid: f6cee4b116817bd439a3c2a645702d15,
     type: 3}
+  rangedSpecialAbility: 0
   extraDamage: 10
   damageRadius: 5

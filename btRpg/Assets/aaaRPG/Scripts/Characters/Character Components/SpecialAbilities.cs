@@ -7,7 +7,10 @@ namespace RPG.Characters
     public class SpecialAbilities : MonoBehaviour
     {
         [Header("Special Abilities")]
-        [SerializeField] AbilityConfig[] specialAbilities;
+        [SerializeField] AbilityConfig specialAbilityMelee;
+        [SerializeField] AbilityConfig[] specialAbilitiesOnPlayer;
+        [SerializeField] AbilityConfig[] specialAbilitiesRanged;
+
 
         [SerializeField] Image energyOrb;
         [SerializeField] float maxEnergyPoints = 100f;
@@ -46,19 +49,43 @@ namespace RPG.Characters
 
         private void AttachSpecialAbilities()
         {
-            for (int abilityIndex = 0; abilityIndex < specialAbilities.Length; abilityIndex++)
+            specialAbilityMelee.AttachAbilityTo(gameObject);
+
+            for (int abilityIndex = 0; abilityIndex < specialAbilitiesOnPlayer.Length; abilityIndex++)
             {
-                specialAbilities[abilityIndex].AttachAbilityTo(gameObject);
+                specialAbilitiesOnPlayer[abilityIndex].AttachAbilityTo(gameObject);
+            }
+
+            for (int abilityIndex = 0; abilityIndex < specialAbilitiesRanged.Length; abilityIndex++)
+            {
+                specialAbilitiesRanged[abilityIndex].AttachAbilityTo(gameObject);
             }
         }
 
-        public void AttemptSpecialAbility(int abilityIndex, GameObject target = null)
+        public void AttemptSpecialAbilityMelee(GameObject targetGameObject = null)
         {
-            float energyCost = specialAbilities[abilityIndex].getEnergyCost();
+            float energyCost = specialAbilityMelee.getEnergyCost();
             if (IsEnergyAvailable(energyCost))
             {
                 ConsumeEnergy(energyCost);
-                specialAbilities[abilityIndex].Use(target);
+                specialAbilityMelee.Use(targetGameObject);
+            }
+            else
+            {
+                if (!audioSource.isPlaying)
+                {
+                    audioSource.PlayOneShot(outOfEnergyClip);
+                }
+            }
+        }
+
+        public void AttemptSpecialAbilityOnPlayer(int abilityIndex, GameObject targetGameObject = null)
+        {
+            float energyCost = specialAbilitiesOnPlayer[abilityIndex].getEnergyCost();
+            if (IsEnergyAvailable(energyCost))
+            {
+                ConsumeEnergy(energyCost);
+                specialAbilitiesOnPlayer[abilityIndex].Use(targetGameObject);
             }
             else
             {
@@ -69,9 +96,31 @@ namespace RPG.Characters
             }
         }
 
-        public int GetNumberOfAbilities()
+        public void AttemptSpecialAbilityRanged(int abilityIndex, GameObject targetGameObject = null)
         {
-            return specialAbilities.Length;
+            float energyCost = specialAbilitiesRanged[abilityIndex].getEnergyCost();
+            if (IsEnergyAvailable(energyCost))
+            {
+                ConsumeEnergy(energyCost);
+                specialAbilitiesRanged[abilityIndex].Use(targetGameObject);
+            }
+            else
+            {
+                if (!audioSource.isPlaying)
+                {
+                    audioSource.PlayOneShot(outOfEnergyClip);
+                }
+            }
+        }
+
+        public int GetNumberOfAbilitiesOnPlayer()
+        {
+            return specialAbilitiesOnPlayer.Length;
+        }
+
+        public int GetNumberOfAbilitiesRanged()
+        {
+            return specialAbilitiesRanged.Length;
         }
 
         private void AddEnergyPoints()

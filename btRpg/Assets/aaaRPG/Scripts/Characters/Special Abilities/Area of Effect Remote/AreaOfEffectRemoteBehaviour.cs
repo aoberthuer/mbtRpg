@@ -1,26 +1,28 @@
-﻿using UnityEngine;
-
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 
 namespace RPG.Characters
 {
-    public class AreaOfEffectBehaviour : AbilityBehaviour
+
+    public class AreaOfEffectRemoteBehaviour : AbilityBehaviour
     {
 
         public override void Use(GameObject target, bool useTargetPosition)
         {
             base.Use(target, useTargetPosition);
-            DealRadialDamage();
+            DealRadialDamage(target);
         }
 
-        private void DealRadialDamage()
+        private void DealRadialDamage(GameObject target)
         {
-            AreaOfEffectConfig aoeConfig = (AreaOfEffectConfig) config;
+            AreaOfEffectRemoteConfig aoeConfig = (AreaOfEffectRemoteConfig)config;
 
             float extraDamage = aoeConfig.GetExtraDamage();
             float damageRadius = aoeConfig.getDamageRadius();
 
             RaycastHit[] raycastHits = Physics.SphereCastAll(
-                transform.position,
+                target.transform.position,
                 damageRadius,
                 Vector3.up,
                 damageRadius
@@ -38,7 +40,5 @@ namespace RPG.Characters
                 }
             }
         }
-
     }
-
 }
