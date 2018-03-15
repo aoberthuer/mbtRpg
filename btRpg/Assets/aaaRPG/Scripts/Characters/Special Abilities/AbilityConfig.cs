@@ -51,5 +51,10 @@ namespace RPG.Characters
             behaviour.Use(target, rangedSpecialAbility);
         }
 
+        public bool GetRangedSpecialAbility()
+        {
+            return rangedSpecialAbility;
+        }
+
     }
 }

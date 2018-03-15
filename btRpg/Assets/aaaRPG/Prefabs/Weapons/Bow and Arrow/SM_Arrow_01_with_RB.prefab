@@ -22,8 +22,8 @@ GameObject:
   - component: {fileID: 33666707997688952}
   - component: {fileID: 23071740994499382}
   - component: {fileID: 54712676707288040}
-  - component: {fileID: 114946768824992714}
   - component: {fileID: 65580917373925534}
+  - component: {fileID: 114946768824992714}
   m_Layer: 0
   m_Name: SM_Arrow_01_with_RB
   m_TagString: Untagged

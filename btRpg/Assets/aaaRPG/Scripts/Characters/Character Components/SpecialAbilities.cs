@@ -79,6 +79,11 @@ namespace RPG.Characters
             }
         }
 
+        public AbilityConfig getSpecialAbilityMelee()
+        {
+            return specialAbilityMelee;
+        }
+
         public void AttemptSpecialAbilityOnPlayer(int abilityIndex, GameObject targetGameObject = null)
         {
             float energyCost = specialAbilitiesOnPlayer[abilityIndex].getEnergyCost();

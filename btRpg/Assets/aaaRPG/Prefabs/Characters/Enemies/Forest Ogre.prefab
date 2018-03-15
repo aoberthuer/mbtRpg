@@ -2068,7 +2068,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5fbf04295f7812543af80d6be5a29357, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  baseDamage: 10
+  baseDamage: 20
   currentWeaponConfig: {fileID: 11400000, guid: 8fa4f3d2d014e634a99542828e7e0de8,
     type: 2}
 --- !u!114 &114622719102414338
@@ -2082,7 +2082,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe02cc92eb7dbfc4fa5c6412f92fa54e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealthPoints: 25
+  maxHealthPoints: 150
   healthBar: {fileID: 114067828955996072}
   damageSounds:
   - {fileID: 8300000, guid: 2598748595821b2479839f404892eaa9, type: 3}

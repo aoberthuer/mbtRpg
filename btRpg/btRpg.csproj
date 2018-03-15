@@ -322,6 +322,8 @@
     <Compile Include="Assets\aaaRPG\Scripts\Characters\Special Abilities\Area of Effect Remote\AreaOfEffectRemoteConfig.cs" />
     <Compile Include="Assets\aaaRPG\Scripts\Characters\Special Abilities\Area of Effect\AreaOfEffectBehaviour.cs" />
     <Compile Include="Assets\aaaRPG\Scripts\Characters\Special Abilities\Area of Effect\AreaOfEffectConfig.cs" />
+    <Compile Include="Assets\aaaRPG\Scripts\Characters\Special Abilities\Magic Missile\MagicMissileBehaviour.cs" />
+    <Compile Include="Assets\aaaRPG\Scripts\Characters\Special Abilities\Magic Missile\MagicMissileConfig.cs" />
     <Compile Include="Assets\aaaRPG\Scripts\Characters\Special Abilities\Power Attack\PowerAttackBehaviour.cs" />
     <Compile Include="Assets\aaaRPG\Scripts\Characters\Special Abilities\Power Attack\PowerAttackConfig.cs" />
     <Compile Include="Assets\aaaRPG\Scripts\Characters\Special Abilities\Self Heal\SelfHealBehaviour.cs" />

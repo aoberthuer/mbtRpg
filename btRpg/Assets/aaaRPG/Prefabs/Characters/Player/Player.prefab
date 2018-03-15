@@ -2536,7 +2536,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd32a5196bcb87148a76690964387109, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  specialAbilityMelee: {fileID: 11400000, guid: 22a79d51d9df7ca4a8dad77e5cf82447,
+  specialAbilityMelee: {fileID: 11400000, guid: e635c0f117fd4d543a5dcb1da9723b5f,
     type: 2}
   specialAbilitiesOnPlayer:
   - {fileID: 11400000, guid: ecdb5d321e535b04eaac269d05f4728b, type: 2}

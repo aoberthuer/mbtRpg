@@ -66,13 +66,21 @@ namespace RPG.Characters
             }
             else if(Input.GetMouseButtonDown(1))
             {
-                if (IsTargetInRange(enemy.gameObject))
+                AbilityConfig meleeConfig = specialAbilities.getSpecialAbilityMelee();
+                if(meleeConfig.GetRangedSpecialAbility())
                 {
                     specialAbilities.AttemptSpecialAbilityMelee(enemy.gameObject);
                 }
                 else
                 {
-                    StartCoroutine(MoveAndPowerAttack(enemy));
+                    if (IsTargetInRange(enemy.gameObject))
+                    {
+                        specialAbilities.AttemptSpecialAbilityMelee(enemy.gameObject);
+                    }
+                    else
+                    {
+                        StartCoroutine(MoveAndPowerAttack(enemy));
+                    }
                 }
             }
         }

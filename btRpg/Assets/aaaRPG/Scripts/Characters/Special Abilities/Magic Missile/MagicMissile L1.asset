@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1eb816c56b200d24786922c6652bcb9c, type: 3}
+  m_Name: MagicMissile L1
+  m_EditorClassIdentifier: 
+  energyCost: 10
+  particlePrefab: {fileID: 144796, guid: 936a6b3b4dd23ad4e9dd86038849c536, type: 2}
+  audioClips:
+  - {fileID: 8300000, guid: 379f14dcff12ee8498fd90aeee310b7e, type: 3}
+  abilityAnimationClip: {fileID: 7400000, guid: f6cee4b116817bd439a3c2a645702d15,
+    type: 3}
+  rangedSpecialAbility: 1
+  missile: {fileID: 1102619799064684, guid: 1d0362bf67d50874b8d1d2578b7b47a8, type: 2}
+  missileDamage: 10
