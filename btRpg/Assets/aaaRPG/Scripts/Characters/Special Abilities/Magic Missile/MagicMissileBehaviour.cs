@@ -15,6 +15,7 @@ namespace RPG.Characters
 
         private void CastMissile(GameObject target)
         {
+            gameObject.transform.LookAt(target.transform);
 
             Vector3 positionToHit = target.transform.position;
             Vector3 unitVectorToTarget = (positionToHit - gameObject.transform.position).normalized;
@@ -28,7 +29,7 @@ namespace RPG.Characters
             newProjectile.name = "Missile";
             newProjectile.transform.LookAt(target.transform);
 
-            float projectileSpeed = 10f;
+            float projectileSpeed = 5f;
             newProjectile.GetComponent<Rigidbody>().velocity = unitVectorToTarget * projectileSpeed;
         }
     }

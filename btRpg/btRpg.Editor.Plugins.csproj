@@ -287,7 +287,7 @@
       <HintPath>Library\UnityAssemblies\UnityEngine.StandardEvents.dll</HintPath>
     </Reference>
     <Reference Include="JMOAssets">
-      <HintPath>Assets\aaaRPG Assets\JMO Assets\Editor\JMOAssets.dll</HintPath>
+      <HintPath>Assets\aaaRPG Assets\Particle Systems\JMO Assets\Editor\JMOAssets.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -405,8 +405,6 @@
     <None Include="Assets\FogVolume\Scripts\Other\TAA\_LICENSE.txt" />
     <None Include="Assets\FogVolume\ShaderReplacements\SpeedTree.shader" />
     <None Include="Assets\GeNa\README.txt" />
-    <None Include="Assets\MeshTint\Forest Ogre\Read me.txt" />
-    <None Include="Assets\MeshTint\Forest Ogre\www.meshtint.com.txt" />
     <None Include="Assets\PostProcessing\Editor Resources\Monitors\HistogramCompute.compute" />
     <None Include="Assets\PostProcessing\Editor Resources\Monitors\HistogramRender.shader" />
     <None Include="Assets\PostProcessing\Editor Resources\Monitors\ParadeRender.shader" />
@@ -522,16 +520,24 @@
     <None Include="Assets\Standard Assets\Environment\Water\Water4\Shaders\FXWater4Advanced.shader" />
     <None Include="Assets\Standard Assets\Environment\Water\Water4\Shaders\FXWater4Simple.shader" />
     <None Include="Assets\Standard Assets\Environment\Water\Water4\Shaders\WaterInclude.cginc" />
-    <None Include="Assets\Synty Polygon\SimpleFX\Materials\UnlitVertexColour_Alpha.shader" />
-    <None Include="Assets\aaaRPG Assets\JMO Assets\!JMO Assets Readme.txt" />
-    <None Include="Assets\aaaRPG Assets\JMO Assets\Shape FX\Demo\Demo Assets\ShapeFX Demo Assets.txt" />
-    <None Include="Assets\aaaRPG Assets\JMO Assets\Shape FX\Documentation\Note.txt" />
-    <None Include="Assets\aaaRPG Assets\JMO Assets\Shape FX\Shaders\CbFX Particle Add.shader" />
-    <None Include="Assets\aaaRPG Assets\JMO Assets\Shape FX\Shaders\CbFX Particle AddSoft.shader" />
-    <None Include="Assets\aaaRPG Assets\JMO Assets\Shape FX\Shaders\CbFX Particle AlphaBlend.shader" />
-    <None Include="Assets\aaaRPG Assets\JMO Assets\Shape FX\Shaders\CbFX Particle AlphaBlendPremultiply.shader" />
-    <None Include="Assets\aaaRPG Assets\JMO Assets\Shape FX\Shaders\CbFX Particle Multiply.shader" />
-    <None Include="Assets\aaaRPG Assets\JMO Assets\Shape FX\ShapeFX Readme.txt" />
+    <None Include="Assets\aaaRPG Assets\Models\MeshTint\Forest Ogre\Read me.txt" />
+    <None Include="Assets\aaaRPG Assets\Models\MeshTint\Forest Ogre\www.meshtint.com.txt" />
+    <None Include="Assets\aaaRPG Assets\Models\Synty Polygon\SimpleFX\Materials\UnlitVertexColour_Alpha.shader" />
+    <None Include="Assets\aaaRPG Assets\Particle Systems\JMO Assets\!JMO Assets Readme.txt" />
+    <None Include="Assets\aaaRPG Assets\Particle Systems\JMO Assets\Shape FX\Demo\Demo Assets\ShapeFX Demo Assets.txt" />
+    <None Include="Assets\aaaRPG Assets\Particle Systems\JMO Assets\Shape FX\Documentation\Note.txt" />
+    <None Include="Assets\aaaRPG Assets\Particle Systems\JMO Assets\Shape FX\Shaders\CbFX Particle Add.shader" />
+    <None Include="Assets\aaaRPG Assets\Particle Systems\JMO Assets\Shape FX\Shaders\CbFX Particle AddSoft.shader" />
+    <None Include="Assets\aaaRPG Assets\Particle Systems\JMO Assets\Shape FX\Shaders\CbFX Particle AlphaBlend.shader" />
+    <None Include="Assets\aaaRPG Assets\Particle Systems\JMO Assets\Shape FX\Shaders\CbFX Particle AlphaBlendPremultiply.shader" />
+    <None Include="Assets\aaaRPG Assets\Particle Systems\JMO Assets\Shape FX\Shaders\CbFX Particle Multiply.shader" />
+    <None Include="Assets\aaaRPG Assets\Particle Systems\JMO Assets\Shape FX\ShapeFX Readme.txt" />
+    <None Include="Assets\aaaRPG Assets\Particle Systems\Polygon Arsenal\Polygon Arsenal - Readme.txt" />
+    <None Include="Assets\aaaRPG Assets\Particle Systems\Polygon Arsenal\Shaders\PolyIntense.Shader" />
+    <None Include="Assets\aaaRPG Assets\Particle Systems\Polygon Arsenal\Shaders\PolyLitSurface.shader" />
+    <None Include="Assets\aaaRPG Assets\Particle Systems\Polygon Arsenal\Shaders\PolyRimLightSelective.shader" />
+    <None Include="Assets\aaaRPG Assets\Particle Systems\Polygon Arsenal\Shaders\PolyRimLightSolid.shader" />
+    <None Include="Assets\aaaRPG Assets\Particle Systems\Polygon Arsenal\Shaders\PolyRimLightTransparent.shader" />
     <None Include="Assets\aaaRPG\Prefabs\Characters\ThirdPersonCharacter\ThirdPersonCharacterGuidelines.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

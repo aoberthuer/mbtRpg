@@ -18,5 +18,5 @@ MonoBehaviour:
   abilityAnimationClip: {fileID: 7400000, guid: f6cee4b116817bd439a3c2a645702d15,
     type: 3}
   rangedSpecialAbility: 1
-  missile: {fileID: 1102619799064684, guid: 1d0362bf67d50874b8d1d2578b7b47a8, type: 2}
+  missile: {fileID: 1724013252938650, guid: f21262a1cdf9ad14ea05234d73ba0753, type: 2}
   missileDamage: 10
