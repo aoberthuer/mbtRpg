@@ -6,6 +6,7 @@ namespace RPG.Characters
 {
     public class MagicMissileBehaviour : AbilityBehaviour
     {
+        const float MISSILE_SPEED = 10f;
 
         public override void Use(GameObject target, bool useTargetPosition)
         {
@@ -29,8 +30,11 @@ namespace RPG.Characters
             newProjectile.name = "Missile";
             newProjectile.transform.LookAt(target.transform);
 
-            float projectileSpeed = 5f;
-            newProjectile.GetComponent<Rigidbody>().velocity = unitVectorToTarget * projectileSpeed;
+            Projectile projectile = newProjectile.GetComponent<Projectile>();
+            projectile.SetProjectileTarget(target);
+            projectile.SetDamageCaused( ((MagicMissileConfig)config).GetMissileDamage());
+
+            newProjectile.GetComponent<Rigidbody>().velocity = unitVectorToTarget * MISSILE_SPEED;
         }
     }
 }
