@@ -27,7 +27,7 @@ namespace RPG.Characters
             positionToSpawnFrom.x += unitVectorToTarget.x; // move missile away from player in the direction player is facing z
 
             GameObject newProjectile = Instantiate(((MagicMissileConfig)config).GetMissile(), positionToSpawnFrom, Quaternion.identity);
-            newProjectile.name = "Missile";
+            newProjectile.name = "Magic Missile";
             newProjectile.transform.LookAt(target.transform);
 
             Projectile projectile = newProjectile.GetComponent<Projectile>();
