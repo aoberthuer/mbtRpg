@@ -21,6 +21,7 @@ Shader "Enviro/FlatCloudMap" {
 		uniform float _CloudScale = 2.5;
 		uniform float2 _CloudAnimation;
 		uniform int noiseOctaves = 8;
+		uniform float _MorphingSpeed;
 		struct v2f
 		{
 			float4 Position : SV_POSITION;
@@ -67,7 +68,7 @@ Shader "Enviro/FlatCloudMap" {
 		
 			for (int i = 0; i < noiseOctaves; i++)
 			{
-				f += noise(uv + _Time.y * 0.0001 * timeScale * (1.0 - mul)) * mul;
+				f += noise(uv + _Time.y * (_MorphingSpeed * 0.0001) * timeScale * (1.0 - mul)) * mul;
 				total += mul;
 				uv *= 3.0;
 				uv = rotate(uv);

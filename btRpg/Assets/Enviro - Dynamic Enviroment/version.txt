@@ -335,7 +335,17 @@ v 2.0.2
 	* Added volume clouds VR quality presets.
 	* Added weather presets and particle effect more suitable for VR.
 	* Added demo scene and envirosky prefab for VR to quickstart.
+	
+	
+----------------------------------------------------------------------------------
+v 2.0.3
 
+	* Fixed issue that changing clouds downsampling not correctly applied in runtime.
+	* Fixed issue that could break interior zone editor when loosing a trigger.
+	* Fixed an issue that the default weather zone not getting a weather selected when starting in an additional zone.
+	* Improved performance when searching for player and camera with auto assignment mode in big scenes.
+	* Improved and fixed issues with WAPI Integration weather changing.
+	* Exposed flat clouds morphing speed modifier in profiles.
 	
 
 

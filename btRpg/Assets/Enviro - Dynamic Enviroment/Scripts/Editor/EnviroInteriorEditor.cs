@@ -61,19 +61,24 @@ public class EnviroInteriorEditor : Editor {
 		} 
 
 		for (int i = 0; i < myTarget.triggers.Count; i++) {
-			GUILayout.BeginVertical ("", boxStyle);
-			GUILayout.Space (10);
-			myTarget.triggers[i].Name = EditorGUILayout.TextField ("Name", myTarget.triggers[i].Name);
-			GUILayout.Space (10);
-			if (GUILayout.Button ("Select")) 
-			{
-				Selection.activeObject = myTarget.triggers[i].gameObject;
-			}
-			if (GUILayout.Button ("Remove")) 
-			{
-				myTarget.RemoveTrigger (myTarget.triggers[i]);
-			}
-			GUILayout.EndVertical ();
+
+            if (myTarget.triggers[i] != null)
+            {
+                GUILayout.BeginVertical("", boxStyle);
+                GUILayout.Space(10);
+                myTarget.triggers[i].Name = EditorGUILayout.TextField("Name", myTarget.triggers[i].Name);
+                GUILayout.Space(10);
+                if (GUILayout.Button("Select"))
+                {
+                    Selection.activeObject = myTarget.triggers[i].gameObject;
+                }
+                if (GUILayout.Button("Remove"))
+                {
+                    myTarget.RemoveTrigger(myTarget.triggers[i]);
+                }
+                GUILayout.EndVertical();
+            }
+
 		}
 
 

@@ -215,7 +215,7 @@ public class EnviroSky : MonoBehaviour
 		}
 	}
 
-	public string prefabVersion = "2.0.1";
+	public string prefabVersion = "2.0.3";
 
 	[Tooltip("Assign your player gameObject here. Required Field! or enable AssignInRuntime!")]
 	public GameObject Player;
@@ -598,6 +598,7 @@ public class EnviroSky : MonoBehaviour
 
         // Set ambient mode
         RenderSettings.ambientMode = lightSettings.ambientMode;
+
         // Set Fog
         RenderSettings.fogDensity = 0f;
         RenderSettings.fogStartDistance = 0f;
@@ -747,12 +748,27 @@ public class EnviroSky : MonoBehaviour
         }
 
         lastCloudsMode = cloudsMode;
+
+        //Update environment texture in next frame!
+        if (lightSettings.ambientMode == UnityEngine.Rendering.AmbientMode.Skybox)
+            StartCoroutine(UpdateAmbientLightWithDelay());
     }
 
-	/// <summary>
-	/// Final Initilization and startup.
-	/// </summary>
-	private void Init ()
+    /// <summary>
+    /// Update the environment texture for skybox ambient mode with one frame delay. Somehow not working in same frame as we create the skybox material.
+    /// </summary>
+    /// <returns></returns>
+    private IEnumerator UpdateAmbientLightWithDelay()
+    {
+        yield return 0;
+        DynamicGI.UpdateEnvironment();
+
+    }
+
+    /// <summary>
+    /// Final Initilization and startup.
+    /// </summary>
+    private void Init ()
 	{
 		if (profile == null)
 			return;
@@ -1414,7 +1430,7 @@ public class EnviroSky : MonoBehaviour
         flatCloudsMat.SetInt("noiseOctaves", cloudsSettings.flatCloudsNoiseOctaves);
         flatCloudsMat.SetFloat("_Softness", cloudsConfig.flatSoftness);
         flatCloudsMat.SetFloat("_Brightness", cloudsConfig.flatBrightness);
-
+        flatCloudsMat.SetFloat("_MorphingSpeed", cloudsSettings.flatCloudsMorphingSpeed);
         Graphics.Blit(null, flatCloudsRenderTarget, flatCloudsMat);
         RenderTexture.ReleaseTemporary(flatCloudsRenderTarget);
     }
@@ -1436,11 +1452,20 @@ public class EnviroSky : MonoBehaviour
             RenderMoon();
 
             if (AssignInRuntime && PlayerTag != "" && CameraTag != "" && Application.isPlaying) {
-                if (GameObject.FindGameObjectWithTag(PlayerTag) != null)
-                    Player = GameObject.FindGameObjectWithTag (PlayerTag);
-				if(GameObject.FindGameObjectWithTag (CameraTag) != null)
-					PlayerCamera = GameObject.FindGameObjectWithTag (CameraTag).GetComponent<Camera>();
-				if (Player != null && PlayerCamera != null) {
+               
+                // Search for Player by tag
+                GameObject plr = GameObject.FindGameObjectWithTag(PlayerTag);
+                if (plr != null)
+                    Player = plr;
+               
+                // Search for camera by tag
+                for(int i = 0; i < Camera.allCameras.Length; i++)
+                {
+                    if (Camera.allCameras[i].tag == CameraTag)
+                        PlayerCamera = Camera.allCameras[i];
+                }
+
+                if (Player != null && PlayerCamera != null) {
 					Init ();
 					started = true;
 				}

@@ -8,7 +8,7 @@ using UnityEditorInternal;
 [CustomEditor(typeof(EnviroSky))]
 public class EnviroSkyEditor : Editor {
 
-	private string latestVersion = "2.0.2";
+	private string latestVersion = "2.0.3";
 	// GUI Styles
 	private GUIStyle boxStyle;
 	private GUIStyle boxStyleModified;
@@ -29,7 +29,7 @@ public class EnviroSkyEditor : Editor {
 	SerializedProperty ambientMode, ambientIntensityCurve, ambientSkyGradient, ambientEquatorGradient, ambientGroundGradient;
 	SerializedProperty globalReflectionsScale,reflectionBool, reflectionIntensity, reflectionUpdate;
     SerializedProperty renderMoon, blackGroundMode,galaxyCubeMap, galaxyIntensity, skyboxMode, customSkyboxMaterial, customSkyboxColor, rayleigh, g, mie, scatteringCurve, scatteringColor, sunMoonPos, sunIntensity, sunDiskScale, sunDiskIntensity, sunDiskColor, moonPhaseMode, moonTexture,moonSize, moonBrightness,moonGlow, startMoonPhase, currentMoonPhase, skyLuminance, skyColorPower, skyExposure, starsCubemap, starsIntensity,moonColor, moonGlowColor;
-    SerializedProperty reprojectionPixelSize,stepsInDepthModificator, farCloudsLOD, shadowCookieSize, flatCloudsTextureIteration, flatCloudsScale, flatCloudsResolution, shadowIntensity, cloudsQuality,customWeatherMap,primaryattenuation, secondaryattenuation, weatherAnimSpeedScale, tonemapping,globalCloudCoverage,cirrusCloudsAltitude,flatCloudsAltitude,cloudsWorldScale, BottomCloudHeight,TopCloudHeight, cloudsRenderQuality,raymarchSteps, directlightIntensity,ambientlightIntensity, hgPhase,baseNoiseUV,detailNoiseUV,cloudsExposure,cirrusCloudsColor,flatCloudsColor,volumeCloudsColor,volumeCloudsMoonColor,cirrusCloudsTexture,flatCloudsTexture, weatherMapTiling,detailNoiseQuality;
+    SerializedProperty reprojectionPixelSize,stepsInDepthModificator, farCloudsLOD, shadowCookieSize, flatCloudsTextureIteration, flatCloudsScale, flatCloudsResolution, flatCloudsMorphingSpeed, shadowIntensity, cloudsQuality,customWeatherMap,primaryattenuation, secondaryattenuation, weatherAnimSpeedScale, tonemapping,globalCloudCoverage,cirrusCloudsAltitude,flatCloudsAltitude,cloudsWorldScale, BottomCloudHeight,TopCloudHeight, cloudsRenderQuality,raymarchSteps, directlightIntensity,ambientlightIntensity, hgPhase,baseNoiseUV,detailNoiseUV,cloudsExposure,cirrusCloudsColor,flatCloudsColor,volumeCloudsColor,volumeCloudsMoonColor,cirrusCloudsTexture,flatCloudsTexture, weatherMapTiling,detailNoiseQuality;
     SerializedProperty useTag, wetnessAccumulationSpeed,wetnessDryingSpeed, snowAccumulationSpeed,snowMeltingSpeed,cloudTransitionSpeed,fogTransitionSpeed,effectTransitionSpeed,audioTransitionSpeed, useWindZoneDirection,windTimeScale,windIntensity,windDirectionX,windDirectionY;
 	SerializedProperty useSimpleFog,fogMie, fogG, fogmode, distanceFog, useRadialFog, startDistance, distanceFogIntensity,maximumFogIntensity, heightFog, height, heightFogIntensity, useNoise, noiseIntensity, noiseIntensityOffset, noiseScale,fogDitheringScale,fogDitheringIntensity;
 	SerializedProperty resolution, screenBlendMode, useDepthTexture, lightShaftsColorSun, lightShaftsColorMoon, treshholdColorSun, treshholdColorMoon, blurRadius, shaftsIntensity, maxRadius;
@@ -190,6 +190,7 @@ public class EnviroSkyEditor : Editor {
         flatCloudsResolution = serializedObj.FindProperty("cloudsSettings.flatCloudsResolution");
         flatCloudsScale = serializedObj.FindProperty("cloudsSettings.flatCloudsScale");
         flatCloudsTextureIteration = serializedObj.FindProperty("cloudsSettings.flatCloudsNoiseOctaves");
+        flatCloudsMorphingSpeed = serializedObj.FindProperty("cloudsSettings.flatCloudsMorphingSpeed");
         // Weather Category
         useTag = serializedObj.FindProperty ("weatherSettings.useTag");
 		wetnessAccumulationSpeed = serializedObj.FindProperty ("weatherSettings.wetnessAccumulationSpeed");
@@ -505,7 +506,8 @@ public class EnviroSkyEditor : Editor {
 					EditorGUILayout.PropertyField (cirrusCloudsTexture, true, null);
 					EditorGUILayout.PropertyField (cirrusCloudsColor, true, null);
 					EditorGUILayout.PropertyField (cirrusCloudsAltitude, true, null);
-					EditorGUILayout.EndVertical ();
+                    
+                    EditorGUILayout.EndVertical ();
 					GUILayout.BeginVertical ("Flat Clouds", boxStyle);
 					GUILayout.Space (20);
             
@@ -515,7 +517,8 @@ public class EnviroSkyEditor : Editor {
                     EditorGUILayout.PropertyField (flatCloudsColor, true, null);
                     EditorGUILayout.PropertyField(flatCloudsScale, true, null);
                     EditorGUILayout.PropertyField (flatCloudsAltitude, true, null);
-					EditorGUILayout.EndVertical ();
+                        EditorGUILayout.PropertyField(flatCloudsMorphingSpeed, true, null);
+                        EditorGUILayout.EndVertical ();
 
 					EditorGUILayout.PropertyField (useWindZoneDirection, true, null);
 					EditorGUILayout.PropertyField (windTimeScale, true, null);

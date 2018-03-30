@@ -1392,17 +1392,25 @@ public class EnviroSkyRendering : MonoBehaviour
         int newSubFrameWidth = newFrameWidth / reprojectionPixelSize;
         int newSubFrameHeight = newFrameHeight / reprojectionPixelSize;
 
-        //Cache new dimensions
-        frameWidth = newFrameWidth;
-        frameHeight = newFrameHeight;
-        subFrameWidth = newSubFrameWidth;
-        subFrameHeight = newSubFrameHeight;
-
         //Check if diemensions changed
         if (newFrameWidth != frameWidth || newSubFrameWidth != subFrameWidth || newFrameHeight != frameHeight || newSubFrameHeight != subFrameHeight)
+        {
+            //Cache new dimensions
+            frameWidth = newFrameWidth;
+            frameHeight = newFrameHeight;
+            subFrameWidth = newSubFrameWidth;
+            subFrameHeight = newSubFrameHeight;
             return true;
+        }
         else
+        {
+            //Cache new dimensions
+            frameWidth = newFrameWidth;
+            frameHeight = newFrameHeight;
+            subFrameWidth = newSubFrameWidth;
+            subFrameHeight = newSubFrameHeight;
             return false;
+        }
     }
 
     // Reprojection

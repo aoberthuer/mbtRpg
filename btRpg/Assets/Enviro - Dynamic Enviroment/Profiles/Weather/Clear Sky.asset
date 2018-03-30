@@ -35,7 +35,7 @@ MonoBehaviour:
     cirrusAlpha: 0
     cirrusCoverage: 0
     cirrusColorPow: 2
-    flatAlpha: 0
+    flatAlpha: 1
     flatCoverage: 0
     flatSoftness: 0.75
     flatBrightness: 0.75
@@ -132,8 +132,8 @@ MonoBehaviour:
     m_NumAlphaKeys: 4
   volumeLightIntensity: 1
   heightFogDensity: 1
-  SkyFogHeight: 1.363
-  SkyFogIntensity: 0.443
+  SkyFogHeight: 2
+  SkyFogIntensity: 0.456
   FogScatteringIntensity: 1.17
   fogSunBlocking: 1
   effectSystems: []

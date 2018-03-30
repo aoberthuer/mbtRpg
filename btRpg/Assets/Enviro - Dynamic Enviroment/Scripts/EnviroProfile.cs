@@ -489,6 +489,9 @@ public class EnviroCloudSettings
     public int flatCloudsNoiseOctaves = 6;
     [Range(30f,100f)][Tooltip("Flat Clouds Altitude")]
 	public float flatCloudsAltitude = 70f;
+    [Range(0.01f, 1f)]
+    [Tooltip("Flat Clouds morphing animation speed.")]
+    public float flatCloudsMorphingSpeed = 0.2f;
 
     [Tooltip("Clouds Shadowcast Intensity. 0 = disabled")]
     [Range(0f, 1f)]
@@ -548,7 +551,7 @@ public static class EnviroProfileCreation {
 	{
 		EnviroProfile profile = ScriptableObject.CreateInstance<EnviroProfile>();
 
-		profile.version = "2.0.2";
+		profile.version = "2.0.3";
 		// Setup new profile with default settings
 		SetupDefaults (profile);
 
@@ -740,7 +743,7 @@ public static class EnviroProfileCreation {
 		if (profile == null)
 			return false;
 
-		if ((fromV == "1.9.0" || fromV == "1.9.1") && toV == "2.0.2") {
+		if ((fromV == "1.9.0" || fromV == "1.9.1") && toV == "2.0.3") {
 			//Sun Intensity
 			profile.lightSettings.directLightSunIntensity = new AnimationCurve();
 			profile.lightSettings.directLightSunIntensity.AddKey (CreateKey (0f, 0f));
@@ -833,7 +836,7 @@ public static class EnviroProfileCreation {
 			return true;
 		}
 
-        if (fromV == "2.0.0" || fromV == "2.0.1" && toV == "2.0.2")
+        if ((fromV == "2.0.0" || fromV == "2.0.1" || fromV == "2.0.2") && toV == "2.0.3")
         {
             //Galaxy
             profile.skySettings.galaxyIntensity = new AnimationCurve();

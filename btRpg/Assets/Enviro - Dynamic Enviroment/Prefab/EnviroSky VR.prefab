@@ -331,8 +331,7 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
-  m_Materials:
-  - {fileID: 0}
+  m_Materials: []
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1311,6 +1310,7 @@ MonoBehaviour:
     flatCloudsScale: 1.55
     flatCloudsNoiseOctaves: 5
     flatCloudsAltitude: 59.9
+    flatCloudsMorphingSpeed: 0.2
     shadowIntensity: 0
     shadowCookieSize: 10000
   weatherSettings:

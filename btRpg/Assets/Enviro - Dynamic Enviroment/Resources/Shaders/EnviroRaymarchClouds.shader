@@ -266,9 +266,9 @@
 	{
 		float4 cameraRay = float4(i.uv * 2.0 - 1.0, 1.0, 1.0);
 		//World Space
-		//float3 EyePosition = _WorldSpaceCameraPos;
+		float3 EyePosition = _WorldSpaceCameraPos;
 		//Workaround for large scale games where player position will be resetted.
-		float3 EyePosition = float3(0.0,_WorldSpaceCameraPos.y, 0.0);
+		//float3 EyePosition = float3(0.0,_WorldSpaceCameraPos.y, 0.0);
 		float3 ray = 0;
 
 #if UNITY_SINGLE_PASS_STEREO

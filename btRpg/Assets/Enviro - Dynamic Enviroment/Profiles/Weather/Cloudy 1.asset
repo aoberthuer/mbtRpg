@@ -23,15 +23,15 @@ MonoBehaviour:
   possibiltyInWinter: 54.5
   cloudsConfig:
     topColor: {r: 1, g: 1, b: 1, a: 1}
-    bottomColor: {r: 0.6544118, g: 0.6544118, b: 0.6544118, a: 1}
+    bottomColor: {r: 0.4817258, g: 0.579816, b: 0.66176474, a: 1}
     skyBlending: 0.922
-    alphaCoef: 2
-    scatteringCoef: 0.303
+    alphaCoef: 2.26
+    scatteringCoef: 0.453
     density: 2
     coverage: -0.29
     coverageHeight: 1.691
     raymarchingScale: 1
-    cloudType: 0.911
+    cloudType: 0.883
     cirrusAlpha: 1
     cirrusCoverage: 0
     cirrusColorPow: 2

@@ -16,8 +16,8 @@ public class EnviroZone : MonoBehaviour {
 	[Tooltip("Uncheck to remove OnTriggerExit call when using overlapping zone layout.")]
 	public bool ExitToDefault = true;
 
-	[HideInInspector]public List<EnviroWeatherPrefab> zoneWeather = new List<EnviroWeatherPrefab>();
-	[HideInInspector]public List<EnviroWeatherPrefab> curPossibleZoneWeather;
+	public List<EnviroWeatherPrefab> zoneWeather = new List<EnviroWeatherPrefab>();
+	public List<EnviroWeatherPrefab> curPossibleZoneWeather;
 
 	[Header("Zone weather settings:")]
 	[Tooltip("Add all weather prefabs for this zone here.")]
@@ -127,9 +127,7 @@ public class EnviroZone : MonoBehaviour {
 							return;
 						}
 					}
-				
 				}
-
 				wP.effectEmmisionRates.Clear ();
 				wPrefab.transform.parent = EnviroSky.instance.Weather.VFXHolder.transform;
 				wPrefab.transform.localPosition = Vector3.zero;
@@ -140,7 +138,8 @@ public class EnviroZone : MonoBehaviour {
 				EnviroSky.instance.Weather.weatherPresets.Add (zoneWeatherPresets [i]);
 			}
 		}
-		// Setup Particle Systems Emission Rates
+		
+        // Setup Particle Systems Emission Rates
 		for (int i = 0; i < zoneWeather.Count; i++)
 		{
 			for (int i2 = 0; i2 < zoneWeather[i].effectSystems.Count; i2++)
@@ -150,9 +149,21 @@ public class EnviroZone : MonoBehaviour {
 			}   
 		}
 			
+        //Set initial weather
 		if (isDefault && EnviroSky.instance.Weather.startWeatherPreset != null) 
 		{
-			EnviroSky.instance.SetWeatherOverwrite (EnviroSky.instance.Weather.startWeatherPreset);
+            EnviroSky.instance.SetWeatherOverwrite(EnviroSky.instance.Weather.startWeatherPreset);
+
+            for (int i = 0; i < zoneWeather.Count; i++)
+            {
+                if(zoneWeather[i].weatherPreset == EnviroSky.instance.Weather.startWeatherPreset)
+                {
+                    currentActiveZoneWeatherPrefab = zoneWeather[i];
+                    lastActiveZoneWeatherPrefab = zoneWeather[i];
+                }
+            }
+            currentActiveZoneWeatherPreset = EnviroSky.instance.Weather.startWeatherPreset;
+            lastActiveZoneWeatherPreset = EnviroSky.instance.Weather.startWeatherPreset;
 		} 
 		else 
 		{
@@ -244,8 +255,8 @@ public class EnviroZone : MonoBehaviour {
 		currentActiveZoneWeatherPreset = currentActiveZoneWeatherPrefab.weatherPreset;
 		EnviroSky.instance.NotifyZoneWeatherChanged (currentActiveZoneWeatherPreset, this);
 	}
-		
-	IEnumerator CreateWeatherListLate ()
+
+    IEnumerator CreateWeatherListLate ()
 	{
 		yield return 0;
 		CreateZoneWeatherTypeList ();
@@ -263,9 +274,9 @@ public class EnviroZone : MonoBehaviour {
         if (EnviroSky.instance.started && !init) 
 		{
 			if (isDefault) {
-				CreateZoneWeatherTypeList ();
-				init = true;
-			} else
+				CreateZoneWeatherTypeList ();          
+                init = true;
+            } else
 				StartCoroutine (CreateWeatherListLate ());
 		}
 

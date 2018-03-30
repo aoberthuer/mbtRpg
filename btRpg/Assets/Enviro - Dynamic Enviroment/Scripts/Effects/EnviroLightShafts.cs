@@ -118,7 +118,7 @@ public class EnviroLightShafts : EnviroEffects
        lrDepthBuffer = RenderTexture.GetTemporary(rtW, rtH, 0, RenderTextureFormat.Default, RenderTextureReadWrite.Default);
 #endif
 
-#if UNITY_2017_1_2
+#if UNITY_2017_1_1 || UNITY_2017_1_2
        lrDepthBuffer = RenderTexture.GetTemporary(rtW, rtH, 0, RenderTextureFormat.Default, RenderTextureReadWrite.Default,1, RenderTextureMemoryless.None, source.vrUsage);
 #endif
 
@@ -175,7 +175,7 @@ public class EnviroLightShafts : EnviroEffects
        lrColorB = RenderTexture.GetTemporary(rtW, rtH, 0, RenderTextureFormat.Default, RenderTextureReadWrite.Default);
 #endif
 
-#if UNITY_2017_1_2
+#if UNITY_2017_1_1 || UNITY_2017_1_2
             lrColorB = RenderTexture.GetTemporary(rtW, rtH, 0, RenderTextureFormat.Default, RenderTextureReadWrite.Default, 1, RenderTextureMemoryless.None, source.vrUsage);
 #endif
 
@@ -197,7 +197,7 @@ public class EnviroLightShafts : EnviroEffects
        lrDepthBuffer = RenderTexture.GetTemporary(rtW, rtH, 0, RenderTextureFormat.Default, RenderTextureReadWrite.Default);
 #endif
 
-#if UNITY_2017_1_2
+#if UNITY_2017_1_1 || UNITY_2017_1_2
        lrDepthBuffer = RenderTexture.GetTemporary(rtW, rtH, 0, RenderTextureFormat.Default, RenderTextureReadWrite.Default, 1, RenderTextureMemoryless.None, source.vrUsage);
 #endif
 

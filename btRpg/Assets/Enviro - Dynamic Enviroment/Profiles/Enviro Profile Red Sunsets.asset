@@ -9,9 +9,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4beab60d43552cb4d89247b229ee1117, type: 3}
-  m_Name: Enviro Profile 2.0
+  m_Name: Enviro Profile Red Sunsets
   m_EditorClassIdentifier: 
-  version: 2.0.2
+  version: 2.0.3
   lightSettings:
     LightColor:
       serializedVersion: 2
@@ -227,7 +227,7 @@ MonoBehaviour:
       m_Mode: 0
       m_NumColorKeys: 2
       m_NumAlphaKeys: 2
-    globalReflections: 0
+    globalReflections: 1
     globalReflectionsIntensity: 0.75
     globalReflectionsUpdate: 0.025
     globalReflectionsScale: 1
@@ -250,7 +250,7 @@ MonoBehaviour:
     customSkyboxColor: {r: 0, g: 0, b: 0, a: 0}
     blackGroundMode: 1
     waveLength: {x: 540, y: 496, z: 437}
-    rayleigh: 5.15
+    rayleigh: 5.43
     turbidity: 1
     mie: 8
     g: 0.9
@@ -264,31 +264,31 @@ MonoBehaviour:
         outSlope: 0
         tangentMode: 0
       - serializedVersion: 2
-        time: 0.5
-        value: -10
+        time: 0.49583435
+        value: -14.589157
         inSlope: 55
         outSlope: 55
         tangentMode: 0
       - serializedVersion: 2
-        time: 0.52
-        value: 6.5
+        time: 0.5408282
+        value: 2.3280334
         inSlope: 35
         outSlope: 35
         tangentMode: 0
       - serializedVersion: 2
-        time: 1
-        value: 11
+        time: 0.9833374
+        value: 5.472145
         inSlope: 0
         outSlope: 0
         tangentMode: 0
       m_PreInfinity: 2
       m_PostInfinity: 2
-      m_RotationOrder: 4
+      m_RotationOrder: 0
     scatteringColor:
       serializedVersion: 2
-      key0: {r: 0.5176471, g: 0.57254905, b: 0.78431374, a: 1}
-      key1: {r: 0.5176471, g: 0.57254905, b: 0.78431374, a: 1}
-      key2: {r: 1, g: 0.7137255, b: 0.6117647, a: 0}
+      key0: {r: 0, g: 0, b: 0, a: 1}
+      key1: {r: 0.1873378, g: 0.198725, b: 0.24264705, a: 1}
+      key2: {r: 1, g: 0.59939146, b: 0.41911763, a: 0}
       key3: {r: 0.8235294, g: 0.8235294, b: 0.8235294, a: 0}
       key4: {r: 0.8235294, g: 0.8235294, b: 0.8235294, a: 0}
       key5: {r: 0, g: 0, b: 0, a: 0}
@@ -296,7 +296,7 @@ MonoBehaviour:
       key7: {r: 0, g: 0, b: 0, a: 0}
       ctime0: 0
       ctime1: 29491
-      ctime2: 34537
+      ctime2: 33346
       ctime3: 49151
       ctime4: 65535
       ctime5: 0
@@ -394,20 +394,20 @@ MonoBehaviour:
         outSlope: 0.2257807
         tangentMode: 0
       - serializedVersion: 2
-        time: 0.5
-        value: 0.14452556
+        time: 0.49583435
+        value: 0.25117686
         inSlope: 0
         outSlope: 0
         tangentMode: 0
       - serializedVersion: 2
-        time: 0.62
-        value: 0.105
+        time: 0.6449939
+        value: 0.069355465
         inSlope: 0
         outSlope: 0
         tangentMode: 0
       - serializedVersion: 2
         time: 1
-        value: 0.1
+        value: 0.07091675
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -424,6 +424,12 @@ MonoBehaviour:
         outSlope: 0
         tangentMode: 0
       - serializedVersion: 2
+        time: 0.49723154
+        value: 1.3179781
+        inSlope: -0.18803477
+        outSlope: -0.18803477
+        tangentMode: 0
+      - serializedVersion: 2
         time: 1
         value: 1.25
         inSlope: 0
@@ -431,7 +437,7 @@ MonoBehaviour:
         tangentMode: 0
       m_PreInfinity: 2
       m_PostInfinity: 2
-      m_RotationOrder: 4
+      m_RotationOrder: 0
     skyExposure: 1.5
     starsCubeMap: {fileID: 8900000, guid: 39b57397df78c0c44a8f13e715e91a6a, type: 3}
     starsIntensity:
@@ -470,7 +476,7 @@ MonoBehaviour:
       m_Curve:
       - serializedVersion: 2
         time: 0
-        value: 0.20520401
+        value: 0.4
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -648,7 +654,7 @@ MonoBehaviour:
     baseNoiseUV: 30
     detailNoiseUV: 2
     detailQuality: 0
-    globalCloudCoverage: 0.985
+    globalCloudCoverage: 1
     cirrusCloudsTexture: {fileID: 2800000, guid: 724998a51cd1bcf438cdc5ca572beef4,
       type: 3}
     cirrusCloudsColor:
@@ -716,6 +722,7 @@ MonoBehaviour:
     flatCloudsScale: 1.55
     flatCloudsNoiseOctaves: 5
     flatCloudsAltitude: 59.9
+    flatCloudsMorphingSpeed: 0.2
     shadowIntensity: 0
     shadowCookieSize: 10000
   weatherSettings:
@@ -748,7 +755,7 @@ MonoBehaviour:
     g: 5
     fogDitheringScale: 240
     fogDitheringIntensity: 0.5
-    skyFogIntensity: 1.4319986
+    skyFogIntensity: 0.44300008
   lightshaftsSettings:
     resolution: 1
     screenBlendMode: 0
@@ -892,12 +899,12 @@ MonoBehaviour:
   qualitySettings:
     GlobalParticleEmissionRates: 1
     UpdateInterval: 0.5
-  viewMode: 9
+  viewMode: 1
   showPlayerSetup: 1
   showRenderingSetup: 0
   showComponentsSetup: 0
-  showTimeUI: 0
-  showWeatherUI: 0
-  showAudioUI: 1
+  showTimeUI: 1
+  showWeatherUI: 1
+  showAudioUI: 0
   showEffectsUI: 0
   modified: 0

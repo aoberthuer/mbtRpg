@@ -9,8 +9,10 @@ using System.Collections;
 [RequireComponent(typeof (NetworkIdentity))]
 public class EnviroUNetPlayer : NetworkBehaviour {
 
-	public bool AssignOnStart = true;
-	public GameObject Player;
+	public bool assignOnStart = true;
+    public bool findSceneCamera = true;
+
+    public GameObject Player;
 	public Camera PlayerCamera;
 
 	public void Start()
@@ -19,11 +21,14 @@ public class EnviroUNetPlayer : NetworkBehaviour {
 		if (!isLocalPlayer && !isServer) {
 			this.enabled = false;
 			return;
-		} 
+		}
 
-		if (isLocalPlayer) 
+        if (PlayerCamera == null && findSceneCamera)
+            PlayerCamera = Camera.main;
+
+        if (isLocalPlayer) 
 		{
-			if (AssignOnStart && Player != null && PlayerCamera != null)
+			if (assignOnStart && Player != null && PlayerCamera != null)
 				EnviroSky.instance.AssignAndStart (Player, PlayerCamera);
 
 			Cmd_RequestSeason ();
@@ -59,6 +64,7 @@ public class EnviroUNetPlayer : NetworkBehaviour {
 	[ClientRpc]
 	void RpcRequestCurrentWeather (int weather, int zone)
 	{
-		EnviroSky.instance.Weather.zones[zone].currentActiveZoneWeatherPrefab = EnviroSky.instance.Weather.WeatherPrefabs [weather];
-	}
+		EnviroSky.instance.Weather.zones[zone].currentActiveZoneWeatherPrefab = EnviroSky.instance.Weather.WeatherPrefabs[weather];
+        EnviroSky.instance.Weather.zones[zone].currentActiveZoneWeatherPreset = EnviroSky.instance.Weather.WeatherPrefabs[weather].weatherPreset;
+    }
 }

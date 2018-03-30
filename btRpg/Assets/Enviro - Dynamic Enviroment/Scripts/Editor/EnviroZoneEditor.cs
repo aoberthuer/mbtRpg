@@ -90,14 +90,12 @@ public class EnviroEnviroZoneEditor : Editor {
 		GUILayout.BeginVertical("", boxStyle);
 		GUILayout.Space(10);
 		myTarget.zoneName = EditorGUILayout.TextField ("Zone Name", myTarget.zoneName);
-		GUILayout.Space(10);
+        GUILayout.Space(10);
 
 		// General Setup
 		GUILayout.BeginVertical("", boxStyle);
 		showGeneral = EditorGUILayout.BeginToggleGroup ("General Configs", showGeneral);
 		if (showGeneral) {
-			//GUILayout.BeginVertical("Sky and Light Color", boxStyle);
-			//GUILayout.Space(15);
 			myTarget.ExitToDefault = EditorGUILayout.Toggle("Exit to Default Zone", myTarget.ExitToDefault);
 			myTarget.zoneScale = EditorGUILayout.Vector3Field ("Zone Scale", myTarget.zoneScale);
 		}

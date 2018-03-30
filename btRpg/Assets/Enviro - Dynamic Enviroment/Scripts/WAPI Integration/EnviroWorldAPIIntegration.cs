@@ -230,8 +230,119 @@ public class EnviroWorldAPIIntegration : MonoBehaviour, IWorldApiChangeHandler
     }
 
 
+    private void ChangeWeatherOnCloudCoverChanged()
+    {
+        if (WorldManager.Instance.RainPower > 0.01f)
+            return;
 
-	private void ChangeWeatherOnCloudCoverChanged ()
+        if (WorldManager.Instance.SnowPower > 0.01f)
+            return;
+
+        float cloudCover = WorldManager.Instance.CloudPower;
+
+        if (cloudCover <= 0.1f)
+        {
+            if (clearWeatherPresets.Count > 0 && EnviroSky.instance.Weather.currentActiveWeatherPreset.Name != clearWeatherPresets[0].Name)
+                EnviroSky.instance.ChangeWeather(clearWeatherPresets[0].Name);
+
+        }
+        else if (cloudCover > 0.1f && cloudCover <= 0.3f)
+        {
+            if (cloudyWeatherPresets.Count > 0 && EnviroSky.instance.Weather.currentActiveWeatherPreset.Name != cloudyWeatherPresets[0].Name)
+                EnviroSky.instance.ChangeWeather(cloudyWeatherPresets[0].Name);
+
+        }
+        else if (cloudCover > 0.3f && cloudCover <= 0.7f)
+        {
+            if (cloudyWeatherPresets.Count > 1 && EnviroSky.instance.Weather.currentActiveWeatherPreset.Name != cloudyWeatherPresets[1].Name)
+                EnviroSky.instance.ChangeWeather(cloudyWeatherPresets[1].Name);
+
+        }
+        else if (cloudCover > 0.7f)
+        {
+            if (cloudyWeatherPresets.Count > 2 && EnviroSky.instance.Weather.currentActiveWeatherPreset.Name != cloudyWeatherPresets[2].Name)
+                EnviroSky.instance.ChangeWeather(cloudyWeatherPresets[2].Name);
+
+        }
+    }
+
+
+
+    private void ChangeWeatherOnRainChanged(float r, float s)
+    {
+        if (r < s || r == 0f)
+        {
+            if (s > 0)
+                ChangeWeatherOnSnowChanged(r, s);
+            else
+                ChangeWeatherOnCloudCoverChanged();
+            return;
+        }
+
+        float rainPower = r;
+
+        if (rainPower < 0.1f)
+        {
+            ChangeWeatherOnCloudCoverChanged();
+        }
+        else if (rainPower > 0.1f && rainPower <= 0.4f)
+        {
+            if (rainWeatherPresets.Count > 0 && EnviroSky.instance.Weather.currentActiveWeatherPreset.Name != rainWeatherPresets[0].Name)
+                EnviroSky.instance.ChangeWeather(rainWeatherPresets[0].Name);
+
+        }
+        else if (rainPower > 0.4f && rainPower < 0.7f)
+        {
+            if (rainWeatherPresets.Count > 1 && EnviroSky.instance.Weather.currentActiveWeatherPreset.Name != rainWeatherPresets[1].Name)
+                EnviroSky.instance.ChangeWeather(rainWeatherPresets[1].Name);
+
+        }
+        else if (rainPower > 0.7f)
+        {
+            if (rainWeatherPresets.Count > 2 && EnviroSky.instance.Weather.currentActiveWeatherPreset.Name != rainWeatherPresets[2].Name)
+                EnviroSky.instance.ChangeWeather(rainWeatherPresets[2].Name);
+        }
+    }
+
+    private void ChangeWeatherOnSnowChanged(float r, float s)
+    {
+        if (s < r || s == 0f)
+        {
+            if (r > 0)
+                ChangeWeatherOnRainChanged(r, s);
+            else
+                ChangeWeatherOnCloudCoverChanged();
+
+            return;
+        }
+
+        float snowPower = s;
+
+        if (snowPower <= 0.1f)
+        {
+            ChangeWeatherOnCloudCoverChanged();
+        }
+        else if (snowPower > 0.1f && snowPower <= 0.5f)
+        {
+            if (snowWeatherPresets.Count > 0 && EnviroSky.instance.Weather.currentActiveWeatherPreset.Name != snowWeatherPresets[0].Name)
+                EnviroSky.instance.ChangeWeather(snowWeatherPresets[0].Name);
+
+        }
+        else if (snowPower > 0.5f)
+        {
+            if (snowWeatherPresets.Count > 1 && EnviroSky.instance.Weather.currentActiveWeatherPreset.Name != snowWeatherPresets[1].Name)
+                EnviroSky.instance.ChangeWeather(snowWeatherPresets[1].Name);
+
+        }
+    }
+
+
+
+
+    /*
+
+
+    private void ChangeWeatherOnCloudCoverChanged ()
 	{
 		if (WorldManager.Instance.RainPower > 0.01f && wetnessPower == GetSet.GetFromWAPI)
 			return;
@@ -323,5 +434,7 @@ public class EnviroWorldAPIIntegration : MonoBehaviour, IWorldApiChangeHandler
 				EnviroSky.instance.ChangeWeather (snowWeatherPresets[2].Name);
 		}
 	}
+
+    */
 }
 #endif

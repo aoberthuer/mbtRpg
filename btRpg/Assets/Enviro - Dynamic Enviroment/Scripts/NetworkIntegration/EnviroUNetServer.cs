@@ -1,5 +1,5 @@
 ﻿/// <summary>
-/// This component can be used to synchronize time and weather in games where server is a player too.
+/// This component can be used to synchronize time and weather.
 /// </summary>
 
 using UnityEngine;
@@ -16,7 +16,6 @@ public class EnviroUNetServer : NetworkBehaviour {
 	[SyncVar] private int networkYears;
 
 	public bool isHeadless = true;
-	//public bool disableCamera;
 
 	public override void OnStartServer()
 	{
