@@ -169,6 +169,7 @@ namespace RPG.Weapons
 
         public void StopAttacking()
         {
+            animator.StopPlayback();
             StopAllCoroutines();
         }
 

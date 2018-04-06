@@ -1097,15 +1097,15 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1532785872058438}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1196, y: 59.4, z: 1211}
+  m_LocalRotation: {x: -0, y: 0.7071068, z: -0, w: 0.70710677}
+  m_LocalPosition: {x: 146.14749, y: 1.766, z: 137.68623}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4619343886588492}
   - {fileID: 224254926018125254}
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 90.00001, z: 0}
 --- !u!4 &4153419566497648
 Transform:
   m_ObjectHideFlags: 1
@@ -2482,6 +2482,7 @@ MonoBehaviour:
   colliderCenter: {x: 0, y: 0.5, z: 0}
   colliderRadius: 0.5
   colliderHeight: 2
+  physicMaterial: {fileID: 13400000, guid: e52fb17f9b1e7fd48b8955f1391d3688, type: 2}
   navMeshAgentSteeringSpeed: 1
   navMeshAgentAcceleration: 1
   navMeshAgentStoppingDistance: 1.5
@@ -2518,7 +2519,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1fe2e6016de681c44b396fc7bb6e1399, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  chaseRadius: 6
+  chaseRadius: 8
   patrolPath: {fileID: 0}
   waypointTolerance: 2
   waypointDwellTime: 2
@@ -2544,7 +2545,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe02cc92eb7dbfc4fa5c6412f92fa54e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealthPoints: 40
+  maxHealthPoints: 80
   healthBar: {fileID: 114096545096188668}
   damageSounds:
   - {fileID: 8300000, guid: 2598748595821b2479839f404892eaa9, type: 3}

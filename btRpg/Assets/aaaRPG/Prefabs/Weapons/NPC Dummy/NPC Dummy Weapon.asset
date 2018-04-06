@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4f489dc591aeea241ad62c42048a1656, type: 3}
+  m_Name: NPC Dummy Weapon
+  m_EditorClassIdentifier: 
+  gripTransform: {fileID: 4784685802506132, guid: bb91590c042991740b1e2e08cab5539f,
+    type: 2}
+  weaponPrefab: {fileID: 1595221981349928, guid: 04189c67e5c7ed948a9e91509c14d3dc,
+    type: 2}
+  attackAnimation: {fileID: 7400000, guid: 5c0b1be3522a16f4c8519b02a90a980d, type: 3}
+  minTimeBetweenHits: 0.5
+  maxAttackRange: 0
+  additionalDamage: 0
+  damageDelay: 0.5
+  rangedAttack: 0
+  rangedAttackPrefab: {fileID: 0}

@@ -14,6 +14,7 @@ namespace RPG.Characters
         [SerializeField] RuntimeAnimatorController animatorController;
         [SerializeField] AnimatorOverrideController animatorOverrideController;
         [SerializeField] Avatar characterAvatar;
+        [SerializeField] [Range(0.1f, 1f)] float animatorForwardCap = 1.0f;
 
         [Header("Audio")]
         [SerializeField] float audioSourceSpatialBlend = 0.5f;
@@ -21,9 +22,11 @@ namespace RPG.Characters
         [Header("Capsule Collider")]
         [SerializeField] Vector3 colliderCenter = new Vector3(0, 0.5f, 0);
         [SerializeField] float colliderRadius = 0.5f;
-        [SerializeField] float colliderHeight = 2.0f;
+        [SerializeField] float colliderHeight = 1.8f;
+        [SerializeField] PhysicMaterial physicMaterial;
 
         [Header("Nav Mesh Agent")]
+        [SerializeField] float navMeshAgentBaseOffset = -0.2f;
         [SerializeField] float navMeshAgentSteeringSpeed = 6f;
         [SerializeField] float navMeshAgentAcceleration = 4f;
         [SerializeField] float navMeshAgentStoppingDistance = 1.5f;
@@ -69,9 +72,11 @@ namespace RPG.Characters
             capsuleCollider.center = colliderCenter;
             capsuleCollider.radius = colliderRadius;
             capsuleCollider.height = colliderHeight;
+            capsuleCollider.material = physicMaterial;
 
             // NavMeshAgent setup
             navMeshAgent = gameObject.AddComponent<NavMeshAgent>();
+            navMeshAgent.baseOffset = navMeshAgentBaseOffset;
             navMeshAgent.speed = navMeshAgentSteeringSpeed;
             navMeshAgent.acceleration = navMeshAgentAcceleration;
             navMeshAgent.stoppingDistance = navMeshAgentStoppingDistance;
@@ -170,7 +175,7 @@ namespace RPG.Characters
 
         void UpdateAnimator()
         {
-            animator.SetFloat("Forward", forwardAmount, 0.1f, Time.deltaTime);
+            animator.SetFloat("Forward", forwardAmount * animatorForwardCap, 0.1f, Time.deltaTime);
             animator.SetFloat("Turn", turnAmount, 0.1f, Time.deltaTime);
             animator.speed = animationSpeedMultiplier;
         }
