@@ -1574,7 +1574,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1763760897697098}
   m_LocalRotation: {x: 0, y: -0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 166, y: 1.513, z: 130}
+  m_LocalPosition: {x: 183, y: 0, z: 200}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4346978327269638}
@@ -2512,10 +2512,13 @@ MonoBehaviour:
   animatorOverrideController: {fileID: 22100000, guid: f119d25ccdb55fd4780a3f379714ed01,
     type: 2}
   characterAvatar: {fileID: 9000000, guid: e2958561779b1a748a4246b9d0c0b309, type: 3}
+  animatorForwardCap: 1
   audioSourceSpatialBlend: 0.5
   colliderCenter: {x: 0, y: 1, z: 0}
   colliderRadius: 0.5
   colliderHeight: 2
+  physicMaterial: {fileID: 13400000, guid: e52fb17f9b1e7fd48b8955f1391d3688, type: 2}
+  navMeshAgentBaseOffset: -0.1
   navMeshAgentSteeringSpeed: 1
   navMeshAgentAcceleration: 2
   navMeshAgentStoppingDistance: 1.5

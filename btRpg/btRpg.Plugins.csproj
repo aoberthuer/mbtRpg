@@ -579,8 +579,8 @@
     <None Include="Assets\Standard Assets\Environment\Water\Water4\Shaders\WaterInclude.cginc" />
     <None Include="Assets\aaaRPG Assets\Models\MeshTint\Forest Ogre\Read me.txt" />
     <None Include="Assets\aaaRPG Assets\Models\MeshTint\Forest Ogre\www.meshtint.com.txt" />
-    <None Include="Assets\aaaRPG Assets\Models\Synty Polygon\POLYGON_Renderbox\Shaders\SkyGradient.shader" />
-    <None Include="Assets\aaaRPG Assets\Models\Synty Polygon\POLYGON_Renderbox\Shaders\UnlitVertexColour_Alpha.shader" />
+    <None Include="Assets\aaaRPG Assets\Models\Synty Polygon\Polygon Renderbox\Shaders\SkyGradient.shader" />
+    <None Include="Assets\aaaRPG Assets\Models\Synty Polygon\Polygon Renderbox\Shaders\UnlitVertexColour_Alpha.shader" />
     <None Include="Assets\aaaRPG Assets\Models\Synty Polygon\SimpleFX\Materials\UnlitVertexColour_Alpha.shader" />
     <None Include="Assets\aaaRPG Assets\Particle Systems\JMO Assets\!JMO Assets Readme.txt" />
     <None Include="Assets\aaaRPG Assets\Particle Systems\JMO Assets\Shape FX\Demo\Demo Assets\ShapeFX Demo Assets.txt" />

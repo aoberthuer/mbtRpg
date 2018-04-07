@@ -149,7 +149,10 @@ namespace RPG.Characters
 
         private void UpdateEnergyOrb()
         {
-            energyOrb.fillAmount = EnergyAsPercentage;
+            if(energyOrb)
+            {
+                energyOrb.fillAmount = EnergyAsPercentage;
+            }
         }
 
         float EnergyAsPercentage { get { return currentEnergyPoints / maxEnergyPoints; } }
