@@ -719,6 +719,7 @@ GameObject:
   - component: {fileID: 114399673367354388}
   - component: {fileID: 114583755068169978}
   - component: {fileID: 114283718174689726}
+  - component: {fileID: 114146921655477112}
   m_Layer: 13
   m_Name: SimpleThug
   m_TagString: Untagged
@@ -2463,6 +2464,20 @@ MonoBehaviour:
   m_FillAmount: 0.66
   m_FillClockwise: 1
   m_FillOrigin: 0
+--- !u!114 &114146921655477112
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1532785872058438}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a3963de19b1ae4d46a0fefa8fad2bde8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  clip: {fileID: 8300000, guid: f772d20617d577648bb8b5d550340f29, type: 3}
+  triggerRadius: 5
+  isOneTimeOnly: 1
 --- !u!114 &114190711095858550
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2478,11 +2493,13 @@ MonoBehaviour:
   animatorOverrideController: {fileID: 22100000, guid: 7720786400304ba489d1ae6b0c691d56,
     type: 2}
   characterAvatar: {fileID: 9000000, guid: e2958561779b1a748a4246b9d0c0b309, type: 3}
+  animatorForwardCap: 1
   audioSourceSpatialBlend: 0.5
   colliderCenter: {x: 0, y: 0.5, z: 0}
   colliderRadius: 0.5
   colliderHeight: 2
   physicMaterial: {fileID: 13400000, guid: e52fb17f9b1e7fd48b8955f1391d3688, type: 2}
+  navMeshAgentBaseOffset: -0.1
   navMeshAgentSteeringSpeed: 1
   navMeshAgentAcceleration: 1
   navMeshAgentStoppingDistance: 1.5
