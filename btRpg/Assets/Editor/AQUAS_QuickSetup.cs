@@ -4,7 +4,39 @@ using System.Collections;
 
 using System;
 using System.Reflection;
+#if UNITY_POST_PROCESSING_STACK_V1
 using UnityEngine.PostProcessing;
+#endif
+#if UNITY_POST_PROCESSING_STACK_V2
+using UnityEngine.Rendering.PostProcessing;
+#endif
+
+public enum TARGETPLATFORM
+{
+    desktopWebAndConsole = 0,
+    mobile = 1
+}
+
+public enum MOBILEPRESETS
+{
+    lake = 0,
+    swamp = 1,
+    sewer = 2,
+    rtsStyle1 = 3,
+    rtsStyle2 = 4
+}
+
+public enum PRESETS
+{
+    clearLake = 0,
+    deepLake = 1,
+    swamp = 2,
+    sewer = 3,
+    calmOcean = 4,
+    pondsAndPools = 5,
+    rtsStyle1 = 6,
+    rtsStyle2 = 7
+}
 
 public class AQUAS_QuickSetup : EditorWindow {
 
@@ -17,6 +49,10 @@ public class AQUAS_QuickSetup : EditorWindow {
     Vector3 waterPosition;
 
     FieldInfo fi = null;
+
+    public PRESETS presets;
+    public MOBILEPRESETS mobilePresets;
+    public TARGETPLATFORM targetPlatform;
 
     //Add menu item to show window
     [MenuItem("Window/AQUAS/Quick Setup")]
@@ -46,27 +82,39 @@ public class AQUAS_QuickSetup : EditorWindow {
             About();
         }
 
-        if (GUI.Button(new Rect(5, 140, position.width - 10, 32), "Add Water"))
+        targetPlatform = (TARGETPLATFORM)EditorGUI.EnumPopup(new Rect(5, 150, position.width - 10, 16), "Select target platform", targetPlatform);
+
+        if(targetPlatform == TARGETPLATFORM.desktopWebAndConsole)
+        {
+            presets = (PRESETS)EditorGUI.EnumPopup(new Rect(5, 170, position.width - 10, 16), "Select a Preset", presets);
+        }
+
+        else
+        {
+            mobilePresets = (MOBILEPRESETS)EditorGUI.EnumPopup(new Rect(5, 170, position.width - 10, 16), "Select a Preset", mobilePresets);
+        }
+
+        if (GUI.Button(new Rect(5, 190, position.width - 10, 32), "Add Water"))
         {
             AddWater();
         }
 
-        if (GUI.Button(new Rect(5, 180, position.width - 10, 32), "Add Underwater Effects"))
+        if (GUI.Button(new Rect(5, 230, position.width - 10, 32), "Add Underwater Effects"))
         {
             AddUnderwaterEffects();
         }
 
-        if (GUI.Button(new Rect(5, 220, position.width/2-5, 32), "Hook Up Camera"))
+        if (GUI.Button(new Rect(5, 270, position.width/2-5, 32), "Hook Up Camera"))
         {
             HookupCamera();
         }
 
-        if (GUI.Button(new Rect(position.width/2+5, 220, position.width / 2 - 5, 32), "<== Info"))
+        if (GUI.Button(new Rect(position.width/2+5, 270, position.width / 2 - 10, 32), "<== Info"))
         {
             HookupCameraInfo();
         }
 
-        if (GUI.Button(new Rect(5, 260, position.width - 10, 32), "Hints"))
+        if (GUI.Button(new Rect(5, 310, position.width - 10, 32), "Hints"))
         {
             Hints();
         }
@@ -107,6 +155,60 @@ public class AQUAS_QuickSetup : EditorWindow {
         
         GameObject aquasPrefab = (GameObject)AssetDatabase.LoadAssetAtPath("Assets/AQUAS/Prefabs/AQUASWater.prefab", typeof(GameObject));
         
+        if(targetPlatform == TARGETPLATFORM.desktopWebAndConsole)
+        {
+            switch (presets)
+            {
+                case PRESETS.clearLake:
+                    aquasPrefab.GetComponent<MeshRenderer>().sharedMaterial = (Material)AssetDatabase.LoadAssetAtPath("Assets/AQUAS/Materials/Water/Desktop&Web/Presets/Clear Lake.mat", typeof(Material));
+                    break;
+                case PRESETS.deepLake:
+                    aquasPrefab.GetComponent<MeshRenderer>().sharedMaterial = (Material)AssetDatabase.LoadAssetAtPath("Assets/AQUAS/Materials/Water/Desktop&Web/Presets/Deep Lake.mat", typeof(Material));
+                    break;
+                case PRESETS.swamp:
+                    aquasPrefab.GetComponent<MeshRenderer>().sharedMaterial = (Material)AssetDatabase.LoadAssetAtPath("Assets/AQUAS/Materials/Water/Desktop&Web/Presets/Swamp.mat", typeof(Material));
+                    break;
+                case PRESETS.sewer:
+                    aquasPrefab.GetComponent<MeshRenderer>().sharedMaterial = (Material)AssetDatabase.LoadAssetAtPath("Assets/AQUAS/Materials/Water/Desktop&Web/Presets/Sewer.mat", typeof(Material));
+                    break;
+                case PRESETS.calmOcean:
+                    aquasPrefab.GetComponent<MeshRenderer>().sharedMaterial = (Material)AssetDatabase.LoadAssetAtPath("Assets/AQUAS/Materials/Water/Desktop&Web/Presets/Calm Ocean.mat", typeof(Material));
+                    break;
+                case PRESETS.pondsAndPools:
+                    aquasPrefab.GetComponent<MeshRenderer>().sharedMaterial = (Material)AssetDatabase.LoadAssetAtPath("Assets/AQUAS/Materials/Water/Desktop&Web/Presets/Ponds & Pools.mat", typeof(Material));
+                    break;
+                case PRESETS.rtsStyle1:
+                    aquasPrefab.GetComponent<MeshRenderer>().sharedMaterial = (Material)AssetDatabase.LoadAssetAtPath("Assets/AQUAS/Materials/Water/Desktop&Web/Presets/RTS-Style 1.mat", typeof(Material));
+                    break;
+                case PRESETS.rtsStyle2:
+                    aquasPrefab.GetComponent<MeshRenderer>().sharedMaterial = (Material)AssetDatabase.LoadAssetAtPath("Assets/AQUAS/Materials/Water/Desktop&Web/Presets/RTS-Style 2.mat", typeof(Material));
+                    break;
+            }
+        }
+        else
+        {
+            switch (mobilePresets)
+            {
+                case MOBILEPRESETS.lake:
+                    aquasPrefab.GetComponent<MeshRenderer>().sharedMaterial = (Material)AssetDatabase.LoadAssetAtPath("Assets/AQUAS/Materials/Water/Mobile/Presets/Mobile Lake.mat", typeof(Material));
+                    break;
+                case MOBILEPRESETS.swamp:
+                    aquasPrefab.GetComponent<MeshRenderer>().sharedMaterial = (Material)AssetDatabase.LoadAssetAtPath("Assets/AQUAS/Materials/Water/Mobile/Presets/Mobile Swamp.mat", typeof(Material));
+                    break;
+                case MOBILEPRESETS.sewer:
+                    aquasPrefab.GetComponent<MeshRenderer>().sharedMaterial = (Material)AssetDatabase.LoadAssetAtPath("Assets/AQUAS/Materials/Water/Mobile/Presets/Mobile Sewer.mat", typeof(Material));
+                    break;
+                case MOBILEPRESETS.rtsStyle1:
+                    aquasPrefab.GetComponent<MeshRenderer>().sharedMaterial = (Material)AssetDatabase.LoadAssetAtPath("Assets/AQUAS/Materials/Water/Mobile/Presets/Mobile RTS 1.mat", typeof(Material));
+                    break;
+                case MOBILEPRESETS.rtsStyle2:
+                    aquasPrefab.GetComponent<MeshRenderer>().sharedMaterial = (Material)AssetDatabase.LoadAssetAtPath("Assets/AQUAS/Materials/Water/Mobile/Presets/Mobile RTS 2.mat", typeof(Material));
+                    break;
+            }
+        }
+
+        
+
         //Check if AQUAS is already in the scene
         if (GameObject.Find("AQUAS Waterplane") != null)
         {
@@ -213,7 +315,12 @@ public class AQUAS_QuickSetup : EditorWindow {
 
             GameObject underwaterObj = Instantiate(underwaterPrefab);
             underwaterObj.name = "UnderWaterCameraEffects";
-            
+
+#if UNITY_POST_PROCESSING_STACK_V2
+            underwaterObj.GetComponent<AQUAS_LensEffects>().underWaterParameters.underwaterProfile = (PostProcessProfile)AssetDatabase.LoadAssetAtPath("Assets/AQUAS/Post Processing/AQUAS_Underwater_v2.asset", typeof(PostProcessProfile));
+            underwaterObj.GetComponent<AQUAS_LensEffects>().underWaterParameters.defaultProfile = (PostProcessProfile)AssetDatabase.LoadAssetAtPath("Assets/AQUAS/Post Processing/DefaultPostProcessing_v2.asset", typeof(PostProcessProfile));
+#endif
+
             camera.GetComponent<Camera>().farClipPlane = terrainBounds;
 
             //Underwater effects setup
@@ -224,10 +331,47 @@ public class AQUAS_QuickSetup : EditorWindow {
             underwaterObj.GetComponent<AQUAS_LensEffects>().gameObjects.waterPlanes[0] = GameObject.Find("AQUAS Waterplane");
 
             //Add and configure image effects neccessary for AQUAS
+#if UNITY_POST_PROCESSING_STACK_V1
             if (camera.gameObject.GetComponent<PostProcessingBehaviour>() == null)
             {
                 camera.gameObject.AddComponent<PostProcessingBehaviour>();
             }
+#endif
+#if UNITY_POST_PROCESSING_STACK_V2
+            if (camera.gameObject.GetComponent<PostProcessLayer>() == null)
+            {
+                camera.gameObject.AddComponent<PostProcessLayer>();
+
+                PostProcessResources resources;
+
+                if ((PostProcessResources)AssetDatabase.LoadAssetAtPath("Assets/PostProcessing-2/PostProcessing/PostProcessResources.asset", typeof(PostProcessResources)) != null)
+                {
+                    resources = (PostProcessResources)AssetDatabase.LoadAssetAtPath("Assets/PostProcessing-2/PostProcessing/PostProcessResources.asset", typeof(PostProcessResources));
+                }
+                else if ((PostProcessResources)AssetDatabase.LoadAssetAtPath("Assets/PostProcessing/PostProcessResources.asset", typeof(PostProcessResources)) != null)
+                {
+                    resources = (PostProcessResources)AssetDatabase.LoadAssetAtPath("Assets/PostProcessing/PostProcessResources.asset", typeof(PostProcessResources));
+                }
+                else if ((PostProcessResources)AssetDatabase.LoadAssetAtPath("Assets/PostProcessing-2/PostProcessResources.asset", typeof(PostProcessResources)) != null)
+                {
+                    resources = (PostProcessResources)AssetDatabase.LoadAssetAtPath("Assets/PostProcessing-2/PostProcessResources.asset", typeof(PostProcessResources));
+                }
+                else
+                {
+                    EditorUtility.DisplayDialog("Could not locate Post Process Resource file.", "Please make sure your post processing folder is at the top level of the assets folder and named either 'PostProcessing' or 'PostProcessing-2'", "Got It!");
+                    resources = null;
+                }
+
+                camera.gameObject.GetComponent<PostProcessLayer>().Init(resources);
+                camera.gameObject.GetComponent<PostProcessLayer>().volumeLayer = LayerMask.NameToLayer("Everything");
+            }
+
+            if (camera.gameObject.GetComponent<PostProcessVolume>() == null)
+            {
+                camera.gameObject.AddComponent<PostProcessVolume>();
+                camera.gameObject.GetComponent<PostProcessVolume>().isGlobal = true;
+            }
+#endif
 
             if (camera.gameObject.GetComponent<AudioSource>() == null)
             {
@@ -279,7 +423,44 @@ public class AQUAS_QuickSetup : EditorWindow {
     //</summary>
     void HookupCamera()
     {
+#if UNITY_POST_PROCESSING_STACK_V1
         camera.gameObject.AddComponent<PostProcessingBehaviour>();
+#endif
+#if UNITY_POST_PROCESSING_STACK_V2
+        if (camera.gameObject.GetComponent<PostProcessLayer>() == null)
+        {
+            camera.gameObject.AddComponent<PostProcessLayer>();
+
+            PostProcessResources resources;
+
+            if ((PostProcessResources)AssetDatabase.LoadAssetAtPath("Assets/PostProcessing-2/PostProcessing/PostProcessResources.asset", typeof(PostProcessResources)) != null)
+            {
+                resources = (PostProcessResources)AssetDatabase.LoadAssetAtPath("Assets/PostProcessing-2/PostProcessing/PostProcessResources.asset", typeof(PostProcessResources));
+            }
+            else if ((PostProcessResources)AssetDatabase.LoadAssetAtPath("Assets/PostProcessing/PostProcessResources.asset", typeof(PostProcessResources)) != null)
+            {
+                resources = (PostProcessResources)AssetDatabase.LoadAssetAtPath("Assets/PostProcessing/PostProcessResources.asset", typeof(PostProcessResources));
+            }
+            else if ((PostProcessResources)AssetDatabase.LoadAssetAtPath("Assets/PostProcessing-2/PostProcessResources.asset", typeof(PostProcessResources)) != null)
+            {
+                resources = (PostProcessResources)AssetDatabase.LoadAssetAtPath("Assets/PostProcessing-2/PostProcessResources.asset", typeof(PostProcessResources));
+            }
+            else
+            {
+                EditorUtility.DisplayDialog("Could not locate Post Process Resource file.", "Please make sure your post processing folder is at the top level of the assets folder and named either 'PostProcessing' or 'PostProcessing-2'", "Got It!");
+                resources = null;
+            }
+
+            camera.gameObject.GetComponent<PostProcessLayer>().Init(resources);
+            camera.gameObject.GetComponent<PostProcessLayer>().volumeLayer = LayerMask.NameToLayer("Everything");
+        }
+
+        if (camera.gameObject.GetComponent<PostProcessVolume>() == null)
+        {
+            camera.gameObject.AddComponent<PostProcessVolume>();
+            camera.gameObject.GetComponent<PostProcessVolume>().isGlobal = true;
+        }
+#endif
 
         if (camera.gameObject.GetComponent<AudioSource>() == null)
         {

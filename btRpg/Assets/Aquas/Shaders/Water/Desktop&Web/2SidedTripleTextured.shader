@@ -46,6 +46,8 @@ Shader "AQUAS/Desktop and Web/Double-Sided/Triple-Textured Bumpy" {
         _MediumTilingDistance ("Medium Tiling Distance", Float ) = 500
         _LongTilingDistance ("Long Tiling Distance", Float ) = 1500
         _DistanceTilingFade ("Distance Tiling Fade", Float ) = 1
+        _RefractionDistance ("Refraction Distance", Float ) = 10
+        _RefractionFalloff ("Refraction Falloff", Float ) = 1
         [HideInInspector]_Cutoff ("Alpha cutoff", Range(0,1)) = 0.5
     }
     SubShader {
@@ -123,6 +125,8 @@ Shader "AQUAS/Desktop and Web/Double-Sided/Triple-Textured Bumpy" {
             uniform float _MediumTilingDistance;
             uniform float _DistanceTilingFade;
             uniform float _LongTilingDistance;
+            uniform float _RefractionDistance;
+            uniform float _RefractionFalloff;
             struct VertexInput {
                 float4 vertex : POSITION;
                 float3 normal : NORMAL;
@@ -223,7 +227,7 @@ Shader "AQUAS/Desktop and Web/Double-Sided/Triple-Textured Bumpy" {
                 float sceneZ = max(0,LinearEyeDepth (UNITY_SAMPLE_DEPTH(tex2Dproj(_CameraDepthTexture, UNITY_PROJ_COORD(i.projPos)))) - _ProjectionParams.g);
                 float partZ = max(0,i.projPos.z - _ProjectionParams.g);
                 float _multiplier1 = (pow(saturate((sceneZ-partZ)/_DepthTransparency),_ShoreFade)*saturate((sceneZ-partZ)/_ShoreTransparency));
-                float2 sceneUVs = float2(1,grabSign)*i.screenPos.xy*0.5+0.5 + ((_add1.rg*(_MediumWaveRefraction*0.02))*_multiplier1);
+                float2 sceneUVs = float2(1,grabSign)*i.screenPos.xy*0.5+0.5 + lerp(((_add1.rg*(_MediumWaveRefraction*0.02))*_multiplier1),float2(0,0),saturate(pow((distance(i.posWorld.rgb,_WorldSpaceCameraPos)/_RefractionDistance),_RefractionFalloff)));
                 float4 sceneColor = tex2D(Refraction, sceneUVs);
                 float3 lightDirection = normalize(_WorldSpaceLightPos0.xyz);
                 float3 lightColor = _LightColor0.rgb;
@@ -394,6 +398,8 @@ Shader "AQUAS/Desktop and Web/Double-Sided/Triple-Textured Bumpy" {
             uniform float _MediumTilingDistance;
             uniform float _DistanceTilingFade;
             uniform float _LongTilingDistance;
+            uniform float _RefractionDistance;
+            uniform float _RefractionFalloff;
             struct VertexInput {
                 float4 vertex : POSITION;
                 float3 normal : NORMAL;
@@ -495,7 +501,7 @@ Shader "AQUAS/Desktop and Web/Double-Sided/Triple-Textured Bumpy" {
                 float sceneZ = max(0,LinearEyeDepth (UNITY_SAMPLE_DEPTH(tex2Dproj(_CameraDepthTexture, UNITY_PROJ_COORD(i.projPos)))) - _ProjectionParams.g);
                 float partZ = max(0,i.projPos.z - _ProjectionParams.g);
                 float _multiplier1 = (pow(saturate((sceneZ-partZ)/_DepthTransparency),_ShoreFade)*saturate((sceneZ-partZ)/_ShoreTransparency));
-                float2 sceneUVs = float2(1,grabSign)*i.screenPos.xy*0.5+0.5 + ((_add1.rg*(_MediumWaveRefraction*0.02))*_multiplier1);
+                float2 sceneUVs = float2(1,grabSign)*i.screenPos.xy*0.5+0.5 + lerp(((_add1.rg*(_MediumWaveRefraction*0.02))*_multiplier1),float2(0,0),saturate(pow((distance(i.posWorld.rgb,_WorldSpaceCameraPos)/_RefractionDistance),_RefractionFalloff)));
                 float4 sceneColor = tex2D(Refraction, sceneUVs);
                 float3 lightDirection = normalize(lerp(_WorldSpaceLightPos0.xyz, _WorldSpaceLightPos0.xyz - i.posWorld.xyz,_WorldSpaceLightPos0.w));
                 float3 lightColor = _LightColor0.rgb;

@@ -107,6 +107,8 @@ Material:
     - _Parallax: 0.02
     - _ReflectionIntensity: 0.518
     - _Refraction: 0.656
+    - _RefractionDistance: 10
+    - _RefractionFalloff: 1
     - _ShoreFade: 0.25
     - _ShoreTransparency: 0.4
     - _SmallWavesSpeed: 120

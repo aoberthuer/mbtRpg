@@ -1,8 +1,11 @@
 ﻿using UnityEngine;
-using System.Collections;
-using System.Collections.Generic;
 using System.Reflection;
+#if UNITY_POST_PROCESSING_STACK_V1
 using UnityEngine.PostProcessing;
+#endif
+#if UNITY_POST_PROCESSING_STACK_V2
+using UnityEngine.Rendering.PostProcessing;
+#endif
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -82,8 +85,13 @@ public class AQUAS_LensEffects : MonoBehaviour {
     SunShafts sunShafts;
 #endif
 
-#if UNITY_5_6_OR_NEWER
+#if UNITY_5_6_OR_NEWER && UNITY_POST_PROCESSING_STACK_V1
     PostProcessingBehaviour postProcessing;
+#endif
+
+#if UNITY_5_6_OR_NEWER && UNITY_POST_PROCESSING_STACK_V2
+    PostProcessLayer postProcessing;
+    PostProcessVolume postProcessingVolume;
 #endif
 
     AudioSource waterLensAudio;
@@ -106,18 +114,67 @@ public class AQUAS_LensEffects : MonoBehaviour {
     void Start () {
 
         //Set up the post processing on the camera
+#if UNITY_POST_PROCESSING_STACK_V1
         if (gameObjects.mainCamera.GetComponent<PostProcessingBehaviour>() == null)
         {
             gameObjects.mainCamera.AddComponent<PostProcessingBehaviour>();
         }
 
         postProcessing = gameObjects.mainCamera.GetComponent<PostProcessingBehaviour>();
+#endif
+
+#if UNITY_POST_PROCESSING_STACK_V2 && UNITY_EDITOR
+        if (gameObjects.mainCamera.GetComponent<PostProcessLayer>() == null)
+        {
+            EditorUtility.DisplayDialog("No Post Process Layer detected", "The camera object is missing a Post Process Layer and a Post Process Volume. In the Editor AQUAS will try to add them when entering play mode. However it is recommended that you add them manually before entering playmode, or else they will be missing in the build.", "Got It!");
+
+            gameObjects.mainCamera.AddComponent<PostProcessLayer>();
+
+            postProcessing = gameObjects.mainCamera.GetComponent<PostProcessLayer>();
+            PostProcessResources resources;
+
+            if ((PostProcessResources)AssetDatabase.LoadAssetAtPath("Assets/PostProcessing-2/PostProcessing/PostProcessResources.asset", typeof(PostProcessResources)) != null)
+            {
+                resources = (PostProcessResources)AssetDatabase.LoadAssetAtPath("Assets/PostProcessing-2/PostProcessing/PostProcessResources.asset", typeof(PostProcessResources));
+            }
+            else if ((PostProcessResources)AssetDatabase.LoadAssetAtPath("Assets/PostProcessing/PostProcessResources.asset", typeof(PostProcessResources)) != null)
+            {
+                resources = (PostProcessResources)AssetDatabase.LoadAssetAtPath("Assets/PostProcessing/PostProcessResources.asset", typeof(PostProcessResources));
+            }
+            else if ((PostProcessResources)AssetDatabase.LoadAssetAtPath("Assets/PostProcessing-2/PostProcessResources.asset", typeof(PostProcessResources)) != null)
+            {
+                resources = (PostProcessResources)AssetDatabase.LoadAssetAtPath("Assets/PostProcessing-2/PostProcessResources.asset", typeof(PostProcessResources));
+            }
+            else
+            {
+                EditorUtility.DisplayDialog("Could not locate Post Process Resource file.", "Please make sure your post processing folder is at the top level of the assets folder and named either 'PostProcessing' or 'PostProcessing-2'","Got It!");
+                resources = null;
+            }
+
+
+            postProcessing.Init(resources);
+
+            postProcessing.volumeTrigger = gameObjects.mainCamera.transform;
+            postProcessing.volumeLayer = LayerMask.NameToLayer("Everything");
+        }
+
+        if (gameObjects.mainCamera.GetComponent<PostProcessVolume>() == null)
+        {
+            gameObjects.mainCamera.AddComponent<PostProcessVolume>();
+            gameObjects.mainCamera.GetComponent<PostProcessVolume>().isGlobal = true;
+        }
+        
+        postProcessingVolume = gameObjects.mainCamera.GetComponent<PostProcessVolume>();
+#endif
+
 
 #if UNITY_EDITOR
+#if UNITY_POST_PROCESSING_STACK_V1 || UNITY_POST_PROCESSING_STACK_V2
         if(underWaterParameters.defaultProfile == null)
         {
             EditorUtility.DisplayDialog("WARNING! - Post default post processing profile missing!", "The post processing profiles in the inspector of the underwater camera effects are missing a default profile! It's not recommended to leave the default profile empty. If you don't want to use post processing while afloat, you can use a profile with all image effects disabled", "Got it!");
         }
+#endif
 #endif
 
         waterLensAudio = gameObjects.waterLens.GetComponent<AudioSource>();
@@ -161,7 +218,13 @@ public class AQUAS_LensEffects : MonoBehaviour {
             defaultRefraction = waterPlaneMaterial.GetFloat("_Refraction");
         }
 
+#if UNITY_POST_PROCESSING_STACK_V1
         postProcessing.profile = underWaterParameters.defaultProfile;
+#endif
+
+#if UNITY_POST_PROCESSING_STACK_V2
+        postProcessingVolume.profile = underWaterParameters.defaultProfile;
+#endif
 
         audioComp.clip = soundEffects.sounds[0];
         audioComp.loop = true;
@@ -260,11 +323,23 @@ public class AQUAS_LensEffects : MonoBehaviour {
 
             //Enables Camera Effects and sets bloom value for underwater mode
             #region Enable Image Effects
-            postProcessing.profile = underWaterParameters.underwaterProfile;
-            #endregion
+#if UNITY_POST_PROCESSING_STACK_V1
+            if(postProcessing.profile != underWaterParameters.underwaterProfile)
+            {
+                postProcessing.profile = underWaterParameters.underwaterProfile;
+            }
+#endif
+#if UNITY_POST_PROCESSING_STACK_V2
+            if (postProcessingVolume.profile != underWaterParameters.underwaterProfile)
+            {
+                postProcessingVolume.profile = underWaterParameters.underwaterProfile;
+                postProcessingVolume.sharedProfile = underWaterParameters.underwaterProfile;
+            }
+#endif
+#endregion
 
             //Enables underwater fog and sets fog parameters for underwater mode
-            #region Enable Underwater Fog    
+#region Enable Underwater Fog    
 
             if (tenkokuObj!=null)
             {
@@ -379,11 +454,24 @@ public class AQUAS_LensEffects : MonoBehaviour {
 
             //Disables Camera Effects for and sets bloom value for afloat mode
             #region Disable Image Effects
-            postProcessing.profile = underWaterParameters.defaultProfile;
-            #endregion
+#if UNITY_POST_PROCESSING_STACK_V1
+            if(postProcessing.profile != underWaterParameters.defaultProfile)
+            {
+                postProcessing.profile = underWaterParameters.defaultProfile;
+            }
+#endif
+
+#if UNITY_POST_PROCESSING_STACK_V2
+            if (postProcessingVolume.profile != underWaterParameters.defaultProfile)
+            {
+                postProcessingVolume.profile = underWaterParameters.defaultProfile;
+                postProcessingVolume.sharedProfile = underWaterParameters.defaultProfile;
+            }
+#endif
+#endregion
 
             //Disables underwater fog and sets fog parameters back to default
-            #region Disable Underwater Fog
+#region Disable Underwater Fog
 
             if (tenkokuObj != null)
             {

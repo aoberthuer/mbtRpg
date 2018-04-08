@@ -1,7 +1,3 @@
-// Upgrade NOTE: replaced '_Object2World' with 'unity_ObjectToWorld'
-// Upgrade NOTE: replaced '_World2Object' with 'unity_WorldToObject'
-// Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
-
 Shader "AQUAS/Desktop and Web/One-Sided/Single-Textured" {
     Properties {
         [NoScaleOffset]_NormalTexture ("Normal Texture", 2D) = "white" {}
@@ -13,7 +9,7 @@ Shader "AQUAS/Desktop and Web/One-Sided/Single-Textured" {
         _DepthTransparency ("Depth Transparency", Float ) = 1.5
         _ShoreFade ("Shore Fade", Float ) = 0.3
         _ShoreTransparency ("Shore Transparency", Float ) = 0.04
-        [MaterialToggle] _EnableReflections ("Enable Reflections", Float ) = 0.6
+        [MaterialToggle] _EnableReflections ("Enable Reflections", Float ) = 1
         [HideInInspector]_ReflectionTex ("Reflection Tex", 2D) = "white" {}
         _ReflectionIntensity ("Reflection Intensity", Range(0, 1)) = 0.6
         _Distortion ("Distortion", Range(0, 2)) = 0.3
@@ -31,10 +27,12 @@ Shader "AQUAS/Desktop and Web/One-Sided/Single-Textured" {
         _FoamContrast ("Foam Contrast", Range(0, 0.5)) = 0.25
         _FoamColor ("Foam Color", Color) = (0.3382353,0.3456964,0.3456964,1)
         _FoamSpeed ("Foam Speed", Float ) = 120
-        [MaterialToggle] _EnableCustomFog ("Enable Custom Fog", Float ) = 1.278023
+        [MaterialToggle] _EnableCustomFog ("Enable Custom Fog", Float ) = 2.860078
         _FogColor ("Fog Color", Color) = (1,1,1,1)
         _FogDistance ("Fog Distance", Float ) = 1000
         _FogFade ("Fog Fade", Float ) = 1
+        _RefractionDistance ("Refraction Distance", Float ) = 10
+        _RefractionFalloff ("Refraction Falloff", Float ) = 1
         [HideInInspector]_Cutoff ("Alpha cutoff", Range(0,1)) = 0.5
     }
     SubShader {
@@ -59,7 +57,7 @@ Shader "AQUAS/Desktop and Web/One-Sided/Single-Textured" {
             #include "UnityCG.cginc"
             #pragma multi_compile_fwdbase
             #pragma multi_compile_fog
-            #pragma exclude_renderers d3d11_9x 
+            #pragma only_renderers d3d9 d3d11 glcore gles gles3 metal xboxone ps4 psp2 n3ds wiiu 
             #pragma target 3.0
             uniform float4 _LightColor0;
             uniform sampler2D Refraction;
@@ -77,14 +75,14 @@ Shader "AQUAS/Desktop and Web/One-Sided/Single-Textured" {
             uniform float4 _FoamColor;
             uniform float _FoamVisibility;
             uniform float _FoamContrast;
-            uniform sampler2D _FoamTexture; uniform float4 _FoamTexture_ST;
+            uniform sampler2D _FoamTexture;
             uniform float _FoamTiling;
             uniform float _FoamSpeed;
             uniform float _Specular;
             uniform float _Gloss;
             uniform float4 _SpecularColor;
             uniform float _Refraction;
-            uniform sampler2D _NormalTexture; uniform float4 _NormalTexture_ST;
+            uniform sampler2D _NormalTexture;
             uniform float _LightWrapping;
             uniform float _NormalTiling;
             uniform float _WaveSpeed;
@@ -96,6 +94,8 @@ Shader "AQUAS/Desktop and Web/One-Sided/Single-Textured" {
             uniform fixed _EnableCustomFog;
             uniform float _FogDistance;
             uniform float _FogFade;
+            uniform float _RefractionDistance;
+            uniform float _RefractionFalloff;
             struct VertexInput {
                 float4 vertex : POSITION;
                 float3 normal : NORMAL;
@@ -140,8 +140,8 @@ Shader "AQUAS/Desktop and Web/One-Sided/Single-Textured" {
                 #endif
                 i.screenPos = float4( i.screenPos.xy / i.screenPos.w, 0, 0 );
                 i.screenPos.y *= _ProjectionParams.x;
-                float sceneZ = max(0,LinearEyeDepth (UNITY_SAMPLE_DEPTH(tex2Dproj(_CameraDepthTexture, UNITY_PROJ_COORD(i.projPos)))) - _ProjectionParams.g);
-                float partZ = max(0,i.projPos.z - _ProjectionParams.g);
+                float3x3 tangentTransform = float3x3( i.tangentDir, i.bitangentDir, i.normalDir);
+                float3 viewDirection = normalize(_WorldSpaceCameraPos.xyz - i.posWorld.xyz);
                 float _rotator1_ang = 1.5708;
                 float _rotator1_spd = 1.0;
                 float _rotator1_cos = cos(_rotator1_spd*_rotator1_ang);
@@ -152,18 +152,17 @@ Shader "AQUAS/Desktop and Web/One-Sided/Single-Textured" {
                 float4 _timer2 = _Time + _TimeEditor;
                 float3 _multiplier7 = (float3((_WaveSpeed/_division1),0.0)*(_timer2.r/100.0));
                 float2 _multiplier5 = ((_rotator1+_multiplier7)*_division1);
-                float4 _texture1 = tex2D(_NormalTexture,TRANSFORM_TEX(_multiplier5, _NormalTexture));
+                float4 _texture1 = tex2D(_NormalTexture,_multiplier5);
                 float2 _multiplier6 = ((i.uv0+_multiplier7)*_division1);
-                float4 _texture2 = tex2D(_NormalTexture,TRANSFORM_TEX(_multiplier6, _NormalTexture));
+                float4 _texture2 = tex2D(_NormalTexture,_multiplier6);
                 float3 _subtractor1 = (_texture1.rgb-_texture2.rgb);
-                float _multiplier1 = (pow(saturate((sceneZ-partZ)/_DepthTransparency),_ShoreFade)*saturate((sceneZ-partZ)/_ShoreTransparency));
-                float2 sceneUVs = float2(1,grabSign)*i.screenPos.xy*0.5+0.5 + ((_subtractor1.rg*(_Refraction*0.2))*_multiplier1);
-                float4 sceneColor = tex2D(Refraction, sceneUVs);
-                float3x3 tangentTransform = float3x3( i.tangentDir, i.bitangentDir, i.normalDir);
-/////// Vectors:
-                float3 viewDirection = normalize(_WorldSpaceCameraPos.xyz - i.posWorld.xyz);
                 float3 normalLocal = lerp(float3(0,0,1),_subtractor1,_Refraction);
                 float3 normalDirection = normalize(mul( normalLocal, tangentTransform )); // Perturbed normals
+                float sceneZ = max(0,LinearEyeDepth (UNITY_SAMPLE_DEPTH(tex2Dproj(_CameraDepthTexture, UNITY_PROJ_COORD(i.projPos)))) - _ProjectionParams.g);
+                float partZ = max(0,i.projPos.z - _ProjectionParams.g);
+                float _multiplier1 = (pow(saturate((sceneZ-partZ)/_DepthTransparency),_ShoreFade)*saturate((sceneZ-partZ)/_ShoreTransparency));
+                float2 sceneUVs = float2(1,grabSign)*i.screenPos.xy*0.5+0.5 + lerp(((_subtractor1.rg*(_Refraction*0.2))*_multiplier1),float2(0,0),saturate(pow((distance(i.posWorld.rgb,_WorldSpaceCameraPos)/_RefractionDistance),_RefractionFalloff)));
+                float4 sceneColor = tex2D(Refraction, sceneUVs);
                 float3 lightDirection = normalize(_WorldSpaceLightPos0.xyz);
                 float3 lightColor = _LightColor0.rgb;
                 float3 halfDirection = normalize(viewDirection+lightDirection);
@@ -172,11 +171,11 @@ Shader "AQUAS/Desktop and Web/One-Sided/Single-Textured" {
                 float3 attenColor = attenuation * _LightColor0.xyz;
 ///////// Gloss:
                 float gloss = _Gloss;
-                float specPow = exp2( gloss * 10.0+1.0);
+                float specPow = exp2( gloss * 10.0 + 1.0 );
 ////// Specular:
-                float NdotL = max(0, dot( normalDirection, lightDirection ));
+                float NdotL = saturate(dot( normalDirection, lightDirection ));
                 float3 specularColor = (_Specular*_SpecularColor.rgb);
-                float3 directSpecular = (floor(attenuation) * _LightColor0.xyz) * pow(max(0,dot(halfDirection,normalDirection)),specPow)*specularColor;
+                float3 directSpecular = attenColor * pow(max(0,dot(halfDirection,normalDirection)),specPow)*specularColor;
                 float3 specular = directSpecular;
 /////// Diffuse:
                 NdotL = dot( normalDirection, lightDirection );
@@ -203,9 +202,9 @@ Shader "AQUAS/Desktop and Web/One-Sided/Single-Textured" {
                 float4 _timer1 = _Time + _TimeEditor;
                 float3 _multiplier8 = (float3((_FoamSpeed/_division2),0.0)*(_timer1.r/100.0));
                 float2 _multiplier4 = ((_rotator2+_multiplier8)*_division2);
-                float4 _texture3 = tex2D(_FoamTexture,TRANSFORM_TEX(_multiplier4, _FoamTexture));
+                float4 _texture3 = tex2D(_FoamTexture,_multiplier4);
                 float2 _multiplier3 = ((i.uv0+_multiplier8)*_division2);
-                float4 _texture4 = tex2D(_FoamTexture,TRANSFORM_TEX(_multiplier3, _FoamTexture));
+                float4 _texture4 = tex2D(_FoamTexture,_multiplier3);
                 float _value2 = 0.0;
                 float3 _multiplier2 = ((saturate((sceneZ-partZ)/_FoamBlend)*-1.0+1.0)*(((_value2 + ( (dot((_texture3.rgb-_texture4.rgb),float3(0.3,0.59,0.11)) - _FoamContrast) * (1.0 - _value2) ) / ((1.0 - _FoamContrast) - _FoamContrast))*_FoamColor.rgb)*(_FoamIntensity*(-1.0))));
                 float3 _lerp = lerp(lerp( _blend1, lerp(_ReflectionTex_var.rgb,_blend1,(1.0 - _ReflectionIntensity)), _EnableReflections ),(_multiplier2*_multiplier2),_FoamVisibility);

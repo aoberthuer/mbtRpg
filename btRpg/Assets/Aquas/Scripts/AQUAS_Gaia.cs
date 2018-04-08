@@ -3,8 +3,12 @@ using UnityEngine;
 using UnityEditor;
 using System.Collections;
 using System.Reflection;
+#if UNITY_POST_PROCESSING_STACK_V1
 using UnityEngine.PostProcessing;
-
+#endif
+#if UNITY_POST_PROCESSING_STACK_V2
+using UnityEngine.Rendering.PostProcessing;
+#endif
 namespace Gaia.GX.Dogmatic
 {
     //<summary>
@@ -12,7 +16,7 @@ namespace Gaia.GX.Dogmatic
     //</summary>
     public class AQUAS_Gaia : MonoBehaviour
     {
-#region Generic informational methods
+        #region Generic informational methods
         /// <summary>
         /// Returns the publisher name if provided. 
         /// This will override the publisher name in the namespace ie Gaia.GX.PublisherName
@@ -364,6 +368,11 @@ namespace Gaia.GX.Dogmatic
 
                 camera.farClipPlane = sceneInfo.m_sceneBounds.extents.x * 2;
 
+#if UNITY_POST_PROCESSING_STACK_V2
+                underwaterObj.GetComponent<AQUAS_LensEffects>().underWaterParameters.underwaterProfile = (PostProcessProfile)AssetDatabase.LoadAssetAtPath("Assets/AQUAS/Post Processing/AQUAS_Underwater_v2.asset", typeof(PostProcessProfile));
+                underwaterObj.GetComponent<AQUAS_LensEffects>().underWaterParameters.defaultProfile = (PostProcessProfile)AssetDatabase.LoadAssetAtPath("Assets/AQUAS/Post Processing/DefaultPostProcessing_v2.asset", typeof(PostProcessProfile));
+#endif
+
                 //Underwater effects setup
                 underwaterObj.transform.SetParent(camera.transform);
                 underwaterObj.transform.localPosition = new Vector3(0, 0, 0);
@@ -382,10 +391,48 @@ namespace Gaia.GX.Dogmatic
                 }
 
                 //Add and configure image effects neccessary for AQUAS
+#if UNITY_POST_PROCESSING_STACK_V1
                 if (camera.gameObject.GetComponent<PostProcessingBehaviour>() == null)
                 {
                 camera.gameObject.AddComponent<PostProcessingBehaviour>();
                 }
+#endif
+
+#if UNITY_POST_PROCESSING_STACK_V2
+                if (camera.gameObject.GetComponent<PostProcessLayer>() == null)
+                {
+                    camera.gameObject.AddComponent<PostProcessLayer>();
+
+                    PostProcessResources resources;
+
+                    if ((PostProcessResources)AssetDatabase.LoadAssetAtPath("Assets/PostProcessing-2/PostProcessing/PostProcessResources.asset", typeof(PostProcessResources)) != null)
+                    {
+                        resources = (PostProcessResources)AssetDatabase.LoadAssetAtPath("Assets/PostProcessing-2/PostProcessing/PostProcessResources.asset", typeof(PostProcessResources));
+                    }
+                    else if ((PostProcessResources)AssetDatabase.LoadAssetAtPath("Assets/PostProcessing/PostProcessResources.asset", typeof(PostProcessResources)) != null)
+                    {
+                        resources = (PostProcessResources)AssetDatabase.LoadAssetAtPath("Assets/PostProcessing/PostProcessResources.asset", typeof(PostProcessResources));
+                    }
+                    else if ((PostProcessResources)AssetDatabase.LoadAssetAtPath("Assets/PostProcessing-2/PostProcessResources.asset", typeof(PostProcessResources)) != null)
+                    {
+                        resources = (PostProcessResources)AssetDatabase.LoadAssetAtPath("Assets/PostProcessing-2/PostProcessResources.asset", typeof(PostProcessResources));
+                    }
+                    else
+                    {
+                        EditorUtility.DisplayDialog("Could not locate Post Process Resource file.", "Please make sure your post processing folder is at the top level of the assets folder and named either 'PostProcessing' or 'PostProcessing-2'", "Got It!");
+                        resources = null;
+                    }
+
+                    camera.gameObject.GetComponent<PostProcessLayer>().Init(resources);
+                    camera.gameObject.GetComponent<PostProcessLayer>().volumeLayer = LayerMask.NameToLayer("Everything");
+                }
+
+                if (camera.gameObject.GetComponent<PostProcessVolume>() == null)
+                {
+                    camera.gameObject.AddComponent<PostProcessVolume>();
+                    camera.gameObject.GetComponent<PostProcessVolume>().isGlobal = true;
+                }
+#endif
 
                 if (camera.gameObject.GetComponent<AudioSource>() == null)
                 {

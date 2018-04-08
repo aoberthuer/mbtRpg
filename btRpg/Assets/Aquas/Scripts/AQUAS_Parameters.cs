@@ -1,7 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+#if UNITY_POST_PROCESSING_STACK_V1
 using UnityEngine.PostProcessing;
+#endif
+#if UNITY_POST_PROCESSING_STACK_V2
+using UnityEngine.Rendering.PostProcessing;
+#endif
 
 [System.Serializable]
 public class AQUAS_Parameters{
@@ -12,11 +17,21 @@ public class AQUAS_Parameters{
         [Space(5)]
         public float fogDensity = 0.1f;
         public Color fogColor;
+#if UNITY_POST_PROCESSING_STACK_V1
         [Space(5)]
         [Header("Post Processing Profiles (Must NOT be empty!)")]
         [Space(5)]
         public PostProcessingProfile underwaterProfile;
         public PostProcessingProfile defaultProfile;
+#endif
+
+#if UNITY_POST_PROCESSING_STACK_V2
+        [Space(5)]
+        [Header("Post Processing Profiles (Must NOT be empty!)")]
+        [Space(5)]
+        public PostProcessProfile underwaterProfile;
+        public PostProcessProfile defaultProfile;
+#endif
     }
 
     [System.Serializable]
