@@ -9,6 +9,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "btRpg.Editor", "btRpg.Edito
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "btRpg.Editor.Plugins", "btRpg.Editor.Plugins.csproj", "{C04D38B4-2E43-5CD9-1EC6-7A57A50F789F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "btRpg.Editor", "btRpg.Editor.csproj", "{72476D91-1872-DFCB-0ECE-018261124A3E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "btRpg.Editor", "btRpg.Editor.csproj", "{72476D91-1872-DFCB-0ECE-018261124A3E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -31,6 +35,14 @@ Global
 		{C04D38B4-2E43-5CD9-1EC6-7A57A50F789F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C04D38B4-2E43-5CD9-1EC6-7A57A50F789F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C04D38B4-2E43-5CD9-1EC6-7A57A50F789F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{72476D91-1872-DFCB-0ECE-018261124A3E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{72476D91-1872-DFCB-0ECE-018261124A3E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{72476D91-1872-DFCB-0ECE-018261124A3E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{72476D91-1872-DFCB-0ECE-018261124A3E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{72476D91-1872-DFCB-0ECE-018261124A3E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{72476D91-1872-DFCB-0ECE-018261124A3E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{72476D91-1872-DFCB-0ECE-018261124A3E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{72476D91-1872-DFCB-0ECE-018261124A3E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
